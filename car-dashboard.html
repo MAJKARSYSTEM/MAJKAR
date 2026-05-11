@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
@@ -194,176 +195,183 @@
       .car-header h2 { font-size: 24px; }
     }
   </style>
-</head>
 
+</head>
 <body>
 
-  <div class="page">
+<div class="page">
 
-    <header class="topbar">
-      <div class="brand">
-        <h1>MAJKAR BOOK</h1>
-        <p>CYFROWA KSIĄŻKA POJAZDU</p>
-      </div>
+  <header class="topbar">
+    <div class="brand">
+      <h1>MAJKAR BOOK</h1>
+      <p>CYFROWA KSIĄŻKA POJAZDU</p>
+    </div>
 
-      <button class="back-btn" id="backBtn">POWRÓT</button>
-    </header>
+```
+<button class="back-btn" id="backBtn">POWRÓT</button>
+```
 
-    <section class="car-header">
-      <h2 id="carTitle">Ładowanie auta...</h2>
+  </header>
 
-      <div class="car-info">
-        <div class="info-box">
-          GENERACJA
-          <span id="carGeneration">---</span>
-        </div>
+  <section class="car-header">
+    <h2 id="carTitle">Ładowanie auta...</h2>
 
-        <div class="info-box">
-          ROK
-          <span id="carYear">---</span>
-        </div>
-
-        <div class="info-box">
-          VIN
-          <span id="carVin">---</span>
-        </div>
-
-        <div class="info-box">
-          STATUS
-          <span>ONLINE</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="grid">
-      <div class="tile" data-module="service">
-        <span class="badge">MODULE 01</span>
-        <div class="icon">🛠️</div>
-        <h3>SERWIS</h3>
-        <p>Historia napraw, serwisów, przebiegu, kosztów i danych warsztatu.</p>
-      </div>
-
-      <div class="tile" data-module="fuel">
-        <span class="badge">MODULE 02</span>
-        <div class="icon">⛽</div>
-        <h3>DZIENNIK PALIWOWY</h3>
-        <p>Tankowania, litry, cena paliwa, koszty miesięczne i roczne.</p>
-      </div>
-
-      <div class="tile" data-module="insurance">
-        <span class="badge">MODULE 03</span>
-        <div class="icon">📄</div>
-        <h3>UBEZPIECZENIE</h3>
-        <p>OC, AC, Assistance i terminy polis.</p>
-      </div>
-
-      <div class="tile" data-module="inspection">
-        <span class="badge">MODULE 04</span>
-        <div class="icon">✅</div>
-        <h3>PRZEGLĄD</h3>
-        <p>Badania techniczne, daty ważności i historia przeglądów.</p>
-      </div>
-
-      <div class="tile" data-module="obd">
-        <span class="badge">MODULE 05</span>
-        <div class="icon">🔌</div>
-        <h3>OBD</h3>
-        <p>Diagnostyka, błędy i przyszłe połączenie z AI.</p>
-      </div>
-    </section>
-
-    <div id="message" class="message"></div>
-
+```
+<div class="car-info">
+  <div class="info-box">
+    GENERACJA
+    <span id="carGeneration">---</span>
   </div>
 
-  <script type="module">
-    import {
-      auth,
-      db,
-      doc,
-      getDoc,
-      onAuthStateChanged
-    } from "./firebase-config.js";
+  <div class="info-box">
+    ROK
+    <span id="carYear">---</span>
+  </div>
 
-    const params = new URLSearchParams(window.location.search);
-    const carId = params.get("id");
+  <div class="info-box">
+    VIN
+    <span id="carVin">---</span>
+  </div>
 
-    const carTitle = document.getElementById("carTitle");
-    const carGeneration = document.getElementById("carGeneration");
-    const carYear = document.getElementById("carYear");
-    const carVin = document.getElementById("carVin");
-    const backBtn = document.getElementById("backBtn");
-    const message = document.getElementById("message");
-    const tiles = document.querySelectorAll(".tile");
+  <div class="info-box">
+    STATUS
+    <span>ONLINE</span>
+  </div>
+</div>
+```
 
-    function showMessage(text, success = true) {
-      message.textContent = text;
-      message.style.color = success ? "#66ff66" : "#ff6666";
+  </section>
+
+  <section class="grid">
+    <div class="tile" data-module="service">
+      <span class="badge">MODULE 01</span>
+      <div class="icon">🛠️</div>
+      <h3>SERWIS</h3>
+      <p>Historia napraw, kosztów i danych warsztatu.</p>
+    </div>
+
+```
+<div class="tile" data-module="fuel">
+  <span class="badge">MODULE 02</span>
+  <div class="icon">⛽</div>
+  <h3>DZIENNIK PALIWOWY</h3>
+  <p>Tankowania, litry i koszty paliwa.</p>
+</div>
+
+<div class="tile" data-module="insurance">
+  <span class="badge">MODULE 03</span>
+  <div class="icon">📄</div>
+  <h3>UBEZPIECZENIE</h3>
+  <p>OC, AC i terminy polis.</p>
+</div>
+
+<div class="tile" data-module="inspection">
+  <span class="badge">MODULE 04</span>
+  <div class="icon">✅</div>
+  <h3>PRZEGLĄD</h3>
+  <p>Daty badań technicznych.</p>
+</div>
+
+<div class="tile" data-module="obd">
+  <span class="badge">MODULE 05</span>
+  <div class="icon">🔌</div>
+  <h3>OBD</h3>
+  <p>Diagnostyka i błędy.</p>
+</div>
+```
+
+  </section>
+
+  <div id="message" class="message"></div>
+
+</div>
+
+<script type="module">
+  import {
+    auth,
+    db,
+    doc,
+    getDoc,
+    onAuthStateChanged
+  } from './firebase-config.js';
+
+  const params = new URLSearchParams(window.location.search);
+  const carId = params.get('id');
+
+  const carTitle = document.getElementById('carTitle');
+  const carGeneration = document.getElementById('carGeneration');
+  const carYear = document.getElementById('carYear');
+  const carVin = document.getElementById('carVin');
+  const backBtn = document.getElementById('backBtn');
+  const message = document.getElementById('message');
+  const tiles = document.querySelectorAll('.tile');
+
+  function showMessage(text, success = true) {
+    message.textContent = text;
+    message.style.color = success ? '#66ff66' : '#ff6666';
+  }
+
+  async function loadCar(user) {
+    if (!carId) {
+      carTitle.textContent = 'Brak ID auta';
+      return;
     }
 
-    async function loadCar(user) {
-      if (!carId) {
-        carTitle.textContent = "Brak ID auta";
-        showMessage("Brak ID auta w adresie.", false);
-        return;
-      }
+    const carRef = doc(db, 'users', user.uid, 'cars', carId);
+    const carSnap = await getDoc(carRef);
 
-      const carRef = doc(db, "users", user.uid, "cars", carId);
-      const carSnap = await getDoc(carRef);
-
-      if (!carSnap.exists()) {
-        carTitle.textContent = "Auto nie istnieje";
-        showMessage("Nie znaleziono auta.", false);
-        return;
-      }
-
-      const car = carSnap.data();
-
-      carTitle.textContent = `${car.brand || ""} ${car.model || ""}`;
-      carGeneration.textContent = car.generation || "Brak danych";
-      carYear.textContent = car.year || "Brak danych";
-      carVin.textContent = car.vin || "Brak danych";
-
-      showMessage("MAJKAR BOOK załadowany.");
+    if (!carSnap.exists()) {
+      carTitle.textContent = 'Auto nie istnieje';
+      return;
     }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
+    const car = carSnap.data();
+
+    carTitle.textContent = `${car.brand || ''} ${car.model || ''}`;
+    carGeneration.textContent = car.generation || 'Brak danych';
+    carYear.textContent = car.year || 'Brak danych';
+    carVin.textContent = car.vin || 'Brak danych';
+
+    showMessage('MAJKAR BOOK załadowany.');
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    try {
+      await loadCar(user);
+    } catch (error) {
+      console.error(error);
+      showMessage('Błąd ładowania auta.', false);
+    }
+  });
+
+  tiles.forEach(tile => {
+    tile.addEventListener('click', () => {
+      const moduleType = tile.dataset.module;
+
+      if (moduleType === 'service') {
+        window.location.href = 'service-log.html?id=' + carId;
         return;
       }
 
-      try {
-        await loadCar(user);
-      } catch (error) {
-        console.error(error);
-        showMessage("Błąd ładowania auta: " + error.code, false);
+      if (moduleType === 'fuel') {
+        window.location.href = 'fuel-log.html?id=' + carId;
+        return;
       }
+
+      const moduleName = tile.querySelector('h3').textContent;
+      showMessage(moduleName + ' — moduł wkrótce dostępny.');
     });
+  });
 
-    tiles.forEach(tile => {
-      tile.addEventListener("click", () => {
-        const moduleType = tile.dataset.module;
-
-        if (moduleType === "fuel") {
-          window.location.href = "fuel-log.html?id=" + carId;
-          return;
-        }
-
-        if (moduleType === "service") {
-          window.location.href = "service-log.html?id=" + carId;
-          return;
-        }
-
-        const moduleName = tile.querySelector("h3").textContent;
-        showMessage(moduleName + " — moduł wkrótce dostępny.");
-      });
-    });
-
-    backBtn.addEventListener("click", () => {
-      window.location.href = "my-car.html";
-    });
-  </script>
+  backBtn.addEventListener('click', () => {
+    window.location.href = 'my-car.html';
+  });
+</script>
 
 </body>
 </html>

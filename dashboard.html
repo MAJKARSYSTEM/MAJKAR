@@ -18,62 +18,255 @@
     body {
       min-height: 100vh;
       background:
-        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.85)),
+        linear-gradient(rgba(0,0,0,.28), rgba(0,0,0,.88)),
         url("background.jpg") center/cover no-repeat;
       color: white;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 35px;
+    }
+
+    .topbar {
+      max-width: 1100px;
+      margin: 0 auto 35px;
+      padding: 22px 26px;
+      border: 1px solid #ff1a1a;
+      border-radius: 14px;
+      background: rgba(0,0,0,.78);
+      box-shadow: 0 0 25px rgba(255,0,0,.35);
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
     }
 
-    .card {
-      width: 600px;
-      max-width: 92vw;
-      padding: 45px;
-      border: 2px solid #ff1a1a;
-      border-radius: 12px;
-      background: rgba(0,0,0,.88);
-      box-shadow: 0 0 30px rgba(255,0,0,.45);
-      text-align: center;
+    .logo h1 {
+      font-size: 36px;
+      letter-spacing: 6px;
+      text-shadow: 0 0 16px red;
     }
 
-    h1 {
-      font-size: 38px;
-      font-weight: 900;
-      text-shadow: 0 0 15px red;
-      margin-bottom: 20px;
+    .logo p {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #aaa;
+      letter-spacing: 2px;
     }
 
-    p {
-      font-size: 13px;
+    .user-box {
+      text-align: right;
+      font-size: 12px;
       color: #ccc;
-      margin-bottom: 30px;
-      word-break: break-word;
     }
 
-    button {
-      padding: 15px 30px;
-      border: none;
-      border-radius: 6px;
-      background: linear-gradient(90deg, #300, #f00, #300);
-      color: white;
-      font-weight: 900;
-      letter-spacing: 3px;
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h2 {
+      font-size: 28px;
+      text-shadow: 0 0 12px red;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      font-size: 13px;
+      color: #bbb;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .tile {
+      min-height: 180px;
+      padding: 26px;
+      border: 1px solid #ff1a1a;
+      border-radius: 16px;
+      background:
+        linear-gradient(135deg, rgba(255,0,0,.13), transparent 40%),
+        rgba(0,0,0,.82);
+      box-shadow:
+        0 0 20px rgba(255,0,0,.28),
+        inset 0 0 24px rgba(255,0,0,.07);
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(255,0,0,.6);
+      transition: .22s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    button:hover {
-      filter: brightness(1.1);
+    .tile::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 90%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      transition: .4s ease;
+    }
+
+    .tile:hover::before {
+      left: 130%;
+    }
+
+    .tile:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        0 0 35px rgba(255,0,0,.58),
+        inset 0 0 28px rgba(255,0,0,.13);
+    }
+
+    .tile.logout-tile {
+      grid-column: 1 / -1;
+      min-height: 120px;
+      background:
+        linear-gradient(135deg, rgba(255,0,0,.20), transparent 45%),
+        rgba(20,0,0,.86);
+    }
+
+    .icon {
+      font-size: 42px;
+      margin-bottom: 18px;
+    }
+
+    .tile h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .tile p {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    .badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 6px 9px;
+      border: 1px solid rgba(255,0,0,.55);
+      color: #ff3030;
+      font-size: 9px;
+      letter-spacing: 1px;
+      background: rgba(0,0,0,.55);
+    }
+
+    .message {
+      margin-top: 18px;
+      min-height: 22px;
+      text-align: center;
+      color: #ff3030;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 18px;
+      }
+
+      .topbar {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+
+      .user-box {
+        text-align: center;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tile.logout-tile {
+        grid-column: auto;
+      }
+
+      .logo h1 {
+        font-size: 30px;
+      }
+
+      .welcome h2 {
+        font-size: 23px;
+      }
     }
   </style>
 </head>
+
 <body>
 
-  <div class="card">
-    <h1>WITAJ W MAJKAR</h1>
-    <p id="userEmail">Ładowanie danych użytkownika...</p>
-    <button id="logoutBtn">WYLOGUJ</button>
+  <div class="page">
+
+    <header class="topbar">
+      <div class="logo">
+        <h1>MAJKAR</h1>
+        <p>GARAGE COMMAND CENTER</p>
+      </div>
+
+      <div class="user-box">
+        <div id="userEmail">Ładowanie użytkownika...</div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="welcome">
+        <h2>Panel użytkownika</h2>
+        <p>Wybierz moduł systemu MAJKAR. Na start mamy najważniejsze funkcje, bez zbędnego pierdolnika.</p>
+      </section>
+
+      <section class="grid">
+        <div class="tile" data-page="car">
+          <span class="badge">MODULE 01</span>
+          <div class="icon">🚗</div>
+          <h3>MOJE AUTO</h3>
+          <p>Profil Twojego auta: marka, model, silnik, VIN, przebieg i zdjęcia.</p>
+        </div>
+
+        <div class="tile" data-page="parts">
+          <span class="badge">MODULE 02</span>
+          <div class="icon">🔧</div>
+          <h3>KUP CZĘŚCI</h3>
+          <p>Części OEM, zamienniki, lista zakupowa i przyszłe oferty partnerów.</p>
+        </div>
+
+        <div class="tile" data-page="market">
+          <span class="badge">MODULE 03</span>
+          <div class="icon">🛒</div>
+          <h3>GIEŁDA</h3>
+          <p>Miejsce na auta, projekty, ogłoszenia i handel motoryzacyjny.</p>
+        </div>
+
+        <div class="tile" data-page="insurance">
+          <span class="badge">MODULE 04</span>
+          <div class="icon">📄</div>
+          <h3>UBEZPIECZENIE</h3>
+          <p>OC, AC, przegląd, terminy i przypomnienia o ważnych datach.</p>
+        </div>
+
+        <div class="tile logout-tile" id="logoutTile">
+          <span class="badge">EXIT</span>
+          <div class="icon">🚪</div>
+          <h3>WYLOGUJ</h3>
+          <p>Zakończ sesję i wróć do ekranu logowania.</p>
+        </div>
+      </section>
+
+      <div id="message" class="message"></div>
+    </main>
+
   </div>
 
   <script type="module">
@@ -84,7 +277,9 @@
     } from "./firebase-config.js";
 
     const userEmail = document.getElementById("userEmail");
-    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutTile = document.getElementById("logoutTile");
+    const message = document.getElementById("message");
+    const tiles = document.querySelectorAll(".tile[data-page]");
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -94,7 +289,14 @@
       }
     });
 
-    logoutBtn.addEventListener("click", async () => {
+    tiles.forEach((tile) => {
+      tile.addEventListener("click", () => {
+        const name = tile.querySelector("h3").textContent;
+        message.textContent = name + " — moduł wkrótce dostępny.";
+      });
+    });
+
+    logoutTile.addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "index.html";
     });

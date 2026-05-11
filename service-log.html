@@ -1,640 +1,270 @@
-# service-log.html
-
-Wklej cały poniższy kod do pliku `service-log.html`.
-
-```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAJKAR - Serwis</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Orbitron', sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      background:
-        linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.9)),
-        url("background.jpg") center/cover no-repeat;
-      color: white;
-      padding: 35px;
-    }
-
-    .page {
-      max-width: 1250px;
-      margin: 0 auto;
-    }
-
-    .topbar,
-    .panel,
-    .summary-box {
-      border: 1px solid #ff1a1a;
-      border-radius: 16px;
-      background: rgba(0,0,0,.82);
-      box-shadow: 0 0 25px rgba(255,0,0,.35);
-    }
-
-    .topbar {
-      padding: 24px 28px;
-      margin-bottom: 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-    }
-
-    h1 {
-      font-size: 34px;
-      letter-spacing: 5px;
-      text-shadow: 0 0 16px red;
-    }
-
-    .topbar p {
-      margin-top: 8px;
-      color: #aaa;
-      font-size: 12px;
-      letter-spacing: 2px;
-    }
-
-    button {
-      min-height: 44px;
-      padding: 0 14px;
-      border: 1px solid #ff1a1a;
-      border-radius: 8px;
-      color: white;
-      background: linear-gradient(90deg, #1a0000, #b00000, #1a0000);
-      font-weight: 900;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: 0 0 14px rgba(255,0,0,.45);
-      font-size: 11px;
-    }
-
-    button:hover {
-      filter: brightness(1.15);
-    }
-
-    .back-btn,
-    .cancel-btn {
-      background: linear-gradient(90deg, #111, #333, #111);
-    }
-
-    .edit-btn {
-      background: linear-gradient(90deg, #00111a, #005577, #00111a);
-    }
-
-    .delete-btn {
-      background: linear-gradient(90deg, #240000, #8b0000, #240000);
-      border-color: #ff3b3b;
-    }
-
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 25px;
-    }
-
-    .summary-box {
-      padding: 20px;
-      text-align: center;
-    }
-
-    .summary-box p {
-      color: #aaa;
-      font-size: 11px;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
-    }
-
-    .summary-box span {
-      color: #ff3030;
-      font-size: 18px;
-      font-weight: 900;
-      text-shadow: 0 0 12px red;
-      word-break: break-word;
-    }
-
-    .panel {
-      padding: 26px;
-      margin-bottom: 24px;
-    }
-
-    .panel h2 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 12px red;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .wide {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 11px;
-      color: #bbb;
-      letter-spacing: 2px;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 0 14px;
-      background: #111;
-      border: 1px solid #ff1a1a;
-      color: white;
-      outline: none;
-      font-size: 14px;
-    }
-
-    input {
-      height: 52px;
-    }
-
-    textarea {
-      min-height: 90px;
-      padding-top: 14px;
-      resize: vertical;
-    }
-
-    .form-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th,
-    td {
-      padding: 14px;
-      border-bottom: 1px solid rgba(255,0,0,.25);
-      text-align: left;
-      font-size: 12px;
-      vertical-align: top;
-    }
-
-    th {
-      color: #ff3030;
-      letter-spacing: 1px;
-    }
-
-    td {
-      color: #ddd;
-    }
-
-    .table-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .message {
-      margin-top: 15px;
-      min-height: 20px;
-      text-align: center;
-      font-size: 12px;
-      color: #66ff66;
-    }
-
-    @media (max-width: 1000px) {
-      .summary {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .wide {
-        grid-column: auto;
-      }
-    }
-
-    @media (max-width: 900px) {
-      body {
-        padding: 18px;
-      }
-
-      .topbar {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .summary {
-        grid-template-columns: 1fr;
-      }
-
-      .form-actions {
-        grid-template-columns: 1fr;
-      }
-
-      table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-    }
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+    body{min-height:100vh;background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.9)),url("background.jpg") center/cover no-repeat;color:#fff;padding:35px}
+    .page{max-width:1250px;margin:0 auto}
+    .topbar,.panel,.summary-box{border:1px solid #ff1a1a;border-radius:16px;background:rgba(0,0,0,.82);box-shadow:0 0 25px rgba(255,0,0,.35)}
+    .topbar{padding:24px 28px;margin-bottom:25px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+    h1{font-size:34px;letter-spacing:5px;text-shadow:0 0 16px red}
+    .topbar p{margin-top:8px;color:#aaa;font-size:12px;letter-spacing:2px}
+    button{min-height:44px;padding:0 14px;border:1px solid #ff1a1a;border-radius:8px;color:#fff;background:linear-gradient(90deg,#1a0000,#b00000,#1a0000);font-weight:900;letter-spacing:1px;cursor:pointer}
+    .back-btn,.cancel-btn{background:linear-gradient(90deg,#111,#333,#111)}
+    .edit-btn{background:linear-gradient(90deg,#00111a,#005577,#00111a)}
+    .delete-btn{background:linear-gradient(90deg,#240000,#8b0000,#240000)}
+    .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:25px}
+    .summary-box{padding:20px;text-align:center}
+    .summary-box p{color:#aaa;font-size:11px;margin-bottom:10px}
+    .summary-box span{color:#ff3030;font-size:18px;font-weight:900}
+    .panel{padding:26px;margin-bottom:24px}
+    .panel h2{font-size:22px;margin-bottom:20px}
+    .form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px}
+    .wide{grid-column:1/-1}
+    label{display:block;margin-bottom:8px;font-size:11px;color:#bbb}
+    input,textarea{width:100%;background:#111;border:1px solid #ff1a1a;color:#fff;font-size:14px;padding:12px}
+    input{height:52px}
+    textarea{min-height:90px;resize:vertical}
+    .form-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:14px;border-bottom:1px solid rgba(255,0,0,.25);text-align:left;font-size:12px;vertical-align:top}
+    th{color:#ff3030}
+    .table-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .message{margin-top:15px;min-height:20px;text-align:center;font-size:12px;color:#66ff66}
+    @media(max-width:1000px){.summary{grid-template-columns:repeat(2,1fr)} .form-grid{grid-template-columns:1fr} .wide{grid-column:auto}}
+    @media(max-width:900px){body{padding:18px}.topbar{flex-direction:column;text-align:center}.summary{grid-template-columns:1fr}.form-actions{grid-template-columns:1fr}table{display:block;overflow-x:auto;white-space:nowrap}}
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="topbar">
-      <div>
-        <h1>SERWIS</h1>
-        <p id="carName">Ładowanie auta...</p>
-      </div>
-      <button class="back-btn" id="backBtn">POWRÓT</button>
-    </header>
-
-    <section class="summary">
-      <div class="summary-box">
-        <p>ŁĄCZNY KOSZT</p>
-        <span id="totalCost">0 zł</span>
-      </div>
-      <div class="summary-box">
-        <p>LICZBA WPISÓW</p>
-        <span id="totalEntries">0</span>
-      </div>
-      <div class="summary-box">
-        <p>OSTATNI SERWIS</p>
-        <span id="lastService">Brak</span>
-      </div>
-      <div class="summary-box">
-        <p>OSTATNI PRZEBIEG</p>
-        <span id="lastMileage">Brak</span>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h2 id="formTitle">Dodaj wpis serwisowy</h2>
-
-      <form id="serviceForm">
-        <div class="form-grid">
-          <div>
-            <label>DATA SERWISU</label>
-            <input id="serviceDate" type="date" required>
-          </div>
-
-          <div>
-            <label>PRZEBIEG</label>
-            <input id="mileage" type="number" min="0" required>
-          </div>
-
-          <div>
-            <label>CENA SERWISU</label>
-            <input id="servicePrice" type="number" step="0.01" min="0" required>
-          </div>
-
-          <div class="wide">
-            <label>CO BYŁO ROBIONE</label>
-            <textarea id="serviceWork" required></textarea>
-          </div>
-
-          <div>
-            <label>MIEJSCE / WARSZTAT</label>
-            <input id="workshopPlace" type="text">
-          </div>
-
-          <div>
-            <label>NIP WARSZTATU</label>
-            <input id="workshopNip" type="text">
-          </div>
-
-          <div>
-            <label>TELEFON WARSZTATU</label>
-            <input id="workshopPhone" type="text">
-          </div>
-
-          <div>
-            <label>AKCJA</label>
-            <div class="form-actions">
-              <button type="submit" id="saveBtn">ZAPISZ</button>
-              <button type="button" class="cancel-btn" id="cancelEditBtn">ANULUJ</button>
-            </div>
-          </div>
-        </div>
-      </form>
-
-      <div id="message" class="message"></div>
-    </section>
-
-    <section class="panel">
-      <h2>Historia serwisowa</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>DATA</th>
-            <th>CO BYŁO ROBIONE</th>
-            <th>PRZEBIEG</th>
-            <th>CENA</th>
-            <th>MIEJSCE</th>
-            <th>NIP</th>
-            <th>TELEFON</th>
-            <th>AKCJE</th>
-          </tr>
-        </thead>
-        <tbody id="serviceTable">
-          <tr>
-            <td colspan="8">Ładowanie danych...</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+<div class="page">
+<header class="topbar">
+  <div>
+    <h1>SERWIS</h1>
+    <p id="carName">Ładowanie auta...</p>
   </div>
+  <button class="back-btn" id="backBtn">POWRÓT</button>
+</header>
 
-  <script type="module">
-    import {
-      auth,
-      db,
-      doc,
-      getDoc,
-      setDoc,
-      collection,
-      addDoc,
-      getDocs,
-      deleteDoc,
-      onAuthStateChanged
-    } from './firebase-config.js';
+<section class="summary">
+  <div class="summary-box"><p>ŁĄCZNY KOSZT</p><span id="totalCost">0 zł</span></div>
+  <div class="summary-box"><p>LICZBA WPISÓW</p><span id="totalEntries">0</span></div>
+  <div class="summary-box"><p>OSTATNI SERWIS</p><span id="lastService">Brak</span></div>
+  <div class="summary-box"><p>OSTATNI PRZEBIEG</p><span id="lastMileage">Brak</span></div>
+</section>
 
-    const params = new URLSearchParams(window.location.search);
-    const carId = params.get('id');
+<section class="panel">
+  <h2 id="formTitle">Dodaj wpis serwisowy</h2>
+  <form id="serviceForm">
+    <div class="form-grid">
+      <div><label>DATA SERWISU</label><input id="serviceDate" type="date" required></div>
+      <div><label>PRZEBIEG</label><input id="mileage" type="number" required></div>
+      <div><label>CENA SERWISU</label><input id="servicePrice" type="number" step="0.01" required></div>
+      <div class="wide"><label>CO BYŁO ROBIONE</label><textarea id="serviceWork" required></textarea></div>
+      <div><label>MIEJSCE / WARSZTAT</label><input id="workshopPlace" type="text"></div>
+      <div><label>NIP WARSZTATU</label><input id="workshopNip" type="text"></div>
+      <div><label>TELEFON WARSZTATU</label><input id="workshopPhone" type="text"></div>
+      <div>
+        <label>AKCJA</label>
+        <div class="form-actions">
+          <button type="submit" id="saveBtn">ZAPISZ</button>
+          <button type="button" class="cancel-btn" id="cancelEditBtn">ANULUJ</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div id="message" class="message"></div>
+</section>
 
-    const carName = document.getElementById('carName');
-    const backBtn = document.getElementById('backBtn');
-    const serviceForm = document.getElementById('serviceForm');
-    const serviceDate = document.getElementById('serviceDate');
-    const mileage = document.getElementById('mileage');
-    const servicePrice = document.getElementById('servicePrice');
-    const serviceWork = document.getElementById('serviceWork');
-    const workshopPlace = document.getElementById('workshopPlace');
-    const workshopNip = document.getElementById('workshopNip');
-    const workshopPhone = document.getElementById('workshopPhone');
-    const serviceTable = document.getElementById('serviceTable');
-    const message = document.getElementById('message');
-    const formTitle = document.getElementById('formTitle');
-    const saveBtn = document.getElementById('saveBtn');
-    const cancelEditBtn = document.getElementById('cancelEditBtn');
+<section class="panel">
+  <h2>Historia serwisowa</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>DATA</th><th>CO BYŁO ROBIONE</th><th>PRZEBIEG</th><th>CENA</th>
+        <th>MIEJSCE</th><th>NIP</th><th>TELEFON</th><th>AKCJE</th>
+      </tr>
+    </thead>
+    <tbody id="serviceTable">
+      <tr><td colspan="8">Ładowanie danych...</td></tr>
+    </tbody>
+  </table>
+</section>
+</div>
 
-    const totalCost = document.getElementById('totalCost');
-    const totalEntries = document.getElementById('totalEntries');
-    const lastService = document.getElementById('lastService');
-    const lastMileage = document.getElementById('lastMileage');
+<script type="module">
+import {
+  auth, db, doc, getDoc, setDoc, collection,
+  addDoc, getDocs, deleteDoc, onAuthStateChanged
+} from './firebase-config.js';
 
-    let currentUser = null;
-    let services = [];
-    let editingServiceId = null;
+const params = new URLSearchParams(window.location.search);
+const carId = params.get('id');
 
-    function showMessage(text, success = true) {
-      message.textContent = text;
-      message.style.color = success ? '#66ff66' : '#ff6666';
-    }
+const carName = document.getElementById('carName');
+const backBtn = document.getElementById('backBtn');
+const serviceForm = document.getElementById('serviceForm');
+const serviceDate = document.getElementById('serviceDate');
+const mileage = document.getElementById('mileage');
+const servicePrice = document.getElementById('servicePrice');
+const serviceWork = document.getElementById('serviceWork');
+const workshopPlace = document.getElementById('workshopPlace');
+const workshopNip = document.getElementById('workshopNip');
+const workshopPhone = document.getElementById('workshopPhone');
+const serviceTable = document.getElementById('serviceTable');
+const message = document.getElementById('message');
+const formTitle = document.getElementById('formTitle');
+const saveBtn = document.getElementById('saveBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
 
-    function formatMoney(value) {
-      return (Number(value) || 0).toFixed(2).replace('.', ',') + ' zł';
-    }
+const totalCost = document.getElementById('totalCost');
+const totalEntries = document.getElementById('totalEntries');
+const lastService = document.getElementById('lastService');
+const lastMileage = document.getElementById('lastMileage');
 
-    function resetForm() {
-      editingServiceId = null;
-      serviceForm.reset();
-      formTitle.textContent = 'Dodaj wpis serwisowy';
-      saveBtn.textContent = 'ZAPISZ';
-    }
+let currentUser = null;
+let services = [];
+let editingServiceId = null;
 
-    async function loadCar(user) {
-      const carRef = doc(db, 'users', user.uid, 'cars', carId);
-      const carSnap = await getDoc(carRef);
+function showMessage(text, success = true) {
+  message.textContent = text;
+  message.style.color = success ? '#66ff66' : '#ff6666';
+}
 
-      if (!carSnap.exists()) {
-        carName.textContent = 'Auto nie istnieje';
-        return;
-      }
+function formatMoney(value) {
+  return (Number(value) || 0).toFixed(2).replace('.', ',') + ' zł';
+}
 
-      const car = carSnap.data();
-      carName.textContent = `${car.brand || ''} ${car.model || ''} ${car.generation || ''}`;
-    }
+function resetForm() {
+  editingServiceId = null;
+  serviceForm.reset();
+  formTitle.textContent = 'Dodaj wpis serwisowy';
+  saveBtn.textContent = 'ZAPISZ';
+}
 
-    async function loadServiceLogs(user) {
-      const servicesRef = collection(db, 'users', user.uid, 'cars', carId, 'serviceLogs');
-      const snap = await getDocs(servicesRef);
+async function loadCar(user) {
+  const carRef = doc(db, 'users', user.uid, 'cars', carId);
+  const carSnap = await getDoc(carRef);
+  if (!carSnap.exists()) return;
+  const car = carSnap.data();
+  carName.textContent = `${car.brand || ''} ${car.model || ''} ${car.generation || ''}`;
+}
 
-      services = [];
+async function loadServiceLogs(user) {
+  const servicesRef = collection(db, 'users', user.uid, 'cars', carId, 'serviceLogs');
+  const snap = await getDocs(servicesRef);
+  services = [];
+  snap.forEach(docSnap => services.push({ id: docSnap.id, ...docSnap.data() }));
+  services.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  renderServiceLogs();
+}
 
-      snap.forEach(docSnap => {
-        services.push({
-          id: docSnap.id,
-          ...docSnap.data()
-        });
-      });
+function renderServiceLogs() {
+  serviceTable.innerHTML = '';
+  let costSum = 0;
 
-      services.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-      renderServiceLogs();
-    }
+  if (services.length === 0) {
+    serviceTable.innerHTML = '<tr><td colspan="8">Brak wpisów serwisowych.</td></tr>';
+  }
 
-    function renderServiceLogs() {
-      serviceTable.innerHTML = '';
+  services.forEach(service => {
+    const price = Number(service.price) || 0;
+    costSum += price;
 
-      let costSum = 0;
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${service.date || '-'}</td>
+      <td>${service.work || '-'}</td>
+      <td>${service.mileage || '-'} km</td>
+      <td>${formatMoney(price)}</td>
+      <td>${service.place || '-'}</td>
+      <td>${service.nip || '-'}</td>
+      <td>${service.phone || '-'}</td>
+      <td>
+        <div class="table-actions">
+          <button type="button" class="edit-btn">EDYTUJ</button>
+          <button type="button" class="delete-btn">USUŃ</button>
+        </div>
+      </td>
+    `;
 
-      if (services.length === 0) {
-        serviceTable.innerHTML = '<tr><td colspan="8">Brak wpisów serwisowych.</td></tr>';
-      }
-
-      services.forEach(service => {
-        const price = Number(service.price) || 0;
-        costSum += price;
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${service.date || '-'}</td>
-          <td>${service.work || '-'}</td>
-          <td>${service.mileage || '-'} km</td>
-          <td>${formatMoney(price)}</td>
-          <td>${service.place || '-'}</td>
-          <td>${service.nip || '-'}</td>
-          <td>${service.phone || '-'}</td>
-          <td>
-            <div class="table-actions">
-              <button type="button" class="edit-btn">EDYTUJ</button>
-              <button type="button" class="delete-btn">USUŃ</button>
-            </div>
-          </td>
-        `;
-
-        row.querySelector('.edit-btn').addEventListener('click', () => {
-          editingServiceId = service.id;
-          serviceDate.value = service.date || '';
-          mileage.value = service.mileage || '';
-          servicePrice.value = service.price || '';
-          serviceWork.value = service.work || '';
-          workshopPlace.value = service.place || '';
-          workshopNip.value = service.nip || '';
-          workshopPhone.value = service.phone || '';
-          formTitle.textContent = 'Edytuj wpis serwisowy';
-          saveBtn.textContent = 'ZAPISZ ZMIANY';
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        row.querySelector('.delete-btn').addEventListener('click', async () => {
-          if (!confirm('Czy na pewno chcesz usunąć ten wpis?')) return;
-
-          const serviceRef = doc(
-            db,
-            'users',
-            currentUser.uid,
-            'cars',
-            carId,
-            'serviceLogs',
-            service.id
-          );
-
-          await deleteDoc(serviceRef);
-          await loadServiceLogs(currentUser);
-          showMessage('Wpis usunięty.');
-        });
-
-        serviceTable.appendChild(row);
-      });
-
-      totalCost.textContent = formatMoney(costSum);
-      totalEntries.textContent = services.length;
-
-      if (services.length > 0) {
-        lastService.textContent = services[0].date || 'Brak';
-        lastMileage.textContent = services[0].mileage ? services[0].mileage + ' km' : 'Brak';
-      } else {
-        lastService.textContent = 'Brak';
-        lastMileage.textContent = 'Brak';
-      }
-    }
-
-    onAuthStateChanged(auth, async user => {
-      if (!user) {
-        window.location.href = 'index.html';
-        return;
-      }
-
-      currentUser = user;
-      await loadCar(user);
-      await loadServiceLogs(user);
+    row.querySelector('.edit-btn').addEventListener('click', () => {
+      editingServiceId = service.id;
+      serviceDate.value = service.date || '';
+      mileage.value = service.mileage || '';
+      servicePrice.value = service.price || '';
+      serviceWork.value = service.work || '';
+      workshopPlace.value = service.place || '';
+      workshopNip.value = service.nip || '';
+      workshopPhone.value = service.phone || '';
+      formTitle.textContent = 'Edytuj wpis serwisowy';
+      saveBtn.textContent = 'ZAPISZ ZMIANY';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    serviceForm.addEventListener('submit', async e => {
-      e.preventDefault();
-
-      const service = {
-        date: serviceDate.value,
-        mileage: Number(mileage.value),
-        work: serviceWork.value.trim(),
-        price: Number(servicePrice.value),
-        place: workshopPlace.value.trim(),
-        nip: workshopNip.value.trim(),
-        phone: workshopPhone.value.trim(),
-        updatedAt: new Date().toISOString()
-      };
-
-      if (editingServiceId) {
-        const serviceRef = doc(
-          db,
-          'users',
-          currentUser.uid,
-          'cars',
-          carId,
-          'serviceLogs',
-          editingServiceId
-        );
-
-        await setDoc(serviceRef, service, { merge: true });
-        showMessage('Wpis zaktualizowany.');
-      } else {
-        const servicesRef = collection(
-          db,
-          'users',
-          currentUser.uid,
-          'cars',
-          carId,
-          'serviceLogs'
-        );
-
-        await addDoc(servicesRef, {
-          ...service,
-          createdAt: new Date().toISOString()
-        });
-
-        showMessage('Wpis zapisany.');
-      }
-
-      resetForm();
+    row.querySelector('.delete-btn').addEventListener('click', async () => {
+      if (!confirm('Czy na pewno chcesz usunąć ten wpis?')) return;
+      const serviceRef = doc(db, 'users', currentUser.uid, 'cars', carId, 'serviceLogs', service.id);
+      await deleteDoc(serviceRef);
       await loadServiceLogs(currentUser);
+      showMessage('Wpis usunięty.');
     });
 
-    cancelEditBtn.addEventListener('click', () => {
-      resetForm();
-      showMessage('Edycja anulowana.');
-    });
+    serviceTable.appendChild(row);
+  });
 
-    backBtn.addEventListener('click', () => {
-      window.location.href = 'car-dashboard.html?id=' + carId;
-    });
-  </script>
+  totalCost.textContent = formatMoney(costSum);
+  totalEntries.textContent = services.length;
+  lastService.textContent = services.length ? (services[0].date || 'Brak') : 'Brak';
+  lastMileage.textContent = services.length ? ((services[0].mileage || 'Brak') + ' km') : 'Brak';
+}
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    window.location.href = 'index.html';
+    return;
+  }
+  currentUser = user;
+  await loadCar(user);
+  await loadServiceLogs(user);
+});
+
+serviceForm.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const service = {
+    date: serviceDate.value,
+    mileage: Number(mileage.value),
+    work: serviceWork.value.trim(),
+    price: Number(servicePrice.value),
+    place: workshopPlace.value.trim(),
+    nip: workshopNip.value.trim(),
+    phone: workshopPhone.value.trim(),
+    updatedAt: new Date().toISOString()
+  };
+
+  if (editingServiceId) {
+    const serviceRef = doc(db, 'users', currentUser.uid, 'cars', carId, 'serviceLogs', editingServiceId);
+    await setDoc(serviceRef, service, { merge: true });
+    showMessage('Wpis zaktualizowany.');
+  } else {
+    const servicesRef = collection(db, 'users', currentUser.uid, 'cars', carId, 'serviceLogs');
+    await addDoc(servicesRef, { ...service, createdAt: new Date().toISOString() });
+    showMessage('Wpis zapisany.');
+  }
+
+  resetForm();
+  await loadServiceLogs(currentUser);
+});
+
+cancelEditBtn.addEventListener('click', resetForm);
+
+backBtn.addEventListener('click', () => {
+  window.location.href = 'car-dashboard.html?id=' + carId;
+});
+</script>
 </body>
 </html>
-```
-
----
-
-## Zmiana w `car-dashboard.html`
-
-Znajdź fragment:
-
-```javascript
-if (moduleType === "fuel") {
-  window.location.href = "fuel-log.html?id=" + carId;
-  return;
-}
-```
-
-I pod nim dodaj:
-
-```javascript
-if (moduleType === "service") {
-  window.location.href = "service-log.html?id=" + carId;
-  return;
-}
-```
-
----
-
-## Wgraj na GitHub
-
-```bash
-git add .
-git commit -m "Dodano modul serwis"
-git push
-```

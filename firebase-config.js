@@ -12,7 +12,11 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -34,6 +38,10 @@ export {
   doc,
   setDoc,
   getDoc,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
   onAuthStateChanged,
   signOut,
   createUserWithEmailAndPassword,

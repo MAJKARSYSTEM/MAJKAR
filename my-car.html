@@ -96,13 +96,12 @@
       border: 1px solid rgba(255,0,0,.45);
       border-radius: 10px;
       background: rgba(0,0,0,.58);
-      cursor: pointer;
       transition: .2s;
     }
 
-    .car-item:hover {
-      box-shadow: 0 0 18px rgba(255,0,0,.4);
-      transform: translateY(-2px);
+    .car-item.active {
+      border-color: #ff3030;
+      box-shadow: 0 0 18px rgba(255,0,0,.55);
     }
 
     .car-item h3 {
@@ -115,6 +114,13 @@
       font-size: 11px;
       color: #aaa;
       margin-top: 4px;
+    }
+
+    .car-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
     }
 
     .empty {
@@ -156,13 +162,13 @@
 
     .buttons {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
       margin-top: 10px;
     }
 
     button {
-      min-height: 52px;
+      min-height: 46px;
       border: 1px solid #ff1a1a;
       border-radius: 8px;
       color: white;
@@ -179,8 +185,12 @@
       filter: brightness(1.15);
     }
 
-    .back-btn {
-      background: linear-gradient(90deg, #111, #333, #111);
+    .read-btn {
+      background: linear-gradient(90deg, #1a0000, #b00000, #1a0000);
+    }
+
+    .edit-btn {
+      background: linear-gradient(90deg, #00111a, #005577, #00111a);
     }
 
     .new-btn {
@@ -190,6 +200,10 @@
     .delete-btn {
       background: linear-gradient(90deg, #240000, #8b0000, #240000);
       border-color: #ff3b3b;
+    }
+
+    .back-btn {
+      background: linear-gradient(90deg, #111, #333, #111);
     }
 
     .message {
@@ -245,7 +259,7 @@
     <header class="topbar">
       <div>
         <h1>MOJE AUTO</h1>
-        <p>KLIKNIJ AUTO, ABY OTWORZYĆ DASHBOARD POJAZDU</p>
+        <p>CZYTAJ = DASHBOARD AUTA / EDYTUJ = ZMIANA DANYCH</p>
       </div>
 
       <div class="counter" id="carCounter">Ładowanie...</div>
@@ -261,7 +275,7 @@
       </section>
 
       <section class="panel">
-        <h2>Dodaj auto</h2>
+        <h2 id="formTitle">Dodaj auto</h2>
 
         <form id="carForm">
           <div class="form-grid">
@@ -292,8 +306,9 @@
           </div>
 
           <div class="buttons">
-            <button type="submit">ZAPISZ AUTO</button>
-            <button type="button" class="delete-btn" id="deleteLastBtn">USUŃ OSTATNIE</button>
+            <button type="button" class="new-btn" id="newBtn">NOWE AUTO</button>
+            <button type="submit" id="saveBtn">ZAPISZ</button>
+            <button type="button" class="delete-btn" id="deleteBtn">USUŃ AUTO</button>
             <button type="button" class="back-btn" id="backBtn">POWRÓT</button>
           </div>
         </form>
@@ -310,6 +325,7 @@
       auth,
       db,
       doc,
+      setDoc,
       collection,
       addDoc,
       getDocs,
@@ -320,14 +336,18 @@
     const MAX_CARS = 10;
 
     const form = document.getElementById("carForm");
+    const newBtn = document.getElementById("newBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
     const backBtn = document.getElementById("backBtn");
-    const deleteLastBtn = document.getElementById("deleteLastBtn");
     const message = document.getElementById("message");
     const carsList = document.getElementById("carsList");
     const carCounter = document.getElementById("carCounter");
+    const formTitle = document.getElementById("formTitle");
 
     let currentUser = null;
     let cars = [];
+    let selectedCarId = null;
+    let editMode = false;
 
     const inputs = {
       brand: document.getElementById("brand"),
@@ -343,11 +363,26 @@
     }
 
     function clearForm() {
+      selectedCarId = null;
+      editMode = false;
+      formTitle.textContent = "Dodaj auto";
       inputs.brand.value = "";
       inputs.model.value = "";
       inputs.generation.value = "";
       inputs.year.value = "";
       inputs.vin.value = "";
+    }
+
+    function fillForm(car) {
+      inputs.brand.value = car.brand || "";
+      inputs.model.value = car.model || "";
+      inputs.generation.value = car.generation || "";
+      inputs.year.value = car.year || "";
+      inputs.vin.value = car.vin || "";
+    }
+
+    function getSelectedCar() {
+      return cars.find(car => car.id === selectedCarId);
     }
 
     function renderCars() {
@@ -362,16 +397,34 @@
       cars.forEach(car => {
         const item = document.createElement("div");
         item.className = "car-item";
+        if (car.id === selectedCarId) item.classList.add("active");
 
         item.innerHTML = `
           <h3>${car.brand || "Brak marki"} ${car.model || ""}</h3>
           <p>Generacja: ${car.generation || "Brak danych"}</p>
           <p>Rok: ${car.year || "Brak danych"}</p>
           <p>VIN: ${car.vin || "Brak danych"}</p>
+
+          <div class="car-actions">
+            <button type="button" class="read-btn">CZYTAJ</button>
+            <button type="button" class="edit-btn">EDYTUJ</button>
+          </div>
         `;
 
-        item.addEventListener("click", () => {
+        const readBtn = item.querySelector(".read-btn");
+        const editBtn = item.querySelector(".edit-btn");
+
+        readBtn.addEventListener("click", () => {
           window.location.href = "car-dashboard.html?id=" + car.id;
+        });
+
+        editBtn.addEventListener("click", () => {
+          selectedCarId = car.id;
+          editMode = true;
+          formTitle.textContent = "Edytuj auto";
+          fillForm(car);
+          renderCars();
+          showMessage("Tryb edycji auta włączony. Zmień dane i kliknij ZAPISZ.");
         });
 
         carsList.appendChild(item);
@@ -419,57 +472,86 @@
         return;
       }
 
-      if (cars.length >= MAX_CARS) {
-        showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
-        return;
-      }
-
       const car = {
         brand: inputs.brand.value.trim(),
         model: inputs.model.value.trim(),
         generation: inputs.generation.value.trim(),
         year: inputs.year.value.trim(),
         vin: inputs.vin.value.trim().toUpperCase(),
-        createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
       try {
-        const carsRef = collection(db, "users", currentUser.uid, "cars");
-        await addDoc(carsRef, car);
+        if (editMode && selectedCarId) {
+          const carRef = doc(db, "users", currentUser.uid, "cars", selectedCarId);
+          await setDoc(carRef, car, { merge: true });
+
+          showMessage("Auto zaktualizowane.");
+        } else {
+          if (cars.length >= MAX_CARS) {
+            showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
+            return;
+          }
+
+          const carsRef = collection(db, "users", currentUser.uid, "cars");
+          await addDoc(carsRef, {
+            ...car,
+            createdAt: new Date().toISOString()
+          });
+
+          showMessage("Nowe auto zapisane.");
+        }
 
         clearForm();
         await loadCars();
-
-        showMessage("Auto zapisane. Kliknij je na liście, aby otworzyć dashboard.");
       } catch (error) {
         console.error(error);
         showMessage("Błąd zapisu Firestore: " + error.code, false);
       }
     });
 
-    deleteLastBtn.addEventListener("click", async () => {
+    newBtn.addEventListener("click", () => {
+      if (cars.length >= MAX_CARS) {
+        showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
+        return;
+      }
+
+      clearForm();
+      renderCars();
+      showMessage("Tryb dodawania nowego auta.");
+    });
+
+    deleteBtn.addEventListener("click", async () => {
       if (!currentUser) {
         showMessage("Brak zalogowanego użytkownika.", false);
         return;
       }
 
-      if (cars.length === 0) {
-        showMessage("Nie masz auta do usunięcia.", false);
+      if (!selectedCarId) {
+        showMessage("Najpierw kliknij EDYTUJ przy aucie, które chcesz usunąć.", false);
         return;
       }
 
-      const lastCar = cars[cars.length - 1];
-      const confirmDelete = confirm("Czy na pewno chcesz usunąć ostatnio dodane auto?");
+      const selectedCar = getSelectedCar();
+      const carName = selectedCar
+        ? `${selectedCar.brand || ""} ${selectedCar.model || ""}`.trim()
+        : "wybrane auto";
 
-      if (!confirmDelete) return;
+      const confirmDelete = confirm("Czy na pewno chcesz usunąć: " + carName + "?");
+
+      if (!confirmDelete) {
+        showMessage("Usuwanie anulowane.", false);
+        return;
+      }
 
       try {
-        const carRef = doc(db, "users", currentUser.uid, "cars", lastCar.id);
+        const carRef = doc(db, "users", currentUser.uid, "cars", selectedCarId);
         await deleteDoc(carRef);
 
+        clearForm();
         await loadCars();
-        showMessage("Ostatnie auto usunięte.");
+
+        showMessage("Auto usunięte.");
       } catch (error) {
         console.error(error);
         showMessage("Błąd usuwania auta: " + error.code, false);

@@ -104,21 +104,6 @@
       overflow: hidden;
     }
 
-    .tile::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -120%;
-      width: 90%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
-      transition: .4s ease;
-    }
-
-    .tile:hover::before {
-      left: 130%;
-    }
-
     .tile:hover {
       transform: translateY(-5px);
       box-shadow:
@@ -129,9 +114,6 @@
     .tile.logout-tile {
       grid-column: 1 / -1;
       min-height: 120px;
-      background:
-        linear-gradient(135deg, rgba(255,0,0,.20), transparent 45%),
-        rgba(20,0,0,.86);
     }
 
     .icon {
@@ -194,14 +176,6 @@
       .tile.logout-tile {
         grid-column: auto;
       }
-
-      .logo h1 {
-        font-size: 30px;
-      }
-
-      .welcome h2 {
-        font-size: 23px;
-      }
     }
   </style>
 </head>
@@ -224,43 +198,43 @@
     <main class="main">
       <section class="welcome">
         <h2>Panel użytkownika</h2>
-        <p>Wybierz moduł systemu MAJKAR. Na start mamy najważniejsze funkcje, bez zbędnego pierdolnika.</p>
+        <p>Wybierz moduł systemu MAJKAR.</p>
       </section>
 
       <section class="grid">
-        <div class="tile" data-page="car">
+        <div class="tile" id="myCarTile">
           <span class="badge">MODULE 01</span>
           <div class="icon">🚗</div>
           <h3>MOJE AUTO</h3>
-          <p>Profil Twojego auta: marka, model, silnik, VIN, przebieg i zdjęcia.</p>
+          <p>Profil Twojego samochodu.</p>
         </div>
 
         <div class="tile" data-page="parts">
           <span class="badge">MODULE 02</span>
           <div class="icon">🔧</div>
           <h3>KUP CZĘŚCI</h3>
-          <p>Części OEM, zamienniki, lista zakupowa i przyszłe oferty partnerów.</p>
+          <p>Moduł w budowie.</p>
         </div>
 
         <div class="tile" data-page="market">
           <span class="badge">MODULE 03</span>
           <div class="icon">🛒</div>
           <h3>GIEŁDA</h3>
-          <p>Miejsce na auta, projekty, ogłoszenia i handel motoryzacyjny.</p>
+          <p>Moduł w budowie.</p>
         </div>
 
         <div class="tile" data-page="insurance">
           <span class="badge">MODULE 04</span>
           <div class="icon">📄</div>
           <h3>UBEZPIECZENIE</h3>
-          <p>OC, AC, przegląd, terminy i przypomnienia o ważnych datach.</p>
+          <p>Moduł w budowie.</p>
         </div>
 
         <div class="tile logout-tile" id="logoutTile">
           <span class="badge">EXIT</span>
           <div class="icon">🚪</div>
           <h3>WYLOGUJ</h3>
-          <p>Zakończ sesję i wróć do ekranu logowania.</p>
+          <p>Zakończ sesję użytkownika.</p>
         </div>
       </section>
 
@@ -278,6 +252,7 @@
 
     const userEmail = document.getElementById("userEmail");
     const logoutTile = document.getElementById("logoutTile");
+    const myCarTile = document.getElementById("myCarTile");
     const message = document.getElementById("message");
     const tiles = document.querySelectorAll(".tile[data-page]");
 
@@ -287,6 +262,10 @@
       } else {
         window.location.href = "index.html";
       }
+    });
+
+    myCarTile.addEventListener("click", () => {
+      window.location.href = "my-car.html";
     });
 
     tiles.forEach((tile) => {

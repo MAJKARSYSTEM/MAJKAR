@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAJKAR - Dziennik Paliwowy</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.9)),
+        url("background.jpg") center/cover no-repeat;
+      color: white;
+      padding: 35px;
+    }
+
+    .page { max-width: 1150px; margin: 0 auto; }
+
+    .topbar, .panel, .summary-box {
+      border: 1px solid #ff1a1a;
+      border-radius: 16px;
+      background: rgba(0,0,0,.82);
+      box-shadow: 0 0 25px rgba(255,0,0,.35);
+    }
+
+    .topbar {
+      padding: 24px 28px;
+      margin-bottom: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    h1 {
+      font-size: 34px;
+      letter-spacing: 5px;
+      text-shadow: 0 0 16px red;
+    }
+
+    .topbar p {
+      margin-top: 8px;
+      color: #aaa;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    button {
+      min-height: 48px;
+      padding: 0 18px;
+      border: 1px solid #ff1a1a;
+      border-radius: 8px;
+      color: white;
+      background: linear-gradient(90deg, #1a0000, #b00000, #1a0000);
+      font-weight: 900;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(255,0,0,.45);
+    }
+
+    .back-btn { background: linear-gradient(90deg, #111, #333, #111); }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .summary-box {
+      padding: 22px;
+      text-align: center;
+    }
+
+    .summary-box p {
+      color: #aaa;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .summary-box span {
+      color: #ff3030;
+      font-size: 24px;
+      font-weight: 900;
+      text-shadow: 0 0 12px red;
+    }
+
+    .panel {
+      padding: 26px;
+      margin-bottom: 24px;
+    }
+
+    .panel h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 12px red;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: #bbb;
+      letter-spacing: 2px;
+    }
+
+    input {
+      width: 100%;
+      height: 52px;
+      padding: 0 14px;
+      background: #111;
+      border: 1px solid #ff1a1a;
+      color: white;
+      outline: none;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 14px;
+      border-bottom: 1px solid rgba(255,0,0,.25);
+      text-align: left;
+      font-size: 12px;
+    }
+
+    th {
+      color: #ff3030;
+      letter-spacing: 1px;
+    }
+
+    td {
+      color: #ddd;
+    }
+
+    .message {
+      margin-top: 15px;
+      min-height: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #66ff66;
+    }
+
+    @media (max-width: 800px) {
+      body { padding: 18px; }
+      .topbar { flex-direction: column; text-align: center; }
+      .summary { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      table { font-size: 11px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <header class="topbar">
+      <div>
+        <h1>DZIENNIK PALIWOWY</h1>
+        <p id="carName">Ładowanie auta...</p>
+      </div>
+
+      <button class="back-btn" id="backBtn">POWRÓT</button>
+    </header>
+
+    <section class="summary">
+      <div class="summary-box">
+        <p>ŁĄCZNIE ZATANKOWANO</p>
+        <span id="totalLiters">0 L</span>
+      </div>
+
+      <div class="summary-box">
+        <p>ŁĄCZNIE WYDANO</p>
+        <span id="totalMoney">0 zł</span>
+      </div>
+
+      <div class="summary-box">
+        <p>LICZBA TANKOWAŃ</p>
+        <span id="totalEntries">0</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Dodaj tankowanie</h2>
+
+      <form id="fuelForm">
+        <div class="form-grid">
+          <div>
+            <label>DATA TANKOWANIA</label>
+            <input id="fuelDate" type="date" required>
+          </div>
+
+          <div>
+            <label>LITRY</label>
+            <input id="liters" type="number" step="0.01" min="0" placeholder="np. 50" required>
+          </div>
+
+          <div>
+            <label>CENA ZA LITR</label>
+            <input id="price" type="number" step="0.01" min="0" placeholder="np. 6.49" required>
+          </div>
+
+          <div>
+            <label>AKCJA</label>
+            <button type="submit">ZAPISZ</button>
+          </div>
+        </div>
+      </form>
+
+      <div id="message" class="message"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Historia tankowań</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>DATA</th>
+            <th>LITRY</th>
+            <th>CENA/L</th>
+            <th>KWOTA</th>
+          </tr>
+        </thead>
+        <tbody id="fuelTable">
+          <tr>
+            <td colspan="4">Ładowanie danych...</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <script type="module">
+    import {
+      auth,
+      db,
+      doc,
+      getDoc,
+      collection,
+      addDoc,
+      getDocs,
+      onAuthStateChanged
+    } from "./firebase-config.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const carId = params.get("id");
+
+    const carName = document.getElementById("carName");
+    const backBtn = document.getElementById("backBtn");
+    const fuelForm = document.getElementById("fuelForm");
+    const fuelDate = document.getElementById("fuelDate");
+    const liters = document.getElementById("liters");
+    const price = document.getElementById("price");
+    const message = document.getElementById("message");
+    const fuelTable = document.getElementById("fuelTable");
+
+    const totalLiters = document.getElementById("totalLiters");
+    const totalMoney = document.getElementById("totalMoney");
+    const totalEntries = document.getElementById("totalEntries");
+
+    let currentUser = null;
+
+    function showMessage(text, success = true) {
+      message.textContent = text;
+      message.style.color = success ? "#66ff66" : "#ff6666";
+    }
+
+    function formatMoney(value) {
+      return value.toFixed(2).replace(".", ",") + " zł";
+    }
+
+    function formatLiters(value) {
+      return value.toFixed(2).replace(".", ",") + " L";
+    }
+
+    async function loadCar(user) {
+      if (!carId) {
+        carName.textContent = "Brak ID auta";
+        showMessage("Brak ID auta w adresie.", false);
+        return;
+      }
+
+      const carRef = doc(db, "users", user.uid, "cars", carId);
+      const carSnap = await getDoc(carRef);
+
+      if (!carSnap.exists()) {
+        carName.textContent = "Auto nie istnieje";
+        showMessage("Nie znaleziono auta.", false);
+        return;
+      }
+
+      const car = carSnap.data();
+      carName.textContent = `${car.brand || ""} ${car.model || ""} ${car.generation || ""}`;
+    }
+
+    async function loadFuelLogs(user) {
+      const logsRef = collection(db, "users", user.uid, "cars", carId, "fuelLogs");
+      const snap = await getDocs(logsRef);
+
+      const logs = [];
+
+      snap.forEach(docSnap => {
+        logs.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+      });
+
+      logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      renderFuelLogs(logs);
+    }
+
+    function renderFuelLogs(logs) {
+      fuelTable.innerHTML = "";
+
+      let litersSum = 0;
+      let moneySum = 0;
+
+      if (logs.length === 0) {
+        fuelTable.innerHTML = `
+          <tr>
+            <td colspan="4">Brak tankowań. Dodaj pierwsze tankowanie.</td>
+          </tr>
+        `;
+      }
+
+      logs.forEach(log => {
+        const l = Number(log.liters) || 0;
+        const p = Number(log.price) || 0;
+        const total = l * p;
+
+        litersSum += l;
+        moneySum += total;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${log.date || "-"}</td>
+          <td>${formatLiters(l)}</td>
+          <td>${formatMoney(p)}</td>
+          <td>${formatMoney(total)}</td>
+        `;
+
+        fuelTable.appendChild(row);
+      });
+
+      totalLiters.textContent = formatLiters(litersSum);
+      totalMoney.textContent = formatMoney(moneySum);
+      totalEntries.textContent = logs.length;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      currentUser = user;
+
+      try {
+        await loadCar(user);
+        await loadFuelLogs(user);
+        showMessage("Dziennik paliwowy załadowany.");
+      } catch (error) {
+        console.error(error);
+        showMessage("Błąd ładowania danych: " + error.code, false);
+      }
+    });
+
+    fuelForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!currentUser || !carId) {
+        showMessage("Brak użytkownika albo ID auta.", false);
+        return;
+      }
+
+      const log = {
+        date: fuelDate.value,
+        liters: Number(liters.value),
+        price: Number(price.value),
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        const logsRef = collection(db, "users", currentUser.uid, "cars", carId, "fuelLogs");
+        await addDoc(logsRef, log);
+
+        fuelForm.reset();
+        await loadFuelLogs(currentUser);
+
+        showMessage("Tankowanie zapisane.");
+      } catch (error) {
+        console.error(error);
+        showMessage("Błąd zapisu tankowania: " + error.code, false);
+      }
+    });
+
+    backBtn.addEventListener("click", () => {
+      window.location.href = "car-dashboard.html?id=" + carId;
+    });
+  </script>
+
+</body>
+</html>

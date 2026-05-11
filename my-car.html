@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
@@ -18,201 +19,200 @@
     body {
       min-height: 100vh;
       background:
-        linear-gradient(rgba(0,0,0,.28), rgba(0,0,0,.9)),
-        url("background.jpg") center/cover no-repeat;
+        linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.9)),
+        url('background.jpg') center/cover no-repeat;
       color: white;
       padding: 35px;
     }
 
     .page {
-      max-width: 1100px;
+      max-width: 1300px;
       margin: 0 auto;
     }
 
-    .topbar {
-      padding: 22px 26px;
+    .panel {
       border: 1px solid #ff1a1a;
-      border-radius: 14px;
-      background: rgba(0,0,0,.78);
+      border-radius: 16px;
+      background: rgba(0,0,0,.82);
       box-shadow: 0 0 25px rgba(255,0,0,.35);
-      margin-bottom: 25px;
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: center;
     }
 
-    .topbar h1 {
-      font-size: 34px;
+    .topbar {
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    h1 {
+      font-size: 36px;
       letter-spacing: 5px;
       text-shadow: 0 0 16px red;
     }
 
-    .topbar p {
+    .subtitle {
       margin-top: 8px;
       color: #aaa;
       font-size: 12px;
       letter-spacing: 2px;
     }
 
-    .counter {
-      color: #ff3030;
-      font-size: 13px;
-      letter-spacing: 2px;
-      text-align: right;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr 1.25fr;
-      gap: 22px;
-    }
-
-    .panel {
-      border: 1px solid #ff1a1a;
-      border-radius: 16px;
-      background:
-        linear-gradient(135deg, rgba(255,0,0,.13), transparent 40%),
-        rgba(0,0,0,.84);
-      box-shadow:
-        0 0 25px rgba(255,0,0,.35),
-        inset 0 0 25px rgba(255,0,0,.08);
-      padding: 26px;
-    }
-
-    .panel h2 {
-      font-size: 22px;
-      margin-bottom: 20px;
-      text-shadow: 0 0 12px red;
-    }
-
-    .cars-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .car-item {
-      padding: 16px;
-      border: 1px solid rgba(255,0,0,.45);
-      border-radius: 10px;
-      background: rgba(0,0,0,.58);
-      transition: .2s;
-    }
-
-    .car-item.active {
-      border-color: #ff3030;
-      box-shadow: 0 0 18px rgba(255,0,0,.55);
-    }
-
-    .car-item h3 {
-      font-size: 15px;
-      margin-bottom: 6px;
-      color: white;
-    }
-
-    .car-item p {
-      font-size: 11px;
-      color: #aaa;
-      margin-top: 4px;
-    }
-
-    .car-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .empty {
-      color: #aaa;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 11px;
-      letter-spacing: 2px;
-      color: #bbb;
-    }
-
-    .field input {
-      width: 100%;
-      height: 52px;
-      padding: 0 15px;
-      background: #111;
-      border: 1px solid #ff1a1a;
-      color: white;
-      outline: none;
-      font-size: 14px;
-      box-shadow: inset 0 0 12px rgba(255,0,0,.12);
-    }
-
-    .vin-field {
-      grid-column: 1 / -1;
-    }
-
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 10px;
-    }
-
     button {
       min-height: 46px;
+      padding: 0 18px;
       border: 1px solid #ff1a1a;
       border-radius: 8px;
+      background: linear-gradient(90deg, #1a0000, #b00000, #1a0000);
       color: white;
       font-weight: 900;
       letter-spacing: 1px;
       cursor: pointer;
-      background: linear-gradient(90deg, #1a0000, #b00000, #1a0000);
-      box-shadow: 0 0 14px rgba(255,0,0,.45);
-      padding: 0 10px;
       font-size: 11px;
+      box-shadow: 0 0 14px rgba(255,0,0,.4);
     }
 
     button:hover {
       filter: brightness(1.15);
     }
 
-    .read-btn {
-      background: linear-gradient(90deg, #1a0000, #b00000, #1a0000);
+    .secondary {
+      background: linear-gradient(90deg, #111, #333, #111);
     }
 
     .edit-btn {
       background: linear-gradient(90deg, #00111a, #005577, #00111a);
     }
 
-    .new-btn {
-      background: linear-gradient(90deg, #001a08, #087a26, #001a08);
+    .read-btn {
+      background: linear-gradient(90deg, #001a00, #007700, #001a00);
     }
 
     .delete-btn {
       background: linear-gradient(90deg, #240000, #8b0000, #240000);
-      border-color: #ff3b3b;
     }
 
-    .back-btn {
-      background: linear-gradient(90deg, #111, #333, #111);
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .summary-box {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .summary-box p {
+      color: #aaa;
+      font-size: 11px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .summary-box span {
+      color: #ff3030;
+      font-size: 22px;
+      font-weight: 900;
+      text-shadow: 0 0 12px red;
+    }
+
+    .panel-body {
+      padding: 26px;
+      margin-bottom: 28px;
+    }
+
+    .panel-body h2 {
+      font-size: 22px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 12px red;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: #bbb;
+      letter-spacing: 2px;
+    }
+
+    input {
+      width: 100%;
+      height: 52px;
+      padding: 0 14px;
+      background: #111;
+      border: 1px solid #ff1a1a;
+      color: white;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .car-card {
+      padding: 22px;
+      border: 1px solid rgba(255,0,0,.4);
+      border-radius: 14px;
+      background: rgba(0,0,0,.65);
+      box-shadow: 0 0 18px rgba(255,0,0,.18);
+    }
+
+    .car-card h3 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px red;
+    }
+
+    .car-card p {
+      font-size: 12px;
+      color: #bbb;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    .car-card strong {
+      color: white;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
     }
 
     .message {
-      margin-top: 18px;
-      min-height: 22px;
+      margin-top: 15px;
+      min-height: 20px;
       text-align: center;
-      color: #66ff66;
       font-size: 12px;
-      letter-spacing: 1px;
+    }
+
+    .empty {
+      color: #aaa;
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
     }
 
     @media (max-width: 900px) {
@@ -220,348 +220,307 @@
         padding: 18px;
       }
 
-      .layout {
-        grid-template-columns: 1fr;
-      }
-
       .topbar {
         flex-direction: column;
         text-align: center;
       }
 
-      .counter {
-        text-align: center;
+      .summary {
+        grid-template-columns: 1fr;
       }
 
       .form-grid {
         grid-template-columns: 1fr;
       }
 
-      .vin-field {
-        grid-column: auto;
+      .form-actions,
+      .card-actions {
+        flex-direction: column;
       }
 
-      .buttons {
-        grid-template-columns: 1fr;
+      button {
+        width: 100%;
       }
 
-      .topbar h1 {
+      h1 {
         font-size: 28px;
       }
     }
   </style>
-</head>
 
+</head>
 <body>
 
-  <div class="page">
+<div class="page">
 
-    <header class="topbar">
-      <div>
-        <h1>MOJE AUTO</h1>
-        <p>CZYTAJ = DASHBOARD AUTA / EDYTUJ = ZMIANA DANYCH</p>
-      </div>
+  <header class="panel topbar">
+    <div>
+      <h1>MOJE AUTO</h1>
 
-      <div class="counter" id="carCounter">Ładowanie...</div>
-    </header>
+```
+</div>
 
-    <main class="layout">
+<button class="secondary" id="backBtn">POWRÓT</button>
+```
 
-      <section class="panel">
-        <h2>Twoje auta</h2>
-        <div id="carsList" class="cars-list">
-          <p class="empty">Ładowanie aut z Firestore...</p>
-        </div>
-      </section>
+  </header>
 
-      <section class="panel">
-        <h2 id="formTitle">Dodaj auto</h2>
+  <section class="summary">
+    <div class="panel summary-box">
+      <p>LICZBA AUT</p>
+      <span id="carCount">0 / 10</span>
+    </div>
 
-        <form id="carForm">
-          <div class="form-grid">
-            <div class="field">
-              <label>MARKA</label>
-              <input id="brand" type="text" placeholder="np. Audi" required>
-            </div>
+```
+<div class="panel summary-box">
+  <p>LIMIT KONTA</p>
+  <span>10 AUT</span>
+</div>
 
-            <div class="field">
-              <label>MODEL</label>
-              <input id="model" type="text" placeholder="np. A8" required>
-            </div>
+<div class="panel summary-box">
+  <p>STATUS</p>
+  <span>ONLINE</span>
+</div>
+```
 
-            <div class="field">
-              <label>GENERACJA</label>
-              <input id="generation" type="text" placeholder="np. D3 / 8P / C7">
-            </div>
+  </section>
 
-            <div class="field">
-              <label>ROK</label>
-              <input id="year" type="number" placeholder="np. 2006" min="1900" max="2100">
-            </div>
+  <section class="panel panel-body">
+    <h2 id="formTitle">Dodaj nowe auto</h2>
 
-            <div class="field vin-field">
-              <label>VIN</label>
-              <input id="vin" type="text" placeholder="17-znakowy numer VIN" maxlength="17">
-            </div>
-          </div>
+```
+<form id="carForm">
+  <div class="form-grid">
+    <div>
+      <label>MARKA</label>
+      <input type="text" id="brand" required>
+    </div>
 
-          <div class="buttons">
-            <button type="button" class="new-btn" id="newBtn">NOWE AUTO</button>
-            <button type="submit" id="saveBtn">ZAPISZ</button>
-            <button type="button" class="delete-btn" id="deleteBtn">USUŃ AUTO</button>
-            <button type="button" class="back-btn" id="backBtn">POWRÓT</button>
-          </div>
-        </form>
+    <div>
+      <label>MODEL</label>
+      <input type="text" id="model" required>
+    </div>
 
-        <div id="message" class="message"></div>
-      </section>
+    <div>
+      <label>GENERACJA</label>
+      <input type="text" id="generation">
+    </div>
 
-    </main>
+    <div>
+      <label>ROK</label>
+      <input type="number" id="year">
+    </div>
 
+    <div>
+      <label>VIN</label>
+      <input type="text" id="vin">
+    </div>
   </div>
 
-  <script type="module">
-    import {
-      auth,
-      db,
-      doc,
-      setDoc,
-      collection,
-      addDoc,
-      getDocs,
-      deleteDoc,
-      onAuthStateChanged
-    } from "./firebase-config.js";
+  <div class="form-actions">
+    <button type="submit" id="saveBtn">ZAPISZ AUTO</button>
+    <button type="button" class="secondary" id="cancelBtn">ANULUJ</button>
+  </div>
+</form>
 
-    const MAX_CARS = 10;
+<div id="message" class="message"></div>
+```
 
-    const form = document.getElementById("carForm");
-    const newBtn = document.getElementById("newBtn");
-    const deleteBtn = document.getElementById("deleteBtn");
-    const backBtn = document.getElementById("backBtn");
-    const message = document.getElementById("message");
-    const carsList = document.getElementById("carsList");
-    const carCounter = document.getElementById("carCounter");
-    const formTitle = document.getElementById("formTitle");
+  </section>
 
-    let currentUser = null;
-    let cars = [];
-    let selectedCarId = null;
-    let editMode = false;
+  <section class="panel panel-body">
+    <h2>Twoje auta</h2>
+    <div id="carsList" class="cars-grid"></div>
+  </section>
 
-    const inputs = {
-      brand: document.getElementById("brand"),
-      model: document.getElementById("model"),
-      generation: document.getElementById("generation"),
-      year: document.getElementById("year"),
-      vin: document.getElementById("vin")
+</div>
+
+<script type="module">
+  import {
+    auth,
+    db,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    deleteDoc,
+    onAuthStateChanged
+  } from './firebase-config.js';
+
+  const MAX_CARS = 10;
+
+  const carForm = document.getElementById('carForm');
+  const formTitle = document.getElementById('formTitle');
+  const saveBtn = document.getElementById('saveBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const backBtn = document.getElementById('backBtn');
+  const carsList = document.getElementById('carsList');
+  const carCount = document.getElementById('carCount');
+  const message = document.getElementById('message');
+
+  const brand = document.getElementById('brand');
+  const model = document.getElementById('model');
+  const generation = document.getElementById('generation');
+  const year = document.getElementById('year');
+  const vin = document.getElementById('vin');
+
+  let currentUser = null;
+  let cars = [];
+  let editingCarId = null;
+
+  function showMessage(text, success = true) {
+    message.textContent = text;
+    message.style.color = success ? '#66ff66' : '#ff6666';
+  }
+
+  function resetForm() {
+    editingCarId = null;
+    carForm.reset();
+    formTitle.textContent = 'Dodaj nowe auto';
+    saveBtn.textContent = 'ZAPISZ AUTO';
+  }
+
+  async function loadCars() {
+    const carsRef = collection(db, 'users', currentUser.uid, 'cars');
+    const snap = await getDocs(carsRef);
+
+    cars = [];
+
+    snap.forEach(docSnap => {
+      cars.push({
+        id: docSnap.id,
+        ...docSnap.data()
+      });
+    });
+
+    cars.sort((a, b) => (a.brand || '').localeCompare(b.brand || ''));
+
+    renderCars();
+  }
+
+  function renderCars() {
+    carCount.textContent = `${cars.length} / ${MAX_CARS}`;
+    carsList.innerHTML = '';
+
+    if (cars.length === 0) {
+      carsList.innerHTML = '<div class="empty">Nie dodałeś jeszcze żadnego auta.</div>';
+      return;
+    }
+
+    cars.forEach(car => {
+      const card = document.createElement('div');
+      card.className = 'car-card';
+
+      card.innerHTML = `
+        <h3>${car.brand || ''} ${car.model || ''}</h3>
+        <p><strong>Generacja:</strong> ${car.generation || '-'}</p>
+        <p><strong>Rok:</strong> ${car.year || '-'}</p>
+        <p><strong>VIN:</strong> ${car.vin || '-'}</p>
+
+        <div class="card-actions">
+          <button class="read-btn">CZYTAJ</button>
+          <button class="edit-btn">EDYTUJ</button>
+          <button class="delete-btn">USUŃ</button>
+        </div>
+      `;
+
+      card.querySelector('.read-btn').addEventListener('click', () => {
+        window.location.href = 'car-dashboard.html?id=' + car.id;
+      });
+
+      card.querySelector('.edit-btn').addEventListener('click', () => {
+        editingCarId = car.id;
+        brand.value = car.brand || '';
+        model.value = car.model || '';
+        generation.value = car.generation || '';
+        year.value = car.year || '';
+        vin.value = car.vin || '';
+
+        formTitle.textContent = 'Edytuj auto';
+        saveBtn.textContent = 'ZAPISZ ZMIANY';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      card.querySelector('.delete-btn').addEventListener('click', async () => {
+        if (!confirm('Czy na pewno chcesz usunąć to auto?')) return;
+
+        await deleteDoc(doc(db, 'users', currentUser.uid, 'cars', car.id));
+        await loadCars();
+        showMessage('Auto zostało usunięte.');
+      });
+
+      carsList.appendChild(card);
+    });
+  }
+
+  onAuthStateChanged(auth, async user => {
+    if (!user) {
+      window.location.href = 'index.html';
+      return;
+    }
+
+    currentUser = user;
+    await loadCars();
+  });
+
+  carForm.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const carData = {
+      brand: brand.value.trim(),
+      model: model.value.trim(),
+      generation: generation.value.trim(),
+      year: year.value.trim(),
+      vin: vin.value.trim(),
+      updatedAt: new Date().toISOString()
     };
 
-    function showMessage(text, success = true) {
-      message.textContent = text;
-      message.style.color = success ? "#66ff66" : "#ff6666";
-    }
+    try {
+      if (editingCarId) {
+        await setDoc(
+          doc(db, 'users', currentUser.uid, 'cars', editingCarId),
+          carData,
+          { merge: true }
+        );
 
-    function clearForm() {
-      selectedCarId = null;
-      editMode = false;
-      formTitle.textContent = "Dodaj auto";
-      inputs.brand.value = "";
-      inputs.model.value = "";
-      inputs.generation.value = "";
-      inputs.year.value = "";
-      inputs.vin.value = "";
-    }
-
-    function fillForm(car) {
-      inputs.brand.value = car.brand || "";
-      inputs.model.value = car.model || "";
-      inputs.generation.value = car.generation || "";
-      inputs.year.value = car.year || "";
-      inputs.vin.value = car.vin || "";
-    }
-
-    function getSelectedCar() {
-      return cars.find(car => car.id === selectedCarId);
-    }
-
-    function renderCars() {
-      carsList.innerHTML = "";
-      carCounter.textContent = `AUTA: ${cars.length}/${MAX_CARS}`;
-
-      if (cars.length === 0) {
-        carsList.innerHTML = `<p class="empty">Nie masz jeszcze dodanego auta. Dodaj pierwsze auto po prawej stronie.</p>`;
-        return;
-      }
-
-      cars.forEach(car => {
-        const item = document.createElement("div");
-        item.className = "car-item";
-        if (car.id === selectedCarId) item.classList.add("active");
-
-        item.innerHTML = `
-          <h3>${car.brand || "Brak marki"} ${car.model || ""}</h3>
-          <p>Generacja: ${car.generation || "Brak danych"}</p>
-          <p>Rok: ${car.year || "Brak danych"}</p>
-          <p>VIN: ${car.vin || "Brak danych"}</p>
-
-          <div class="car-actions">
-            <button type="button" class="read-btn">CZYTAJ</button>
-            <button type="button" class="edit-btn">EDYTUJ</button>
-          </div>
-        `;
-
-        const readBtn = item.querySelector(".read-btn");
-        const editBtn = item.querySelector(".edit-btn");
-
-        readBtn.addEventListener("click", () => {
-          window.location.href = "car-dashboard.html?id=" + car.id;
-        });
-
-        editBtn.addEventListener("click", () => {
-          selectedCarId = car.id;
-          editMode = true;
-          formTitle.textContent = "Edytuj auto";
-          fillForm(car);
-          renderCars();
-          showMessage("Tryb edycji auta włączony. Zmień dane i kliknij ZAPISZ.");
-        });
-
-        carsList.appendChild(item);
-      });
-    }
-
-    async function loadCars() {
-      const carsRef = collection(db, "users", currentUser.uid, "cars");
-      const snap = await getDocs(carsRef);
-
-      cars = [];
-
-      snap.forEach(docSnap => {
-        cars.push({
-          id: docSnap.id,
-          ...docSnap.data()
-        });
-      });
-
-      renderCars();
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-        return;
-      }
-
-      currentUser = user;
-
-      try {
-        await loadCars();
-        showMessage("Auta wczytane z Firestore.");
-      } catch (error) {
-        console.error(error);
-        showMessage("Błąd odczytu Firestore: " + error.code, false);
-      }
-    });
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      if (!currentUser) {
-        showMessage("Brak zalogowanego użytkownika.", false);
-        return;
-      }
-
-      const car = {
-        brand: inputs.brand.value.trim(),
-        model: inputs.model.value.trim(),
-        generation: inputs.generation.value.trim(),
-        year: inputs.year.value.trim(),
-        vin: inputs.vin.value.trim().toUpperCase(),
-        updatedAt: new Date().toISOString()
-      };
-
-      try {
-        if (editMode && selectedCarId) {
-          const carRef = doc(db, "users", currentUser.uid, "cars", selectedCarId);
-          await setDoc(carRef, car, { merge: true });
-
-          showMessage("Auto zaktualizowane.");
-        } else {
-          if (cars.length >= MAX_CARS) {
-            showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
-            return;
-          }
-
-          const carsRef = collection(db, "users", currentUser.uid, "cars");
-          await addDoc(carsRef, {
-            ...car,
-            createdAt: new Date().toISOString()
-          });
-
-          showMessage("Nowe auto zapisane.");
+        showMessage('Auto zostało zaktualizowane.');
+      } else {
+        if (cars.length >= MAX_CARS) {
+          showMessage('Osiągnięto limit 10 aut.', false);
+          return;
         }
 
-        clearForm();
-        await loadCars();
-      } catch (error) {
-        console.error(error);
-        showMessage("Błąd zapisu Firestore: " + error.code, false);
-      }
-    });
+        await addDoc(
+          collection(db, 'users', currentUser.uid, 'cars'),
+          {
+            ...carData,
+            createdAt: new Date().toISOString()
+          }
+        );
 
-    newBtn.addEventListener("click", () => {
-      if (cars.length >= MAX_CARS) {
-        showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
-        return;
+        showMessage('Auto zostało zapisane.');
       }
 
-      clearForm();
-      renderCars();
-      showMessage("Tryb dodawania nowego auta.");
-    });
+      resetForm();
+      await loadCars();
+    } catch (error) {
+      console.error(error);
+      showMessage('Błąd zapisu danych.', false);
+    }
+  });
 
-    deleteBtn.addEventListener("click", async () => {
-      if (!currentUser) {
-        showMessage("Brak zalogowanego użytkownika.", false);
-        return;
-      }
+  cancelBtn.addEventListener('click', () => {
+    resetForm();
+    showMessage('Edycja anulowana.');
+  });
 
-      if (!selectedCarId) {
-        showMessage("Najpierw kliknij EDYTUJ przy aucie, które chcesz usunąć.", false);
-        return;
-      }
-
-      const selectedCar = getSelectedCar();
-      const carName = selectedCar
-        ? `${selectedCar.brand || ""} ${selectedCar.model || ""}`.trim()
-        : "wybrane auto";
-
-      const confirmDelete = confirm("Czy na pewno chcesz usunąć: " + carName + "?");
-
-      if (!confirmDelete) {
-        showMessage("Usuwanie anulowane.", false);
-        return;
-      }
-
-      try {
-        const carRef = doc(db, "users", currentUser.uid, "cars", selectedCarId);
-        await deleteDoc(carRef);
-
-        clearForm();
-        await loadCars();
-
-        showMessage("Auto usunięte.");
-      } catch (error) {
-        console.error(error);
-        showMessage("Błąd usuwania auta: " + error.code, false);
-      }
-    });
-
-    backBtn.addEventListener("click", () => {
-      window.location.href = "dashboard.html";
-    });
-  </script>
+  backBtn.addEventListener('click', () => {
+    window.location.href = 'dashboard.html';
+  });
+</script>
 
 </body>
 </html>

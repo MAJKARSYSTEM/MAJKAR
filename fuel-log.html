@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -239,369 +240,359 @@
     }
   </style>
 </head>
-
 <body>
 
-  <div class="page">
+<div class="page">
 
-    <header class="topbar">
-      <div>
-        <h1>DZIENNIK PALIWOWY</h1>
-        <p id="carName">Ładowanie auta...</p>
-      </div>
+  <header class="topbar">
+    <div>
+      <h1>DZIENNIK PALIWOWY</h1>
+      <p id="carName">Ładowanie auta...</p>
+    </div>
 
-      <button class="back-btn" id="backBtn">POWRÓT</button>
-    </header>
+    <button class="back-btn" id="backBtn">POWRÓT</button>
+  </header>
 
-    <section class="summary">
-      <div class="summary-box">
-        <p>W TYM MIESIĄCU</p>
-        <span id="monthMoney">0 zł</span>
-      </div>
+  <section class="summary">
+    <div class="summary-box">
+      <p>W TYM MIESIĄCU</p>
+      <span id="monthMoney">0 zł</span>
+    </div>
 
-      <div class="summary-box">
-        <p>W TYM ROKU</p>
-        <span id="yearMoney">0 zł</span>
-      </div>
+    <div class="summary-box">
+      <p>W TYM ROKU</p>
+      <span id="yearMoney">0 zł</span>
+    </div>
 
-      <div class="summary-box">
-        <p>ŁĄCZNIE LITRÓW</p>
-        <span id="totalLiters">0 L</span>
-      </div>
+    <div class="summary-box">
+      <p>ŁĄCZNIE LITRÓW</p>
+      <span id="totalLiters">0 L</span>
+    </div>
 
-      <div class="summary-box">
-        <p>ŁĄCZNIE WYDANO</p>
-        <span id="totalMoney">0 zł</span>
-      </div>
+    <div class="summary-box">
+      <p>ŁĄCZNIE WYDANO</p>
+      <span id="totalMoney">0 zł</span>
+    </div>
 
-      <div class="summary-box">
-        <p>LICZBA TANKOWAŃ</p>
-        <span id="totalEntries">0</span>
-      </div>
-    </section>
+    <div class="summary-box">
+      <p>LICZBA TANKOWAŃ</p>
+      <span id="totalEntries">0</span>
+    </div>
+  </section>
 
-    <section class="panel">
-      <h2 id="formTitle">Dodaj tankowanie</h2>
+  <section class="panel">
+    <h2 id="formTitle">Dodaj tankowanie</h2>
 
-      <form id="fuelForm">
-        <div class="form-grid">
-          <div>
-            <label>DATA TANKOWANIA</label>
-            <input id="fuelDate" type="date" required>
-          </div>
+    <form id="fuelForm">
+      <div class="form-grid">
+        <div>
+          <label>DATA TANKOWANIA</label>
+          <input id="fuelDate" type="date" required>
+        </div>
 
-          <div>
-            <label>LITRY</label>
-            <input id="liters" type="number" step="0.01" min="0" placeholder="np. 50" required>
-          </div>
+        <div>
+          <label>LITRY</label>
+          <input id="liters" type="number" step="0.01" min="0" required>
+        </div>
 
-          <div>
-            <label>CENA ZA LITR</label>
-            <input id="price" type="number" step="0.01" min="0" placeholder="np. 6.49" required>
-          </div>
+        <div>
+          <label>CENA ZA LITR</label>
+          <input id="price" type="number" step="0.01" min="0" required>
+        </div>
 
-          <div>
-            <label>AKCJA</label>
-            <div class="form-actions">
-              <button type="submit" id="saveBtn">ZAPISZ</button>
-              <button type="button" class="cancel-btn" id="cancelEditBtn">ANULUJ</button>
-            </div>
+        <div>
+          <label>AKCJA</label>
+          <div class="form-actions">
+            <button type="submit" id="saveBtn">ZAPISZ</button>
+            <button type="button" class="cancel-btn" id="cancelEditBtn">ANULUJ</button>
           </div>
         </div>
-      </form>
+      </div>
+    </form>
 
-      <div id="message" class="message"></div>
-    </section>
+    <div id="message" class="message"></div>
+  </section>
 
-    <section class="panel">
-      <h2>Historia tankowań</h2>
+  <section class="panel">
+    <h2>Historia tankowań</h2>
 
-      <table>
-        <thead>
-          <tr>
-            <th>DATA</th>
-            <th>LITRY</th>
-            <th>CENA/L</th>
-            <th>KWOTA</th>
-            <th>AKCJE</th>
-          </tr>
-        </thead>
+    <table>
+      <thead>
+        <tr>
+          <th>DATA</th>
+          <th>LITRY</th>
+          <th>CENA/L</th>
+          <th>KWOTA</th>
+          <th>AKCJE</th>
+        </tr>
+      </thead>
+      <tbody id="fuelTable">
+        <tr>
+          <td colspan="5">Ładowanie danych...</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-        <tbody id="fuelTable">
-          <tr>
-            <td colspan="5">Ładowanie danych...</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+</div>
 
-  </div>
+<script type="module">
+import {
+  auth,
+  db,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  onAuthStateChanged
+} from "./firebase-config.js";
 
-  <script type="module">
-    import {
-      auth,
+const params = new URLSearchParams(window.location.search);
+const carId = params.get("id");
+
+const carName = document.getElementById("carName");
+const backBtn = document.getElementById("backBtn");
+const fuelForm = document.getElementById("fuelForm");
+const fuelDate = document.getElementById("fuelDate");
+const liters = document.getElementById("liters");
+const price = document.getElementById("price");
+const message = document.getElementById("message");
+const fuelTable = document.getElementById("fuelTable");
+const formTitle = document.getElementById("formTitle");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
+const saveBtn = document.getElementById("saveBtn");
+
+const monthMoney = document.getElementById("monthMoney");
+const yearMoney = document.getElementById("yearMoney");
+const totalLiters = document.getElementById("totalLiters");
+const totalMoney = document.getElementById("totalMoney");
+const totalEntries = document.getElementById("totalEntries");
+
+let currentUser = null;
+let logs = [];
+let editingLogId = null;
+
+function showMessage(text, success = true) {
+  message.textContent = text;
+  message.style.color = success ? "#66ff66" : "#ff6666";
+}
+
+function formatMoney(value) {
+  return value.toFixed(2).replace(".", ",") + " zł";
+}
+
+function formatLiters(value) {
+  return value.toFixed(2).replace(".", ",") + " L";
+}
+
+function resetForm() {
+  editingLogId = null;
+  fuelForm.reset();
+  formTitle.textContent = "Dodaj tankowanie";
+  saveBtn.textContent = "ZAPISZ";
+}
+
+async function loadCar(user) {
+  const carRef = doc(db, "users", user.uid, "cars", carId);
+  const carSnap = await getDoc(carRef);
+
+  if (!carSnap.exists()) {
+    carName.textContent = "Auto nie istnieje";
+    return;
+  }
+
+  const car = carSnap.data();
+  carName.textContent = `${car.brand || ""} ${car.model || ""} ${car.generation || ""}`;
+}
+
+async function loadFuelLogs(user) {
+  const logsRef = collection(db, "users", user.uid, "cars", carId, "fuelLogs");
+  const snap = await getDocs(logsRef);
+
+  logs = [];
+
+  snap.forEach(docSnap => {
+    logs.push({
+      id: docSnap.id,
+      ...docSnap.data()
+    });
+  });
+
+  logs.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+
+  renderFuelLogs();
+}
+
+function renderFuelLogs() {
+  fuelTable.innerHTML = "";
+
+  let litersSum = 0;
+  let moneySum = 0;
+  let monthSum = 0;
+  let yearSum = 0;
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  if (logs.length === 0) {
+    fuelTable.innerHTML = `
+      <tr>
+        <td colspan="5">Brak tankowań. Dodaj pierwsze tankowanie.</td>
+      </tr>
+    `;
+  }
+
+  logs.forEach(log => {
+    const l = Number(log.liters) || 0;
+    const p = Number(log.price) || 0;
+    const total = l * p;
+
+    litersSum += l;
+    moneySum += total;
+
+    if (log.date) {
+      const dateParts = log.date.split("-");
+      const logYear = Number(dateParts[0]);
+      const logMonth = Number(dateParts[1]) - 1;
+
+      if (logMonth === currentMonth && logYear === currentYear) {
+        monthSum += total;
+      }
+
+      if (logYear === currentYear) {
+        yearSum += total;
+      }
+    }
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${log.date || "-"}</td>
+      <td>${formatLiters(l)}</td>
+      <td>${formatMoney(p)}</td>
+      <td>${formatMoney(total)}</td>
+      <td>
+        <div class="table-actions">
+          <button type="button" class="edit-btn">EDYTUJ</button>
+          <button type="button" class="delete-btn">USUŃ</button>
+        </div>
+      </td>
+    `;
+
+    row.querySelector(".edit-btn").addEventListener("click", () => {
+      editingLogId = log.id;
+      fuelDate.value = log.date || "";
+      liters.value = log.liters || "";
+      price.value = log.price || "";
+      formTitle.textContent = "Edytuj tankowanie";
+      saveBtn.textContent = "ZAPISZ ZMIANY";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    row.querySelector(".delete-btn").addEventListener("click", async () => {
+      if (!confirm("Czy na pewno chcesz usunąć to tankowanie?")) return;
+
+      const logRef = doc(
+        db,
+        "users",
+        currentUser.uid,
+        "cars",
+        carId,
+        "fuelLogs",
+        log.id
+      );
+
+      await deleteDoc(logRef);
+      await loadFuelLogs(currentUser);
+      showMessage("Tankowanie usunięte.");
+    });
+
+    fuelTable.appendChild(row);
+  });
+
+  monthMoney.textContent = formatMoney(monthSum);
+  yearMoney.textContent = formatMoney(yearSum);
+  totalLiters.textContent = formatLiters(litersSum);
+  totalMoney.textContent = formatMoney(moneySum);
+  totalEntries.textContent = logs.length;
+}
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  currentUser = user;
+
+  await loadCar(user);
+  await loadFuelLogs(user);
+});
+
+fuelForm.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  const log = {
+    date: fuelDate.value,
+    liters: Number(liters.value),
+    price: Number(price.value),
+    total: Number(liters.value) * Number(price.value),
+    updatedAt: new Date().toISOString()
+  };
+
+  if (editingLogId) {
+    const logRef = doc(
       db,
-      doc,
-      getDoc,
-      setDoc,
-      collection,
-      addDoc,
-      getDocs,
-      deleteDoc,
-      onAuthStateChanged
-    } from "./firebase-config.js";
+      "users",
+      currentUser.uid,
+      "cars",
+      carId,
+      "fuelLogs",
+      editingLogId
+    );
 
-    const params = new URLSearchParams(window.location.search);
-    const carId = params.get("id");
+    await setDoc(logRef, log, { merge: true });
+    showMessage("Tankowanie zaktualizowane.");
+  } else {
+    const logsRef = collection(
+      db,
+      "users",
+      currentUser.uid,
+      "cars",
+      carId,
+      "fuelLogs"
+    );
 
-    const carName = document.getElementById("carName");
-    const backBtn = document.getElementById("backBtn");
-    const fuelForm = document.getElementById("fuelForm");
-    const fuelDate = document.getElementById("fuelDate");
-    const liters = document.getElementById("liters");
-    const price = document.getElementById("price");
-    const message = document.getElementById("message");
-    const fuelTable = document.getElementById("fuelTable");
-    const formTitle = document.getElementById("formTitle");
-    const cancelEditBtn = document.getElementById("cancelEditBtn");
-    const saveBtn = document.getElementById("saveBtn");
-
-    const monthMoney = document.getElementById("monthMoney");
-    const yearMoney = document.getElementById("yearMoney");
-    const totalLiters = document.getElementById("totalLiters");
-    const totalMoney = document.getElementById("totalMoney");
-    const totalEntries = document.getElementById("totalEntries");
-
-    let currentUser = null;
-    let logs = [];
-    let editingLogId = null;
-
-    function showMessage(text, success = true) {
-      message.textContent = text;
-      message.style.color = success ? "#66ff66" : "#ff6666";
-    }
-
-    function formatMoney(value) {
-      return value.toFixed(2).replace(".", ",") + " zł";
-    }
-
-    function formatLiters(value) {
-      return value.toFixed(2).replace(".", ",") + " L";
-    }
-
-    function resetForm() {
-      editingLogId = null;
-      fuelForm.reset();
-      formTitle.textContent = "Dodaj tankowanie";
-      saveBtn.textContent = "ZAPISZ";
-      showMessage("Tryb dodawania tankowania.");
-    }
-
-    async function loadCar(user) {
-      if (!carId) {
-        carName.textContent = "Brak ID auta";
-        showMessage("Brak ID auta w adresie.", false);
-        return;
-      }
-
-      const carRef = doc(db, "users", user.uid, "cars", carId);
-      const carSnap = await getDoc(carRef);
-
-      if (!carSnap.exists()) {
-        carName.textContent = "Auto nie istnieje";
-        showMessage("Nie znaleziono auta.", false);
-        return;
-      }
-
-      const car = carSnap.data();
-      carName.textContent = `${car.brand || ""} ${car.model || ""} ${car.generation || ""}`;
-    }
-
-    async function loadFuelLogs(user) {
-      const logsRef = collection(db, "users", user.uid, "cars", carId, "fuelLogs");
-      const snap = await getDocs(logsRef);
-
-      logs = [];
-
-      snap.forEach(docSnap => {
-        logs.push({
-          id: docSnap.id,
-          ...docSnap.data()
-        });
-      });
-
-      logs.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      renderFuelLogs();
-    }
-
-    function renderFuelLogs() {
-      fuelTable.innerHTML = "";
-
-      let litersSum = 0;
-      let moneySum = 0;
-      let monthSum = 0;
-      let yearSum = 0;
-
-      const now = new Date();
-      const currentMonth = now.getMonth();
-      const currentYear = now.getFullYear();
-
-      if (logs.length === 0) {
-        fuelTable.innerHTML = `
-          <tr>
-            <td colspan="5">Brak tankowań. Dodaj pierwsze tankowanie.</td>
-          </tr>
-        `;
-      }
-
-      logs.forEach(log => {
-        const l = Number(log.liters) || 0;
-        const p = Number(log.price) || 0;
-        const total = l * p;
-
-        litersSum += l;
-        moneySum += total;
-
-        if (log.date) {
-          const logDate = new Date(log.date);
-
-          if (
-            logDate.getMonth() === currentMonth &&
-            logDate.getFullYear() === currentYear
-          ) {
-            monthSum += total;
-          }
-
-          if (logDate.getFullYear() === currentYear) {
-            yearSum += total;
-          }
-        }
-
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-          <td>${log.date || "-"}</td>
-          <td>${formatLiters(l)}</td>
-          <td>${formatMoney(p)}</td>
-          <td>${formatMoney(total)}</td>
-          <td>
-            <div class="table-actions">
-              <button type="button" class="edit-btn">EDYTUJ</button>
-              <button type="button" class="delete-btn">USUŃ</button>
-            </div>
-          </td>
-        `;
-
-        const editBtn = row.querySelector(".edit-btn");
-        const deleteBtn = row.querySelector(".delete-btn");
-
-        editBtn.addEventListener("click", () => {
-          editingLogId = log.id;
-          fuelDate.value = log.date || "";
-          liters.value = log.liters || "";
-          price.value = log.price || "";
-          formTitle.textContent = "Edytuj tankowanie";
-          saveBtn.textContent = "ZAPISZ ZMIANY";
-          showMessage("Tryb edycji tankowania.");
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-
-        deleteBtn.addEventListener("click", async () => {
-          const confirmDelete = confirm("Czy na pewno chcesz usunąć to tankowanie?");
-
-          if (!confirmDelete) {
-            showMessage("Usuwanie anulowane.", false);
-            return;
-          }
-
-          try {
-            const logRef = doc(db, "users", currentUser.uid, "cars", carId, "fuelLogs", log.id);
-            await deleteDoc(logRef);
-
-            await loadFuelLogs(currentUser);
-            showMessage("Tankowanie usunięte.");
-          } catch (error) {
-            console.error(error);
-            showMessage("Błąd usuwania: " + error.code, false);
-          }
-        });
-
-        fuelTable.appendChild(row);
-      });
-
-      monthMoney.textContent = formatMoney(monthSum);
-      yearMoney.textContent = formatMoney(yearSum);
-      totalLiters.textContent = formatLiters(litersSum);
-      totalMoney.textContent = formatMoney(moneySum);
-      totalEntries.textContent = logs.length;
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-        return;
-      }
-
-      currentUser = user;
-
-      try {
-        await loadCar(user);
-        await loadFuelLogs(user);
-        showMessage("Dziennik paliwowy załadowany.");
-      } catch (error) {
-        console.error(error);
-        showMessage("Błąd ładowania danych: " + error.code, false);
-      }
+    await addDoc(logsRef, {
+      ...log,
+      createdAt: new Date().toISOString()
     });
 
-    fuelForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    showMessage("Tankowanie zapisane.");
+  }
 
-      if (!currentUser || !carId) {
-        showMessage("Brak użytkownika albo ID auta.", false);
-        return;
-      }
+  resetForm();
+  await loadFuelLogs(currentUser);
+});
 
-      const log = {
-        date: fuelDate.value,
-        liters: Number(liters.value),
-        price: Number(price.value),
-        total: Number(liters.value) * Number(price.value),
-        updatedAt: new Date().toISOString()
-      };
+cancelEditBtn.addEventListener("click", resetForm);
 
-      try {
-        if (editingLogId) {
-          const logRef = doc(db, "users", currentUser.uid, "cars", carId, "fuelLogs", editingLogId);
-          await setDoc(logRef, log, { merge: true });
-          showMessage("Tankowanie zaktualizowane.");
-        } else {
-          const logsRef = collection(db, "users", currentUser.uid, "cars", carId, "fuelLogs");
-          await addDoc(logsRef, {
-            ...log,
-            createdAt: new Date().toISOString()
-          });
-
-          showMessage("Tankowanie zapisane.");
-        }
-
-        resetForm();
-        await loadFuelLogs(currentUser);
-      } catch (error) {
-        console.error(error);
-        showMessage("Błąd zapisu tankowania: " + error.code, false);
-      }
-    });
-
-    cancelEditBtn.addEventListener("click", () => {
-      resetForm();
-    });
-
-    backBtn.addEventListener("click", () => {
-      window.location.href = "car-dashboard.html?id=" + carId;
-    });
-  </script>
+backBtn.addEventListener("click", () => {
+  window.location.href = "car-dashboard.html?id=" + carId;
+});
+</script>
 
 </body>
 </html>
+```
+
+### Wgraj zmiany
+
+```bash
+git add .
+git commit -m "Naprawiono liczenie miesiecy w dzienniku paliwowym"
+git push
+```

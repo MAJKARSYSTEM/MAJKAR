@@ -200,7 +200,7 @@
 
     <header class="topbar">
       <h1>MOJE AUTO</h1>
-      <p>MAJKAR VEHICLE PROFILE MODULE</p>
+      <p>MAJKAR VEHICLE PROFILE MODULE / FIRESTORE CLOUD SYNC</p>
     </header>
 
     <section class="panel">
@@ -241,7 +241,7 @@
         </div>
       </form>
 
-      <div id="message" class="message"></div>
+      <div id="message" class="message">Ładowanie danych z Firestore...</div>
 
       <div class="preview">
         <h3>AKTUALNIE ZAPISANE AUTO</h3>
@@ -258,6 +258,10 @@
   <script type="module">
     import {
       auth,
+      db,
+      doc,
+      setDoc,
+      getDoc,
       onAuthStateChanged
     } from "./firebase-config.js";
 
@@ -265,6 +269,8 @@
     const editBtn = document.getElementById("editBtn");
     const backBtn = document.getElementById("backBtn");
     const message = document.getElementById("message");
+
+    let currentUser = null;
 
     const inputs = {
       brand: document.getElementById("brand"),
@@ -288,6 +294,11 @@
       });
     }
 
+    function showMessage(text, success = true) {
+      message.textContent = text;
+      message.style.color = success ? "#66ff66" : "#ff6666";
+    }
+
     function updatePreview(car) {
       preview.brand.textContent = car.brand || "Brak danych";
       preview.model.textContent = car.model || "Brak danych";
@@ -296,52 +307,81 @@
       preview.vin.textContent = car.vin || "Brak danych";
     }
 
-    function loadCar() {
-      const savedCar = localStorage.getItem("majkarCar");
+    function fillInputs(car) {
+      inputs.brand.value = car.brand || "";
+      inputs.model.value = car.model || "";
+      inputs.generation.value = car.generation || "";
+      inputs.year.value = car.year || "";
+      inputs.vin.value = car.vin || "";
+    }
 
-      if (savedCar) {
-        const car = JSON.parse(savedCar);
+    async function loadCarFromFirestore(user) {
+      try {
+        const carRef = doc(db, "users", user.uid, "cars", "mainCar");
+        const carSnap = await getDoc(carRef);
 
-        inputs.brand.value = car.brand || "";
-        inputs.model.value = car.model || "";
-        inputs.generation.value = car.generation || "";
-        inputs.year.value = car.year || "";
-        inputs.vin.value = car.vin || "";
+        if (carSnap.exists()) {
+          const car = carSnap.data();
 
-        updatePreview(car);
-        setInputsDisabled(true);
+          fillInputs(car);
+          updatePreview(car);
+          setInputsDisabled(true);
+
+          showMessage("Dane auta wczytane z Firestore.", true);
+        } else {
+          setInputsDisabled(false);
+          showMessage("Brak zapisanego auta. Uzupełnij dane i kliknij ZAPISZ AUTO.", true);
+        }
+      } catch (error) {
+        console.error(error);
+        showMessage("Błąd odczytu z Firestore: " + error.code, false);
       }
     }
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (!user) {
         window.location.href = "index.html";
-      } else {
-        loadCar();
+        return;
       }
+
+      currentUser = user;
+      await loadCarFromFirestore(user);
     });
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+
+      if (!currentUser) {
+        showMessage("Brak zalogowanego użytkownika.", false);
+        return;
+      }
 
       const car = {
         brand: inputs.brand.value.trim(),
         model: inputs.model.value.trim(),
         generation: inputs.generation.value.trim(),
         year: inputs.year.value.trim(),
-        vin: inputs.vin.value.trim().toUpperCase()
+        vin: inputs.vin.value.trim().toUpperCase(),
+        updatedAt: new Date().toISOString()
       };
 
-      localStorage.setItem("majkarCar", JSON.stringify(car));
-      updatePreview(car);
-      setInputsDisabled(true);
+      try {
+        const carRef = doc(db, "users", currentUser.uid, "cars", "mainCar");
+        await setDoc(carRef, car);
 
-      message.textContent = "Auto zapisane lokalnie.";
+        updatePreview(car);
+        setInputsDisabled(true);
+
+        showMessage("Auto zapisane w Firestore.", true);
+      } catch (error) {
+        console.error(error);
+        showMessage("Błąd zapisu do Firestore: " + error.code, false);
+      }
     });
 
     editBtn.addEventListener("click", () => {
       setInputsDisabled(false);
-      message.textContent = "Tryb edycji włączony.";
+      showMessage("Tryb edycji włączony.", true);
     });
 
     backBtn.addEventListener("click", () => {

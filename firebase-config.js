@@ -8,6 +8,13 @@ import {
   signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyArjhwELyU01SqVJZONbrHGsSBkruLH6Rs",
   authDomain: "majkar-46764.firebaseapp.com",
@@ -19,9 +26,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 export {
   auth,
+  db,
+  doc,
+  setDoc,
+  getDoc,
   onAuthStateChanged,
   signOut,
   createUserWithEmailAndPassword,

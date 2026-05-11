@@ -105,11 +105,6 @@
       transform: translateY(-2px);
     }
 
-    .car-item.active {
-      border-color: #ff3030;
-      box-shadow: 0 0 18px rgba(255,0,0,.55);
-    }
-
     .car-item h3 {
       font-size: 15px;
       margin-bottom: 6px;
@@ -155,18 +150,13 @@
       box-shadow: inset 0 0 12px rgba(255,0,0,.12);
     }
 
-    .field input:disabled {
-      opacity: .65;
-      cursor: not-allowed;
-    }
-
     .vin-field {
       grid-column: 1 / -1;
     }
 
     .buttons {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       margin-top: 10px;
     }
@@ -189,18 +179,8 @@
       filter: brightness(1.15);
     }
 
-    button:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-      filter: none;
-    }
-
     .back-btn {
       background: linear-gradient(90deg, #111, #333, #111);
-    }
-
-    .edit-btn {
-      background: linear-gradient(90deg, #00111a, #005577, #00111a);
     }
 
     .new-btn {
@@ -265,7 +245,7 @@
     <header class="topbar">
       <div>
         <h1>MOJE AUTO</h1>
-        <p>MAJKAR VEHICLE GARAGE / LIMIT 10 AUT</p>
+        <p>KLIKNIJ AUTO, ABY OTWORZYĆ DASHBOARD POJAZDU</p>
       </div>
 
       <div class="counter" id="carCounter">Ładowanie...</div>
@@ -281,7 +261,7 @@
       </section>
 
       <section class="panel">
-        <h2 id="formTitle">Dodaj auto</h2>
+        <h2>Dodaj auto</h2>
 
         <form id="carForm">
           <div class="form-grid">
@@ -312,10 +292,8 @@
           </div>
 
           <div class="buttons">
-            <button type="button" class="new-btn" id="newBtn">NOWE AUTO</button>
-            <button type="button" class="edit-btn" id="editBtn">EDYTUJ</button>
-            <button type="submit" id="saveBtn">ZAPISZ</button>
-            <button type="button" class="delete-btn" id="deleteBtn">USUŃ AUTO</button>
+            <button type="submit">ZAPISZ AUTO</button>
+            <button type="button" class="delete-btn" id="deleteLastBtn">USUŃ OSTATNIE</button>
             <button type="button" class="back-btn" id="backBtn">POWRÓT</button>
           </div>
         </form>
@@ -332,7 +310,6 @@
       auth,
       db,
       doc,
-      setDoc,
       collection,
       addDoc,
       getDocs,
@@ -343,19 +320,14 @@
     const MAX_CARS = 10;
 
     const form = document.getElementById("carForm");
-    const editBtn = document.getElementById("editBtn");
-    const newBtn = document.getElementById("newBtn");
-    const deleteBtn = document.getElementById("deleteBtn");
     const backBtn = document.getElementById("backBtn");
+    const deleteLastBtn = document.getElementById("deleteLastBtn");
     const message = document.getElementById("message");
     const carsList = document.getElementById("carsList");
     const carCounter = document.getElementById("carCounter");
-    const formTitle = document.getElementById("formTitle");
 
     let currentUser = null;
     let cars = [];
-    let selectedCarId = null;
-    let editingExisting = false;
 
     const inputs = {
       brand: document.getElementById("brand"),
@@ -370,32 +342,12 @@
       message.style.color = success ? "#66ff66" : "#ff6666";
     }
 
-    function setInputsDisabled(disabled) {
-      Object.values(inputs).forEach(input => input.disabled = disabled);
-    }
-
     function clearForm() {
-      selectedCarId = null;
-      editingExisting = false;
-      formTitle.textContent = "Dodaj auto";
       inputs.brand.value = "";
       inputs.model.value = "";
       inputs.generation.value = "";
       inputs.year.value = "";
       inputs.vin.value = "";
-      setInputsDisabled(false);
-    }
-
-    function fillForm(car) {
-      inputs.brand.value = car.brand || "";
-      inputs.model.value = car.model || "";
-      inputs.generation.value = car.generation || "";
-      inputs.year.value = car.year || "";
-      inputs.vin.value = car.vin || "";
-    }
-
-    function getSelectedCar() {
-      return cars.find(car => car.id === selectedCarId);
     }
 
     function renderCars() {
@@ -403,14 +355,13 @@
       carCounter.textContent = `AUTA: ${cars.length}/${MAX_CARS}`;
 
       if (cars.length === 0) {
-        carsList.innerHTML = `<p class="empty">Nie masz jeszcze dodanego auta. Uzupełnij formularz i kliknij ZAPISZ.</p>`;
+        carsList.innerHTML = `<p class="empty">Nie masz jeszcze dodanego auta. Dodaj pierwsze auto po prawej stronie.</p>`;
         return;
       }
 
       cars.forEach(car => {
         const item = document.createElement("div");
         item.className = "car-item";
-        if (car.id === selectedCarId) item.classList.add("active");
 
         item.innerHTML = `
           <h3>${car.brand || "Brak marki"} ${car.model || ""}</h3>
@@ -420,13 +371,7 @@
         `;
 
         item.addEventListener("click", () => {
-          selectedCarId = car.id;
-          editingExisting = true;
-          formTitle.textContent = "Wybrane auto";
-          fillForm(car);
-          setInputsDisabled(true);
-          renderCars();
-          showMessage("Auto wybrane. Kliknij EDYTUJ, żeby zmienić dane.");
+          window.location.href = "car-dashboard.html?id=" + car.id;
         });
 
         carsList.appendChild(item);
@@ -438,6 +383,7 @@
       const snap = await getDocs(carsRef);
 
       cars = [];
+
       snap.forEach(docSnap => {
         cars.push({
           id: docSnap.id,
@@ -446,18 +392,6 @@
       });
 
       renderCars();
-
-      if (cars.length > 0 && !selectedCarId) {
-        selectedCarId = cars[0].id;
-        editingExisting = true;
-        fillForm(cars[0]);
-        setInputsDisabled(true);
-        formTitle.textContent = "Wybrane auto";
-      }
-
-      if (cars.length === 0) {
-        clearForm();
-      }
     }
 
     onAuthStateChanged(auth, async (user) => {
@@ -470,7 +404,7 @@
 
       try {
         await loadCars();
-        showMessage("Dane aut wczytane z Firestore.");
+        showMessage("Auta wczytane z Firestore.");
       } catch (error) {
         console.error(error);
         showMessage("Błąd odczytu Firestore: " + error.code, false);
@@ -485,99 +419,57 @@
         return;
       }
 
+      if (cars.length >= MAX_CARS) {
+        showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
+        return;
+      }
+
       const car = {
         brand: inputs.brand.value.trim(),
         model: inputs.model.value.trim(),
         generation: inputs.generation.value.trim(),
         year: inputs.year.value.trim(),
         vin: inputs.vin.value.trim().toUpperCase(),
+        createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
       try {
-        if (editingExisting && selectedCarId) {
-          const carRef = doc(db, "users", currentUser.uid, "cars", selectedCarId);
-          await setDoc(carRef, car, { merge: true });
-          showMessage("Auto zaktualizowane w Firestore.");
-        } else {
-          if (cars.length >= MAX_CARS) {
-            showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
-            return;
-          }
+        const carsRef = collection(db, "users", currentUser.uid, "cars");
+        await addDoc(carsRef, car);
 
-          const carsRef = collection(db, "users", currentUser.uid, "cars");
-          await addDoc(carsRef, {
-            ...car,
-            createdAt: new Date().toISOString()
-          });
-
-          showMessage("Nowe auto zapisane w Firestore.");
-        }
-
+        clearForm();
         await loadCars();
-        setInputsDisabled(true);
+
+        showMessage("Auto zapisane. Kliknij je na liście, aby otworzyć dashboard.");
       } catch (error) {
         console.error(error);
         showMessage("Błąd zapisu Firestore: " + error.code, false);
       }
     });
 
-    editBtn.addEventListener("click", () => {
-      if (!selectedCarId && cars.length > 0) {
-        showMessage("Najpierw wybierz auto z listy.", false);
-        return;
-      }
-
-      editingExisting = true;
-      setInputsDisabled(false);
-      showMessage("Tryb edycji włączony.");
-    });
-
-    newBtn.addEventListener("click", () => {
-      if (cars.length >= MAX_CARS) {
-        showMessage("Limit osiągnięty. Możesz dodać maksymalnie 10 aut.", false);
-        return;
-      }
-
-      clearForm();
-      renderCars();
-      showMessage("Tryb dodawania nowego auta.");
-    });
-
-    deleteBtn.addEventListener("click", async () => {
+    deleteLastBtn.addEventListener("click", async () => {
       if (!currentUser) {
         showMessage("Brak zalogowanego użytkownika.", false);
         return;
       }
 
-      if (!selectedCarId) {
-        showMessage("Najpierw wybierz auto z listy.", false);
+      if (cars.length === 0) {
+        showMessage("Nie masz auta do usunięcia.", false);
         return;
       }
 
-      const selectedCar = getSelectedCar();
-      const carName = selectedCar
-        ? `${selectedCar.brand || ""} ${selectedCar.model || ""}`.trim()
-        : "wybrane auto";
+      const lastCar = cars[cars.length - 1];
+      const confirmDelete = confirm("Czy na pewno chcesz usunąć ostatnio dodane auto?");
 
-      const confirmDelete = confirm(`Czy na pewno chcesz usunąć: ${carName}?`);
-
-      if (!confirmDelete) {
-        showMessage("Usuwanie anulowane.", false);
-        return;
-      }
+      if (!confirmDelete) return;
 
       try {
-        const carRef = doc(db, "users", currentUser.uid, "cars", selectedCarId);
+        const carRef = doc(db, "users", currentUser.uid, "cars", lastCar.id);
         await deleteDoc(carRef);
 
-        selectedCarId = null;
-        editingExisting = false;
-        clearForm();
-
         await loadCars();
-
-        showMessage("Auto usunięte z Firestore.");
+        showMessage("Ostatnie auto usunięte.");
       } catch (error) {
         console.error(error);
         showMessage("Błąd usuwania auta: " + error.code, false);

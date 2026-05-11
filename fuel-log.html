@@ -19,7 +19,7 @@
       padding: 35px;
     }
 
-    .page { max-width: 1150px; margin: 0 auto; }
+    .page { max-width: 1200px; margin: 0 auto; }
 
     .topbar, .panel, .summary-box {
       border: 1px solid #ff1a1a;
@@ -51,8 +51,8 @@
     }
 
     button {
-      min-height: 48px;
-      padding: 0 18px;
+      min-height: 44px;
+      padding: 0 14px;
       border: 1px solid #ff1a1a;
       border-radius: 8px;
       color: white;
@@ -61,9 +61,23 @@
       letter-spacing: 1px;
       cursor: pointer;
       box-shadow: 0 0 14px rgba(255,0,0,.45);
+      font-size: 11px;
     }
 
-    .back-btn { background: linear-gradient(90deg, #111, #333, #111); }
+    button:hover { filter: brightness(1.15); }
+
+    .back-btn, .cancel-btn {
+      background: linear-gradient(90deg, #111, #333, #111);
+    }
+
+    .edit-btn {
+      background: linear-gradient(90deg, #00111a, #005577, #00111a);
+    }
+
+    .delete-btn {
+      background: linear-gradient(90deg, #240000, #8b0000, #240000);
+      border-color: #ff3b3b;
+    }
 
     .summary {
       display: grid;
@@ -127,11 +141,16 @@
       font-size: 14px;
     }
 
+    .form-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
-      overflow: hidden;
     }
 
     th, td {
@@ -139,6 +158,7 @@
       border-bottom: 1px solid rgba(255,0,0,.25);
       text-align: left;
       font-size: 12px;
+      vertical-align: middle;
     }
 
     th {
@@ -146,8 +166,12 @@
       letter-spacing: 1px;
     }
 
-    td {
-      color: #ddd;
+    td { color: #ddd; }
+
+    .table-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .message {
@@ -158,12 +182,13 @@
       color: #66ff66;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       body { padding: 18px; }
       .topbar { flex-direction: column; text-align: center; }
       .summary { grid-template-columns: 1fr; }
       .form-grid { grid-template-columns: 1fr; }
-      table { font-size: 11px; }
+      .form-actions { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
     }
   </style>
 </head>
@@ -199,7 +224,7 @@
     </section>
 
     <section class="panel">
-      <h2>Dodaj tankowanie</h2>
+      <h2 id="formTitle">Dodaj tankowanie</h2>
 
       <form id="fuelForm">
         <div class="form-grid">
@@ -220,7 +245,10 @@
 
           <div>
             <label>AKCJA</label>
-            <button type="submit">ZAPISZ</button>
+            <div class="form-actions">
+              <button type="submit" id="saveBtn">ZAPISZ</button>
+              <button type="button" class="cancel-btn" id="cancelEditBtn">ANULUJ</button>
+            </div>
           </div>
         </div>
       </form>
@@ -238,11 +266,12 @@
             <th>LITRY</th>
             <th>CENA/L</th>
             <th>KWOTA</th>
+            <th>AKCJE</th>
           </tr>
         </thead>
         <tbody id="fuelTable">
           <tr>
-            <td colspan="4">Ładowanie danych...</td>
+            <td colspan="5">Ładowanie danych...</td>
           </tr>
         </tbody>
       </table>
@@ -256,9 +285,11 @@
       db,
       doc,
       getDoc,
+      setDoc,
       collection,
       addDoc,
       getDocs,
+      deleteDoc,
       onAuthStateChanged
     } from "./firebase-config.js";
 
@@ -273,12 +304,17 @@
     const price = document.getElementById("price");
     const message = document.getElementById("message");
     const fuelTable = document.getElementById("fuelTable");
+    const formTitle = document.getElementById("formTitle");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const saveBtn = document.getElementById("saveBtn");
 
     const totalLiters = document.getElementById("totalLiters");
     const totalMoney = document.getElementById("totalMoney");
     const totalEntries = document.getElementById("totalEntries");
 
     let currentUser = null;
+    let logs = [];
+    let editingLogId = null;
 
     function showMessage(text, success = true) {
       message.textContent = text;
@@ -291,6 +327,14 @@
 
     function formatLiters(value) {
       return value.toFixed(2).replace(".", ",") + " L";
+    }
+
+    function resetForm() {
+      editingLogId = null;
+      fuelForm.reset();
+      formTitle.textContent = "Dodaj tankowanie";
+      saveBtn.textContent = "ZAPISZ";
+      showMessage("Tryb dodawania tankowania.");
     }
 
     async function loadCar(user) {
@@ -317,7 +361,7 @@
       const logsRef = collection(db, "users", user.uid, "cars", carId, "fuelLogs");
       const snap = await getDocs(logsRef);
 
-      const logs = [];
+      logs = [];
 
       snap.forEach(docSnap => {
         logs.push({
@@ -328,10 +372,10 @@
 
       logs.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-      renderFuelLogs(logs);
+      renderFuelLogs();
     }
 
-    function renderFuelLogs(logs) {
+    function renderFuelLogs() {
       fuelTable.innerHTML = "";
 
       let litersSum = 0;
@@ -340,7 +384,7 @@
       if (logs.length === 0) {
         fuelTable.innerHTML = `
           <tr>
-            <td colspan="4">Brak tankowań. Dodaj pierwsze tankowanie.</td>
+            <td colspan="5">Brak tankowań. Dodaj pierwsze tankowanie.</td>
           </tr>
         `;
       }
@@ -354,12 +398,53 @@
         moneySum += total;
 
         const row = document.createElement("tr");
+
         row.innerHTML = `
           <td>${log.date || "-"}</td>
           <td>${formatLiters(l)}</td>
           <td>${formatMoney(p)}</td>
           <td>${formatMoney(total)}</td>
+          <td>
+            <div class="table-actions">
+              <button type="button" class="edit-btn">EDYTUJ</button>
+              <button type="button" class="delete-btn">USUŃ</button>
+            </div>
+          </td>
         `;
+
+        const editBtn = row.querySelector(".edit-btn");
+        const deleteBtn = row.querySelector(".delete-btn");
+
+        editBtn.addEventListener("click", () => {
+          editingLogId = log.id;
+          fuelDate.value = log.date || "";
+          liters.value = log.liters || "";
+          price.value = log.price || "";
+          formTitle.textContent = "Edytuj tankowanie";
+          saveBtn.textContent = "ZAPISZ ZMIANY";
+          showMessage("Tryb edycji tankowania.");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        deleteBtn.addEventListener("click", async () => {
+          const confirmDelete = confirm("Czy na pewno chcesz usunąć to tankowanie?");
+
+          if (!confirmDelete) {
+            showMessage("Usuwanie anulowane.", false);
+            return;
+          }
+
+          try {
+            const logRef = doc(db, "users", currentUser.uid, "cars", carId, "fuelLogs", log.id);
+            await deleteDoc(logRef);
+
+            await loadFuelLogs(currentUser);
+            showMessage("Tankowanie usunięte.");
+          } catch (error) {
+            console.error(error);
+            showMessage("Błąd usuwania: " + error.code, false);
+          }
+        });
 
         fuelTable.appendChild(row);
       });
@@ -399,21 +484,34 @@
         date: fuelDate.value,
         liters: Number(liters.value),
         price: Number(price.value),
-        createdAt: new Date().toISOString()
+        total: Number(liters.value) * Number(price.value),
+        updatedAt: new Date().toISOString()
       };
 
       try {
-        const logsRef = collection(db, "users", currentUser.uid, "cars", carId, "fuelLogs");
-        await addDoc(logsRef, log);
+        if (editingLogId) {
+          const logRef = doc(db, "users", currentUser.uid, "cars", carId, "fuelLogs", editingLogId);
+          await setDoc(logRef, log, { merge: true });
+          showMessage("Tankowanie zaktualizowane.");
+        } else {
+          const logsRef = collection(db, "users", currentUser.uid, "cars", carId, "fuelLogs");
+          await addDoc(logsRef, {
+            ...log,
+            createdAt: new Date().toISOString()
+          });
+          showMessage("Tankowanie zapisane.");
+        }
 
-        fuelForm.reset();
+        resetForm();
         await loadFuelLogs(currentUser);
-
-        showMessage("Tankowanie zapisane.");
       } catch (error) {
         console.error(error);
         showMessage("Błąd zapisu tankowania: " + error.code, false);
       }
+    });
+
+    cancelEditBtn.addEventListener("click", () => {
+      resetForm();
     });
 
     backBtn.addEventListener("click", () => {

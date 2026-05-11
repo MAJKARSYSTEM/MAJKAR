@@ -197,6 +197,7 @@
 </head>
 
 <body>
+
   <div class="page">
 
     <header class="topbar">
@@ -239,35 +240,35 @@
         <span class="badge">MODULE 01</span>
         <div class="icon">🛠️</div>
         <h3>SERWIS</h3>
-        <p>Historia napraw i obsługi.</p>
+        <p>Historia napraw, serwisów, przebiegu, kosztów i danych warsztatu.</p>
       </div>
 
       <div class="tile" data-module="fuel">
         <span class="badge">MODULE 02</span>
         <div class="icon">⛽</div>
         <h3>DZIENNIK PALIWOWY</h3>
-        <p>Tankowania i koszty paliwa.</p>
+        <p>Tankowania, litry, cena paliwa, koszty miesięczne i roczne.</p>
       </div>
 
       <div class="tile" data-module="insurance">
         <span class="badge">MODULE 03</span>
         <div class="icon">📄</div>
         <h3>UBEZPIECZENIE</h3>
-        <p>OC, AC i terminy polis.</p>
+        <p>OC, AC, Assistance i terminy polis.</p>
       </div>
 
       <div class="tile" data-module="inspection">
         <span class="badge">MODULE 04</span>
         <div class="icon">✅</div>
         <h3>PRZEGLĄD</h3>
-        <p>Badania techniczne.</p>
+        <p>Badania techniczne, daty ważności i historia przeglądów.</p>
       </div>
 
       <div class="tile" data-module="obd">
         <span class="badge">MODULE 05</span>
         <div class="icon">🔌</div>
         <h3>OBD</h3>
-        <p>Diagnostyka i błędy.</p>
+        <p>Diagnostyka, błędy i przyszłe połączenie z AI.</p>
       </div>
     </section>
 
@@ -301,6 +302,12 @@
     }
 
     async function loadCar(user) {
+      if (!carId) {
+        carTitle.textContent = "Brak ID auta";
+        showMessage("Brak ID auta w adresie.", false);
+        return;
+      }
+
       const carRef = doc(db, "users", user.uid, "cars", carId);
       const carSnap = await getDoc(carRef);
 
@@ -316,6 +323,8 @@
       carGeneration.textContent = car.generation || "Brak danych";
       carYear.textContent = car.year || "Brak danych";
       carVin.textContent = car.vin || "Brak danych";
+
+      showMessage("MAJKAR BOOK załadowany.");
     }
 
     onAuthStateChanged(auth, async (user) => {
@@ -326,10 +335,9 @@
 
       try {
         await loadCar(user);
-        showMessage("MAJKAR BOOK załadowany.");
       } catch (error) {
         console.error(error);
-        showMessage("Błąd ładowania auta.", false);
+        showMessage("Błąd ładowania auta: " + error.code, false);
       }
     });
 
@@ -342,6 +350,11 @@
           return;
         }
 
+        if (moduleType === "service") {
+          window.location.href = "service-log.html?id=" + carId;
+          return;
+        }
+
         const moduleName = tile.querySelector("h3").textContent;
         showMessage(moduleName + " — moduł wkrótce dostępny.");
       });
@@ -351,5 +364,6 @@
       window.location.href = "my-car.html";
     });
   </script>
+
 </body>
 </html>

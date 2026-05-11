@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAJKAR - Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.85)),
+        url("background.jpg") center/cover no-repeat;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      width: 600px;
+      max-width: 92vw;
+      padding: 45px;
+      border: 2px solid #ff1a1a;
+      border-radius: 12px;
+      background: rgba(0,0,0,.88);
+      box-shadow: 0 0 30px rgba(255,0,0,.45);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 38px;
+      font-weight: 900;
+      text-shadow: 0 0 15px red;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 13px;
+      color: #ccc;
+      margin-bottom: 30px;
+      word-break: break-word;
+    }
+
+    button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #300, #f00, #300);
+      color: white;
+      font-weight: 900;
+      letter-spacing: 3px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255,0,0,.6);
+    }
+
+    button:hover {
+      filter: brightness(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>WITAJ W MAJKAR</h1>
+    <p id="userEmail">Ładowanie danych użytkownika...</p>
+    <button id="logoutBtn">WYLOGUJ</button>
+  </div>
+
+  <script type="module">
+    import {
+      auth,
+      onAuthStateChanged,
+      signOut
+    } from "./firebase-config.js";
+
+    const userEmail = document.getElementById("userEmail");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userEmail.textContent = "Zalogowany jako: " + user.email;
+      } else {
+        window.location.href = "index.html";
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+  </script>
+
+</body>
+</html>

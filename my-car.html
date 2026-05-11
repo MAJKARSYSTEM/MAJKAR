@@ -119,6 +119,7 @@
     .car-item p {
       font-size: 11px;
       color: #aaa;
+      margin-top: 4px;
     }
 
     .empty {
@@ -165,7 +166,7 @@
 
     .buttons {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 12px;
       margin-top: 10px;
     }
@@ -181,6 +182,7 @@
       background: linear-gradient(90deg, #1a0000, #b00000, #1a0000);
       box-shadow: 0 0 14px rgba(255,0,0,.45);
       padding: 0 10px;
+      font-size: 11px;
     }
 
     button:hover {
@@ -205,6 +207,11 @@
       background: linear-gradient(90deg, #001a08, #087a26, #001a08);
     }
 
+    .delete-btn {
+      background: linear-gradient(90deg, #240000, #8b0000, #240000);
+      border-color: #ff3b3b;
+    }
+
     .message {
       margin-top: 18px;
       min-height: 22px;
@@ -214,7 +221,7 @@
       letter-spacing: 1px;
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 900px) {
       body {
         padding: 18px;
       }
@@ -307,7 +314,8 @@
           <div class="buttons">
             <button type="button" class="new-btn" id="newBtn">NOWE AUTO</button>
             <button type="button" class="edit-btn" id="editBtn">EDYTUJ</button>
-            <button type="submit" id="saveBtn">ZAPISZ AUTO</button>
+            <button type="submit" id="saveBtn">ZAPISZ</button>
+            <button type="button" class="delete-btn" id="deleteBtn">USUŃ AUTO</button>
             <button type="button" class="back-btn" id="backBtn">POWRÓT</button>
           </div>
         </form>
@@ -328,6 +336,7 @@
       collection,
       addDoc,
       getDocs,
+      deleteDoc,
       onAuthStateChanged
     } from "./firebase-config.js";
 
@@ -336,6 +345,7 @@
     const form = document.getElementById("carForm");
     const editBtn = document.getElementById("editBtn");
     const newBtn = document.getElementById("newBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
     const backBtn = document.getElementById("backBtn");
     const message = document.getElementById("message");
     const carsList = document.getElementById("carsList");
@@ -384,12 +394,16 @@
       inputs.vin.value = car.vin || "";
     }
 
+    function getSelectedCar() {
+      return cars.find(car => car.id === selectedCarId);
+    }
+
     function renderCars() {
       carsList.innerHTML = "";
       carCounter.textContent = `AUTA: ${cars.length}/${MAX_CARS}`;
 
       if (cars.length === 0) {
-        carsList.innerHTML = `<p class="empty">Nie masz jeszcze dodanego auta. Uzupełnij formularz i kliknij ZAPISZ AUTO.</p>`;
+        carsList.innerHTML = `<p class="empty">Nie masz jeszcze dodanego auta. Uzupełnij formularz i kliknij ZAPISZ.</p>`;
         return;
       }
 
@@ -439,6 +453,10 @@
         fillForm(cars[0]);
         setInputsDisabled(true);
         formTitle.textContent = "Wybrane auto";
+      }
+
+      if (cars.length === 0) {
+        clearForm();
       }
     }
 
@@ -522,8 +540,48 @@
       }
 
       clearForm();
-      showMessage("Tryb dodawania nowego auta.");
       renderCars();
+      showMessage("Tryb dodawania nowego auta.");
+    });
+
+    deleteBtn.addEventListener("click", async () => {
+      if (!currentUser) {
+        showMessage("Brak zalogowanego użytkownika.", false);
+        return;
+      }
+
+      if (!selectedCarId) {
+        showMessage("Najpierw wybierz auto z listy.", false);
+        return;
+      }
+
+      const selectedCar = getSelectedCar();
+      const carName = selectedCar
+        ? `${selectedCar.brand || ""} ${selectedCar.model || ""}`.trim()
+        : "wybrane auto";
+
+      const confirmDelete = confirm(`Czy na pewno chcesz usunąć: ${carName}?`);
+
+      if (!confirmDelete) {
+        showMessage("Usuwanie anulowane.", false);
+        return;
+      }
+
+      try {
+        const carRef = doc(db, "users", currentUser.uid, "cars", selectedCarId);
+        await deleteDoc(carRef);
+
+        selectedCarId = null;
+        editingExisting = false;
+        clearForm();
+
+        await loadCars();
+
+        showMessage("Auto usunięte z Firestore.");
+      } catch (error) {
+        console.error(error);
+        showMessage("Błąd usuwania auta: " + error.code, false);
+      }
     });
 
     backBtn.addEventListener("click", () => {

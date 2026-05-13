@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -236,15 +237,8 @@ body{
     <p>Daty badań technicznych i historia przeglądów.</p>
   </div>
 
-  <div class="tile" data-module="ai-mechanic">
-    <span class="badge">MODULE 05</span>
-    <div class="icon">🤖</div>
-    <h3>AI MECHANIK</h3>
-    <p>Zadaj pytanie o auto, wyjaśnij kody błędów i analizuj historię pojazdu.</p>
-  </div>
-
   <div class="tile" data-module="export-pdf">
-    <span class="badge">MODULE 06</span>
+    <span class="badge">MODULE 05</span>
     <div class="icon">📑</div>
     <h3>EXPORT PDF</h3>
     <p>Wygeneruj raport PDF z serwisów, ubezpieczenia i przeglądów.</p>
@@ -345,11 +339,6 @@ tiles.forEach(tile => {
       return;
     }
 
-    if (moduleType === "ai-mechanic") {
-      window.location.href = "ai-mechanic.html?id=" + carId;
-      return;
-    }
-
     if (moduleType === "export-pdf") {
       window.location.href = "export-pdf.html?id=" + carId;
       return;
@@ -367,3 +356,4 @@ backBtn.addEventListener("click", () => {
 
 </body>
 </html>
+```

@@ -1,0 +1,241 @@
+# ai-mechanic.html
+
+Wklej ten kod jako cały plik `ai-mechanic.html`.
+
+```html
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI MECHANIK</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+body{min-height:100vh;background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.92)),url('background.jpg') center/cover no-repeat;color:white;padding:35px}
+.page{max-width:1150px;margin:0 auto}
+.topbar{padding:24px 28px;border:1px solid #ff1a1a;border-radius:16px;background:rgba(0,0,0,.82);box-shadow:0 0 28px rgba(255,0,0,.4);margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.brand h1{font-size:36px;letter-spacing:5px;text-shadow:0 0 18px red}
+.back-btn,.action-btn,.clear-btn{min-height:48px;padding:0 20px;border:1px solid #ff1a1a;border-radius:8px;color:white;background:linear-gradient(90deg,#111,#333,#111);font-weight:900;letter-spacing:2px;cursor:pointer;box-shadow:0 0 14px rgba(255,0,0,.35)}
+.hero,.panel{border:1px solid #ff1a1a;border-radius:16px;background:linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),rgba(0,0,0,.82);box-shadow:0 0 20px rgba(255,0,0,.25),inset 0 0 24px rgba(255,0,0,.06)}
+.hero{padding:28px;margin-bottom:26px}
+.hero h2{font-size:30px;margin-bottom:12px;text-shadow:0 0 14px red}
+.hero p,.panel p{color:#aaa;font-size:13px;line-height:1.7}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.panel{padding:24px}
+.panel.full{grid-column:1/-1}
+.panel h3{font-size:20px;margin-bottom:14px;letter-spacing:2px;text-shadow:0 0 10px red}
+textarea,input{width:100%;border:1px solid rgba(255,0,0,.55);border-radius:10px;background:rgba(0,0,0,.72);color:white;padding:15px;outline:none;font-size:13px;margin-bottom:14px}
+textarea{min-height:130px;resize:vertical}
+.result{margin-top:16px;padding:18px;min-height:90px;border:1px solid rgba(255,0,0,.35);border-radius:12px;background:rgba(0,0,0,.62);color:#ddd;font-size:13px;line-height:1.7;white-space:pre-line}
+.examples{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.example{padding:8px 10px;border:1px solid rgba(255,0,0,.35);border-radius:999px;background:rgba(0,0,0,.55);color:#bbb;font-size:10px;cursor:pointer}
+.history-top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px}
+.history-list{display:grid;gap:12px}
+.history-item{padding:16px;border:1px solid rgba(255,0,0,.35);border-radius:12px;background:rgba(0,0,0,.58)}
+.history-item strong{display:block;color:white;margin-bottom:8px;font-size:13px}
+.history-item span{display:block;color:#aaa;font-size:11px;line-height:1.5;white-space:pre-line}
+.empty{color:#777;font-size:13px;text-align:center;padding:20px}
+.warning{margin-top:22px;padding:16px;border:1px solid rgba(255,0,0,.45);border-radius:12px;background:rgba(255,0,0,.08);color:#ffb3b3;font-size:11px;line-height:1.8;text-align:center}
+@media(max-width:900px){body{padding:18px}.topbar{flex-direction:column;text-align:center}.layout{grid-template-columns:1fr}.brand h1{font-size:30px}.hero h2{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+  <div class="brand"><h1>AI MECHANIK</h1></div>
+  <button class="back-btn" id="backBtn">POWRÓT</button>
+</header>
+
+<section class="hero">
+  <h2>Twój cyfrowy mechanik</h2>
+  <p>Zadaj pytanie o objawy auta, wpisz kod błędu OBD albo wróć do poprzednich wyszukiwań.</p>
+</section>
+
+<section class="layout">
+  <div class="panel">
+    <h3>🤖 ZADAJ PYTANIE AI</h3>
+    <p>Opisz objawy auta tak, jak powiedziałbyś mechanikowi.</p>
+    <div class="examples">
+      <div class="example" data-question="Auto szarpie przy ruszaniu, co może być przyczyną?">Szarpie przy ruszaniu</div>
+      <div class="example" data-question="Silnik kopci na czarno przy dodawaniu gazu. Co sprawdzić?">Kopci na czarno</div>
+      <div class="example" data-question="Słychać stukanie z przodu auta na nierównościach. Co to może być?">Stuka z przodu</div>
+    </div>
+    <textarea id="questionInput" placeholder="Np. Audi A8 D3 3.0 TDI ciężko odpala na ciepłym silniku..."></textarea>
+    <button class="action-btn" id="askBtn">ZAPYTAJ MECHANIKA</button>
+    <div class="result" id="questionResult">Tutaj pojawi się odpowiedź AI Mechanika.</div>
+  </div>
+
+  <div class="panel">
+    <h3>⚠️ ROZWIĄŻ KODY BŁĘDÓW</h3>
+    <p>Wpisz kod błędu, np. P0299.</p>
+    <input id="codeInput" placeholder="Np. P0299">
+    <button class="action-btn" id="codeBtn">WYJAŚNIJ KOD</button>
+    <div class="result" id="codeResult">Tutaj pojawi się wyjaśnienie kodu błędu.</div>
+  </div>
+
+  <div class="panel full">
+    <div class="history-top">
+      <h3>🧾 HISTORIA</h3>
+      <button class="clear-btn" id="clearHistoryBtn">WYCZYŚĆ</button>
+    </div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</section>
+
+<div class="warning">
+  AI MECHANIK to inteligentny asystent diagnostyczny, który pomaga analizować objawy pojazdu i interpretować kody błędów OBD.
+</div>
+</div>
+
+<script>
+const API_URL = 'http://127.0.0.1:5000/api/ai-mechanic';
+
+const params = new URLSearchParams(window.location.search);
+const carId = params.get('id');
+const historyKey = 'majkar_ai_mechanic_history_' + (carId || 'default');
+
+const backBtn = document.getElementById('backBtn');
+const questionInput = document.getElementById('questionInput');
+const askBtn = document.getElementById('askBtn');
+const questionResult = document.getElementById('questionResult');
+const codeInput = document.getElementById('codeInput');
+const codeBtn = document.getElementById('codeBtn');
+const codeResult = document.getElementById('codeResult');
+const historyList = document.getElementById('historyList');
+const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+const examples = document.querySelectorAll('.example');
+
+function getHistory(){
+  return JSON.parse(localStorage.getItem(historyKey)) || [];
+}
+
+function saveHistory(history){
+  localStorage.setItem(historyKey, JSON.stringify(history));
+}
+
+function addHistory(type,title,content){
+  const history = getHistory();
+  history.unshift({type,title,content,date:new Date().toLocaleString('pl-PL')});
+  saveHistory(history.slice(0,20));
+  renderHistory();
+}
+
+function renderHistory(){
+  const history = getHistory();
+  historyList.innerHTML = '';
+
+  if(!history.length){
+    historyList.innerHTML = '<div class="empty">Brak historii.</div>';
+    return;
+  }
+
+  history.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'history-item';
+    div.innerHTML = `
+      <strong>${item.type} — ${item.title}</strong>
+      <span>${item.content}</span>
+      <span style="margin-top:8px;color:#666;">${item.date}</span>
+    `;
+    historyList.appendChild(div);
+  });
+}
+
+async function askRealAI(promptText){
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({question: promptText})
+  });
+
+  const data = await response.json();
+
+  if(!response.ok){
+    throw new Error(data.error || 'Błąd AI');
+  }
+
+  if(!data.answer){
+    throw new Error('Brak odpowiedzi z AI');
+  }
+
+  return data.answer;
+}
+
+askBtn.addEventListener('click', async () => {
+  const question = questionInput.value.trim();
+
+  if(!question){
+    questionResult.textContent = 'Najpierw wpisz pytanie.';
+    return;
+  }
+
+  askBtn.disabled = true;
+  askBtn.textContent = 'AI ANALIZUJE...';
+  questionResult.textContent = 'AI Mechanik analizuje...';
+
+  try {
+    const answer = await askRealAI(question);
+    questionResult.textContent = answer;
+    addHistory('PYTANIE AI', question, answer);
+    questionInput.value = '';
+  } catch(error) {
+    console.error(error);
+    questionResult.textContent = 'BŁĄD: ' + error.message;
+  } finally {
+    askBtn.disabled = false;
+    askBtn.textContent = 'ZAPYTAJ MECHANIKA';
+  }
+});
+
+codeBtn.addEventListener('click', async () => {
+  const code = codeInput.value.trim().toUpperCase();
+
+  if(!code){
+    codeResult.textContent = 'Wpisz kod błędu.';
+    return;
+  }
+
+  codeBtn.disabled = true;
+  codeBtn.textContent = 'AI SPRAWDZA...';
+  codeResult.textContent = 'AI Mechanik analizuje kod błędu...';
+
+  try {
+    const answer = await askRealAI('Wyjaśnij kod błędu OBD ' + code + ' po polsku.');
+    codeResult.textContent = answer;
+    addHistory('KOD BŁĘDU', code, answer);
+    codeInput.value = '';
+  } catch(error) {
+    console.error(error);
+    codeResult.textContent = 'BŁĄD: ' + error.message;
+  } finally {
+    codeBtn.disabled = false;
+    codeBtn.textContent = 'WYJAŚNIJ KOD';
+  }
+});
+
+clearHistoryBtn.addEventListener('click', () => {
+  localStorage.removeItem(historyKey);
+  renderHistory();
+});
+
+examples.forEach(example => {
+  example.addEventListener('click', () => {
+    questionInput.value = example.dataset.question;
+  });
+});
+
+backBtn.addEventListener('click', () => {
+  if(carId){
+    window.location.href = 'car-dashboard.html?id=' + carId;
+  } else {
+    window.location.href = 'my-car.html';
+  }
+});
+
+renderHistory();
+</script>
+</body>
+</html>
+```

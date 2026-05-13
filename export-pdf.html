@@ -82,7 +82,6 @@ body{
   letter-spacing:1px;
 }
 
-/* PDF TEMPLATE */
 #pdfTemplate{
   width:794px;
   background:#f2f2f2;
@@ -139,9 +138,7 @@ body{
   font-weight:bold;
 }
 
-.pdf-car-main{
-  margin-top:130px;
-}
+.pdf-car-main{margin-top:130px}
 
 .pdf-car-main h2{
   font-size:42px;
@@ -307,7 +304,7 @@ body{
 <main class="report-preview">
   <h2 class="preview-title" id="previewTitle">Ładowanie raportu...</h2>
   <p class="preview-text">
-    Ta strona generuje elegancki raport PDF z danych auta, historii serwisowej, ubezpieczeń i przeglądów.
+    Ta strona generuje raport PDF z danych auta, historii serwisowej, ubezpieczeń i przeglądów.
   </p>
 </main>
 
@@ -316,6 +313,7 @@ body{
 </div>
 
 <div id="pdfTemplate">
+
   <section class="pdf-cover">
     <div class="pdf-logo">MAJKAR</div>
     <div class="pdf-subtitle">RAPORT POJAZDU</div>
@@ -362,8 +360,8 @@ body{
       </div>
 
       <div class="pdf-card">
-        <small>Łączna liczba wpisów</small>
-        <strong id="sumEntries">0</strong>
+        <small>Łączny koszt przeglądów</small>
+        <strong id="sumInspection">0 zł</strong>
       </div>
     </div>
 
@@ -411,6 +409,7 @@ body{
     <h2 class="pdf-section-title">Przeglądy techniczne</h2>
     <div id="pdfInspections"></div>
   </section>
+
 </div>
 
 <script type="module">
@@ -421,8 +420,6 @@ import {
   getDoc,
   collection,
   getDocs,
-  query,
-  orderBy,
   onAuthStateChanged
 } from "./firebase-config.js";
 
@@ -444,13 +441,14 @@ function showMessage(text, success = true){
 }
 
 function safe(value){
+  if(value === 0) return "0";
   return value || "Brak danych";
 }
 
 function money(value){
   const number = Number(value);
   if (!number) return "0 zł";
-  return number.toLocaleString("pl-PL") + " zł";
+  return number.toFixed(2).replace(".", ",") + " zł";
 }
 
 function sumCost(items, field){
@@ -485,15 +483,17 @@ function table(headers, rows){
 
 async function getCollectionData(user, collectionName){
   const ref = collection(db, "users", user.uid, "cars", carId, collectionName);
+  const snap = await getDocs(ref);
 
-  try{
-    const q = query(ref, orderBy("createdAt", "desc"));
-    const snap = await getDocs(q);
-    return snap.docs.map(doc => doc.data());
-  }catch(error){
-    const snap = await getDocs(ref);
-    return snap.docs.map(doc => doc.data());
-  }
+  const items = [];
+  snap.forEach(docSnap => {
+    items.push({
+      id: docSnap.id,
+      ...docSnap.data()
+    });
+  });
+
+  return items;
 }
 
 async function loadReport(user){
@@ -516,9 +516,13 @@ async function loadReport(user){
   const fullName = `${car.brand || ""} ${car.model || ""}`.trim() || "Auto";
   currentCarName = fullName.replaceAll(" ", "-").toLowerCase();
 
-  const services = await getCollectionData(user, "services");
-  const insurances = await getCollectionData(user, "insurances");
+  const services = await getCollectionData(user, "serviceLogs");
+  const insurances = await getCollectionData(user, "insurance");
   const inspections = await getCollectionData(user, "inspections");
+
+  services.sort((a,b) => (b.date || "").localeCompare(a.date || ""));
+  insurances.sort((a,b) => (b.endDate || "").localeCompare(a.endDate || ""));
+  inspections.sort((a,b) => (b.inspectionDate || "").localeCompare(a.inspectionDate || ""));
 
   previewTitle.textContent = `Raport gotowy: ${fullName}`;
 
@@ -533,50 +537,54 @@ async function loadReport(user){
   setText("carYearCell", car.year);
   setText("carVinCell", car.vin);
 
-  document.getElementById("sumService").textContent = money(sumCost(services, "cost"));
+  document.getElementById("sumService").textContent = money(sumCost(services, "price"));
   document.getElementById("sumInsurance").textContent = money(sumCost(insurances, "price"));
-  document.getElementById("sumEntries").textContent = services.length + insurances.length + inspections.length;
+  document.getElementById("sumInspection").textContent = money(sumCost(inspections, "price"));
 
   document.getElementById("countServices").textContent = services.length;
   document.getElementById("countInsurances").textContent = insurances.length;
   document.getElementById("countInspections").textContent = inspections.length;
 
   document.getElementById("pdfServices").innerHTML = table(
-    ["Data", "Przebieg", "Warsztat", "Opis", "Koszt"],
+    ["Data", "Przebieg", "Co było robione", "Miejsce", "NIP", "Telefon", "Cena"],
     services.map(item => [
       item.date,
       item.mileage ? item.mileage + " km" : "",
-      item.workshop,
-      item.description,
-      item.cost ? money(item.cost) : ""
+      item.work,
+      item.place,
+      item.nip,
+      item.phone,
+      item.price ? money(item.price) : ""
     ])
   );
 
   document.getElementById("pdfInsurances").innerHTML = table(
-    ["Data wykupienia", "Data zakończenia", "Ubezpieczyciel", "Numer polisy", "Cena"],
+    ["Od", "Do", "Ubezpieczyciel", "Numer polisy", "Cena"],
     insurances.map(item => [
       item.startDate,
       item.endDate,
-      item.company,
+      item.insurer,
       item.policyNumber,
       item.price ? money(item.price) : ""
     ])
   );
 
   document.getElementById("pdfInspections").innerHTML = table(
-    ["Data przeglądu", "Data następnego", "Stacja", "Wynik", "Koszt", "Uwagi"],
+    ["Data", "Ważny do", "Przebieg", "Wynik", "Cena", "Stacja", "Nr badania", "Uwagi"],
     inspections.map(item => [
-      item.date,
-      item.nextDate,
-      item.station,
+      item.inspectionDate,
+      item.validDate,
+      item.mileage ? item.mileage + " km" : "",
       item.result,
       item.price ? money(item.price) : "",
+      item.station,
+      item.inspectionNumber,
       item.notes
     ])
   );
 
   reportReady = true;
-  showMessage("Raport premium gotowy do pobrania.");
+  showMessage("Raport gotowy do pobrania.");
 }
 
 downloadBtn.addEventListener("click", async () => {
@@ -586,7 +594,7 @@ downloadBtn.addEventListener("click", async () => {
   }
 
   if (typeof html2pdf === "undefined") {
-    showMessage("Biblioteka PDF się nie załadowała. Sprawdź internet albo CDN.", false);
+    showMessage("Biblioteka PDF się nie załadowała.", false);
     return;
   }
 
@@ -625,7 +633,7 @@ downloadBtn.addEventListener("click", async () => {
     showMessage("PDF pobrany.");
   } catch (error) {
     console.error(error);
-    showMessage("Błąd generowania PDF. Otwórz F12 → Console i podeślij błąd.", false);
+    showMessage("Błąd generowania PDF. Sprawdź F12 → Console.", false);
   }
 
   pdfTemplate.style.display = "none";

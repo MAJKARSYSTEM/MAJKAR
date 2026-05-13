@@ -17,7 +17,10 @@ import {
   addDoc,
   getDocs,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  query,
+  orderBy,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -44,6 +47,9 @@ export {
   getDocs,
   updateDoc,
   deleteDoc,
+  query,
+  orderBy,
+  serverTimestamp,
   onAuthStateChanged,
   signOut,
   createUserWithEmailAndPassword,

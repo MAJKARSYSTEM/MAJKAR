@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moje ogłoszenia - MAJKAR</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.92)),
+    url("background.jpg") center/cover no-repeat;
+  color:white;
+}
+
+.page{min-height:100vh;padding:35px}
+
+.topbar{
+  max-width:1150px;
+  margin:0 auto 28px;
+  padding:22px 26px;
+  border:1px solid #ff1a1a;
+  border-radius:14px;
+  background:rgba(0,0,0,.78);
+  box-shadow:0 0 25px rgba(255,0,0,.35);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+}
+
+.logo h1{
+  font-size:36px;
+  letter-spacing:6px;
+  text-shadow:0 0 16px red;
+}
+
+.logo p{
+  margin-top:6px;
+  font-size:11px;
+  color:#aaa;
+  letter-spacing:2px;
+}
+
+.nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.nav a{
+  padding:13px 16px;
+  border:1px solid #ff1a1a;
+  border-radius:8px;
+  background:linear-gradient(90deg,#111,#333,#111);
+  color:white;
+  text-decoration:none;
+  font-size:10px;
+  letter-spacing:2px;
+  box-shadow:0 0 14px rgba(255,0,0,.35);
+  transition:.22s;
+}
+
+.nav a:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 25px rgba(255,0,0,.65);
+}
+
+.main{
+  max-width:1150px;
+  margin:0 auto;
+}
+
+.hero{
+  margin-bottom:22px;
+  padding:26px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),
+    rgba(0,0,0,.82);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.25),
+    inset 0 0 24px rgba(255,0,0,.06);
+}
+
+.hero h2{
+  font-size:30px;
+  text-shadow:0 0 14px red;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.message{
+  margin-bottom:18px;
+  padding:16px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:12px;
+  background:rgba(0,0,0,.7);
+  color:#ffb3b3;
+  font-size:12px;
+  line-height:1.7;
+  text-align:center;
+  min-height:50px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
+}
+
+.card{
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),
+    rgba(0,0,0,.84);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.25),
+    inset 0 0 24px rgba(255,0,0,.06);
+  overflow:hidden;
+}
+
+.car-img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+  background:rgba(0,0,0,.65);
+  border-bottom:1px solid rgba(255,0,0,.45);
+}
+
+.content{
+  padding:22px;
+}
+
+.content h3{
+  font-size:20px;
+  margin-bottom:12px;
+  letter-spacing:2px;
+  text-shadow:0 0 10px red;
+}
+
+.meta{
+  color:#aaa;
+  font-size:11px;
+  line-height:1.8;
+  margin-bottom:12px;
+}
+
+.price{
+  font-size:22px;
+  margin:14px 0;
+  color:white;
+  text-shadow:0 0 12px red;
+}
+
+.desc{
+  color:#bbb;
+  font-size:12px;
+  line-height:1.7;
+  margin-bottom:14px;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn{
+  width:100%;
+  min-height:44px;
+  border-radius:9px;
+  color:white;
+  font-size:11px;
+  letter-spacing:2px;
+  cursor:pointer;
+  transition:.22s;
+}
+
+.edit-btn{
+  border:1px solid rgba(255,255,255,.55);
+  background:rgba(255,255,255,.08);
+}
+
+.edit-btn:hover{
+  box-shadow:0 0 18px rgba(255,255,255,.28);
+}
+
+.delete-btn{
+  border:1px solid rgba(255,0,0,.75);
+  background:rgba(255,0,0,.12);
+  color:#ffb3b3;
+}
+
+.delete-btn:hover{
+  background:rgba(255,0,0,.22);
+  box-shadow:0 0 18px rgba(255,0,0,.35);
+}
+
+.empty{
+  grid-column:1/-1;
+  padding:26px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:16px;
+  background:rgba(0,0,0,.76);
+  color:#aaa;
+  font-size:13px;
+  line-height:1.8;
+  text-align:center;
+}
+
+.editor{
+  display:none;
+  margin-top:18px;
+  padding:18px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:14px;
+  background:rgba(0,0,0,.72);
+}
+
+.editor.active{
+  display:block;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:10px;
+  color:#bbb;
+  letter-spacing:1px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid rgba(255,0,0,.55);
+  border-radius:10px;
+  background:rgba(0,0,0,.72);
+  color:white;
+  outline:none;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+  line-height:1.7;
+}
+
+input:focus,select:focus,textarea:focus{
+  box-shadow:0 0 14px rgba(255,0,0,.45);
+}
+
+.editor-actions{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.save-btn{
+  border:1px solid #ff1a1a;
+  background:linear-gradient(90deg,#300,#900,#300);
+  box-shadow:0 0 18px rgba(255,0,0,.38);
+}
+
+.cancel-btn{
+  border:1px solid rgba(255,255,255,.45);
+  background:rgba(255,255,255,.08);
+}
+
+@media(max-width:900px){
+  .page{padding:18px}
+  .topbar{flex-direction:column;text-align:center}
+  .nav{justify-content:center}
+  .grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .logo h1{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="logo">
+      <h1>MAJKAR</h1>
+      <p>MY RENTAL OFFERS</p>
+    </div>
+
+    <nav class="nav">
+      <a href="rent.html">WRÓĆ</a>
+      <a href="add-rental.html">DODAJ</a>
+      <a href="rentals.html">PUBLICZNE</a>
+      <a href="dashboard.html">PANEL</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <h2>Moje ogłoszenia</h2>
+      <p>Tutaj widzisz tylko ogłoszenia dodane przez aktualnie zalogowane konto. Możesz je edytować albo usunąć.</p>
+    </section>
+
+    <div id="message" class="message">Ładowanie Twoich ogłoszeń...</div>
+
+    <section id="rentalsGrid" class="grid"></section>
+  </main>
+
+</div>
+
+<script type="module">
+import {
+  auth,
+  db,
+  collection,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  serverTimestamp,
+  onAuthStateChanged
+} from "./firebase-config.js";
+
+const rentalsGrid = document.getElementById("rentalsGrid");
+const message = document.getElementById("message");
+
+let currentUser = null;
+let rentals = [];
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  currentUser = user;
+  await loadMyRentals();
+});
+
+async function loadMyRentals() {
+  try {
+    message.textContent = "Ładowanie Twoich ogłoszeń...";
+
+    const rentalsQuery = query(collection(db, "rentals"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(rentalsQuery);
+
+    rentals = snapshot.docs
+      .map((document) => {
+        return {
+          id: document.id,
+          ...document.data()
+        };
+      })
+      .filter((rental) => rental.ownerUid === currentUser.uid);
+
+    message.textContent = "";
+    renderRentals();
+  } catch (error) {
+    console.error(error);
+    message.textContent = "Błąd ładowania ogłoszeń. Sprawdź Firestore albo reguły bazy danych.";
+  }
+}
+
+function renderRentals() {
+  rentalsGrid.innerHTML = "";
+
+  if (rentals.length === 0) {
+    rentalsGrid.innerHTML = `
+      <div class="empty">
+        Nie masz jeszcze żadnych ogłoszeń. Dodaj pierwsze auto i niech system zacznie oddychać.
+      </div>
+    `;
+    return;
+  }
+
+  rentals.forEach((rental) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img class="car-img" src="${escapeHtml(rental.image || "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop")}" alt="Zdjęcie auta">
+
+      <div class="content">
+        <h3>${escapeHtml(rental.brand)} ${escapeHtml(rental.model)}</h3>
+
+        <div class="meta">
+          ROCZNIK: ${escapeHtml(rental.year || "BRAK DANYCH")}<br>
+          MIASTO: ${escapeHtml(rental.city)}<br>
+          PALIWO: ${escapeHtml(rental.fuel)}<br>
+          SKRZYNIA: ${escapeHtml(rental.gearbox)}<br>
+          KAUCJA: ${escapeHtml(rental.deposit || "BRAK DANYCH")} ZŁ
+        </div>
+
+        <div class="price">${escapeHtml(rental.price)} ZŁ / DOBA</div>
+
+        <div class="desc">${escapeHtml(rental.description || "Brak opisu.")}</div>
+
+        <div class="actions">
+          <button class="edit-btn" data-id="${rental.id}">EDYTUJ</button>
+          <button class="delete-btn" data-id="${rental.id}">USUŃ</button>
+        </div>
+
+        <div class="editor" id="editor-${rental.id}">
+          <div class="form-grid">
+            <div class="field">
+              <label>MARKA AUTA</label>
+              <input id="brand-${rental.id}" type="text" value="${escapeAttribute(rental.brand)}">
+            </div>
+
+            <div class="field">
+              <label>MODEL</label>
+              <input id="model-${rental.id}" type="text" value="${escapeAttribute(rental.model)}">
+            </div>
+
+            <div class="field">
+              <label>ROK PRODUKCJI</label>
+              <input id="year-${rental.id}" type="number" value="${escapeAttribute(rental.year)}">
+            </div>
+
+            <div class="field">
+              <label>MIASTO</label>
+              <input id="city-${rental.id}" type="text" value="${escapeAttribute(rental.city)}">
+            </div>
+
+            <div class="field">
+              <label>CENA ZA DOBĘ</label>
+              <input id="price-${rental.id}" type="number" value="${escapeAttribute(rental.price)}">
+            </div>
+
+            <div class="field">
+              <label>KAUCJA</label>
+              <input id="deposit-${rental.id}" type="number" value="${escapeAttribute(rental.deposit)}">
+            </div>
+
+            <div class="field">
+              <label>PALIWO</label>
+              <select id="fuel-${rental.id}">
+                <option value="Benzyna" ${rental.fuel === "Benzyna" ? "selected" : ""}>BENZYNA</option>
+                <option value="Diesel" ${rental.fuel === "Diesel" ? "selected" : ""}>DIESEL</option>
+                <option value="Hybryda" ${rental.fuel === "Hybryda" ? "selected" : ""}>HYBRYDA</option>
+                <option value="Elektryk" ${rental.fuel === "Elektryk" ? "selected" : ""}>ELEKTRYK</option>
+                <option value="LPG" ${rental.fuel === "LPG" ? "selected" : ""}>LPG</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>SKRZYNIA</label>
+              <select id="gearbox-${rental.id}">
+                <option value="Manual" ${rental.gearbox === "Manual" ? "selected" : ""}>MANUAL</option>
+                <option value="Automat" ${rental.gearbox === "Automat" ? "selected" : ""}>AUTOMAT</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>TELEFON</label>
+              <input id="phone-${rental.id}" type="text" value="${escapeAttribute(rental.phone)}">
+            </div>
+
+            <div class="field">
+              <label>NAZWA / IMIĘ</label>
+              <input id="ownerName-${rental.id}" type="text" value="${escapeAttribute(rental.ownerName)}">
+            </div>
+
+            <div class="field full">
+              <label>LINK DO ZDJĘCIA</label>
+              <input id="image-${rental.id}" type="text" value="${escapeAttribute(rental.image)}">
+            </div>
+
+            <div class="field full">
+              <label>OPIS</label>
+              <textarea id="description-${rental.id}">${escapeHtml(rental.description)}</textarea>
+            </div>
+          </div>
+
+          <div class="editor-actions">
+            <button class="save-btn" data-id="${rental.id}">ZAPISZ</button>
+            <button class="cancel-btn" data-id="${rental.id}">ANULUJ</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    rentalsGrid.appendChild(card);
+  });
+
+  document.querySelectorAll(".edit-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      openEditor(button.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".cancel-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      closeEditor(button.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".save-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      await saveRental(button.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".delete-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      await deleteRental(button.dataset.id);
+    });
+  });
+}
+
+function openEditor(id) {
+  const editor = document.getElementById(`editor-${id}`);
+  if (editor) editor.classList.add("active");
+}
+
+function closeEditor(id) {
+  const editor = document.getElementById(`editor-${id}`);
+  if (editor) editor.classList.remove("active");
+}
+
+async function saveRental(id) {
+  const rental = rentals.find((item) => item.id === id);
+
+  if (!rental) {
+    alert("Nie znaleziono ogłoszenia.");
+    return;
+  }
+
+  if (!currentUser || rental.ownerUid !== currentUser.uid) {
+    alert("Możesz edytować tylko swoje ogłoszenia.");
+    return;
+  }
+
+  const updatedRental = {
+    brand: document.getElementById(`brand-${id}`).value.trim(),
+    model: document.getElementById(`model-${id}`).value.trim(),
+    year: document.getElementById(`year-${id}`).value.trim(),
+    city: document.getElementById(`city-${id}`).value.trim(),
+    price: document.getElementById(`price-${id}`).value.trim(),
+    deposit: document.getElementById(`deposit-${id}`).value.trim(),
+    fuel: document.getElementById(`fuel-${id}`).value,
+    gearbox: document.getElementById(`gearbox-${id}`).value,
+    phone: document.getElementById(`phone-${id}`).value.trim(),
+    ownerName: document.getElementById(`ownerName-${id}`).value.trim(),
+    image: document.getElementById(`image-${id}`).value.trim(),
+    description: document.getElementById(`description-${id}`).value.trim(),
+    updatedAt: serverTimestamp()
+  };
+
+  if (!updatedRental.brand || !updatedRental.model || !updatedRental.city || !updatedRental.price || !updatedRental.fuel || !updatedRental.gearbox || !updatedRental.phone) {
+    alert("Uzupełnij wymagane pola.");
+    return;
+  }
+
+  try {
+    message.textContent = "Zapisuję zmiany...";
+    await updateDoc(doc(db, "rentals", id), updatedRental);
+
+    rentals = rentals.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          ...updatedRental
+        };
+      }
+
+      return item;
+    });
+
+    message.textContent = "Ogłoszenie zaktualizowane.";
+    renderRentals();
+  } catch (error) {
+    console.error(error);
+    message.textContent = "Błąd zapisu. Sprawdź Firestore albo reguły bazy danych.";
+  }
+}
+
+async function deleteRental(id) {
+  const rental = rentals.find((item) => item.id === id);
+
+  if (!rental) {
+    alert("Nie znaleziono ogłoszenia.");
+    return;
+  }
+
+  if (!currentUser || rental.ownerUid !== currentUser.uid) {
+    alert("Możesz usuwać tylko swoje ogłoszenia.");
+    return;
+  }
+
+  const confirmDelete = confirm("Na pewno usunąć to ogłoszenie?");
+  if (!confirmDelete) return;
+
+  try {
+    message.textContent = "Usuwam ogłoszenie...";
+    await deleteDoc(doc(db, "rentals", id));
+
+    rentals = rentals.filter((item) => item.id !== id);
+    message.textContent = "Ogłoszenie usunięte.";
+    renderRentals();
+  } catch (error) {
+    console.error(error);
+    message.textContent = "Błąd usuwania. Sprawdź Firestore albo reguły bazy danych.";
+  }
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeAttribute(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+</script>
+
+</body>
+</html>

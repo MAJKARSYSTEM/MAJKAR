@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wypożycz Auto - MAJKAR</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.9)),
+    url("background.jpg") center/cover no-repeat;
+  color:white;
+}
+
+.page{min-height:100vh;padding:35px}
+
+.topbar{
+  max-width:1100px;
+  margin:0 auto 35px;
+  padding:22px 26px;
+  border:1px solid #ff1a1a;
+  border-radius:14px;
+  background:rgba(0,0,0,.78);
+  box-shadow:0 0 25px rgba(255,0,0,.35);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo h1{
+  font-size:36px;
+  letter-spacing:6px;
+  text-shadow:0 0 16px red;
+}
+
+.logo p{
+  margin-top:6px;
+  font-size:11px;
+  color:#aaa;
+  letter-spacing:2px;
+}
+
+.back-btn{
+  padding:14px 18px;
+  border:1px solid #ff1a1a;
+  border-radius:8px;
+  background:linear-gradient(90deg,#111,#333,#111);
+  color:white;
+  text-decoration:none;
+  font-size:11px;
+  letter-spacing:2px;
+  box-shadow:0 0 14px rgba(255,0,0,.35);
+  transition:.22s;
+}
+
+.back-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 25px rgba(255,0,0,.65);
+}
+
+.main{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.hero{
+  margin-bottom:25px;
+  padding:28px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),
+    rgba(0,0,0,.82);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.25),
+    inset 0 0 24px rgba(255,0,0,.06);
+}
+
+.hero h2{
+  font-size:30px;
+  text-shadow:0 0 14px red;
+  margin-bottom:12px;
+}
+
+.hero p{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+}
+
+.option{
+  min-height:260px;
+  padding:30px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.13),transparent 40%),
+    rgba(0,0,0,.82);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.28),
+    inset 0 0 24px rgba(255,0,0,.07);
+  cursor:pointer;
+  transition:.22s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.option:hover{
+  transform:translateY(-5px);
+  box-shadow:
+    0 0 35px rgba(255,0,0,.58),
+    inset 0 0 28px rgba(255,0,0,.13);
+}
+
+.badge{
+  position:absolute;
+  top:18px;
+  right:18px;
+  padding:6px 9px;
+  border:1px solid rgba(255,0,0,.55);
+  color:#ff3030;
+  font-size:9px;
+  letter-spacing:1px;
+  background:rgba(0,0,0,.55);
+}
+
+.icon{
+  font-size:52px;
+  margin-bottom:22px;
+}
+
+.option h3{
+  font-size:21px;
+  margin-bottom:14px;
+  letter-spacing:2px;
+  text-shadow:0 0 12px red;
+}
+
+.option p{
+  font-size:12px;
+  color:#aaa;
+  line-height:1.7;
+}
+
+.warning{
+  margin-top:22px;
+  padding:16px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:12px;
+  background:rgba(255,0,0,.08);
+  color:#ffb3b3;
+  font-size:11px;
+  line-height:1.8;
+  text-align:center;
+}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
+
+@media(max-width:760px){
+  .page{padding:18px}
+  .topbar{flex-direction:column;text-align:center;gap:15px}
+  .logo h1{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="logo">
+      <h1>MAJKAR</h1>
+      <p>RENTAL COMMAND CENTER</p>
+    </div>
+
+    <a href="dashboard.html" class="back-btn">WRÓĆ DO PANELU</a>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <h2>Wypożycz Auto</h2>
+      <p>Publiczne ogłoszenia wynajmu aut od użytkowników MAJKAR. Możesz przeglądać auta, dodać własne ogłoszenie albo zarządzać swoimi ofertami.</p>
+    </section>
+
+    <section class="grid">
+      <div class="option" id="rentalsBtn">
+        <span class="badge">RENT 01</span>
+        <div class="icon">🔎</div>
+        <h3>WYPOŻYCZ</h3>
+        <p>Przejdź do publicznych ogłoszeń i zobacz auta dostępne do wynajęcia od użytkowników MAJKAR.</p>
+      </div>
+
+      <div class="option" id="addRentalBtn">
+        <span class="badge">RENT 02</span>
+        <div class="icon">➕</div>
+        <h3>DODAJ OGŁOSZENIE</h3>
+        <p>Wystaw swoje auto do wynajęcia. Ogłoszenie będzie widoczne dla innych zalogowanych użytkowników.</p>
+      </div>
+
+      <div class="option" id="myRentalsBtn">
+        <span class="badge">RENT 03</span>
+        <div class="icon">🧾</div>
+        <h3>MOJE OGŁOSZENIA</h3>
+        <p>Zobacz ogłoszenia dodane przez Twoje konto. Edytuj dane auta albo usuń ofertę.</p>
+      </div>
+    </section>
+
+    <div class="warning">
+      Zarządzanie ogłoszeniami działa po koncie użytkownika. Każdy widzi publiczne ogłoszenia, ale edytować i usuwać można tylko swoje.
+    </div>
+  </main>
+
+</div>
+
+<script type="module">
+import {
+  auth,
+  onAuthStateChanged
+} from "./firebase-config.js";
+
+const rentalsBtn = document.getElementById("rentalsBtn");
+const addRentalBtn = document.getElementById("addRentalBtn");
+const myRentalsBtn = document.getElementById("myRentalsBtn");
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+  }
+});
+
+rentalsBtn.addEventListener("click", () => {
+  window.location.href = "rentals.html";
+});
+
+addRentalBtn.addEventListener("click", () => {
+  window.location.href = "add-rental.html";
+});
+
+myRentalsBtn.addEventListener("click", () => {
+  window.location.href = "my-rentals.html";
+});
+</script>
+
+</body>
+</html>

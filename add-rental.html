@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dodaj ogłoszenie - MAJKAR</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.92)),
+    url("background.jpg") center/cover no-repeat;
+  color:white;
+}
+
+.page{
+  min-height:100vh;
+  padding:35px;
+}
+
+.topbar{
+  max-width:1150px;
+  margin:0 auto 28px;
+  padding:22px 26px;
+  border:1px solid #ff1a1a;
+  border-radius:14px;
+  background:rgba(0,0,0,.78);
+  box-shadow:0 0 25px rgba(255,0,0,.35);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+}
+
+.logo h1{
+  font-size:36px;
+  letter-spacing:6px;
+  text-shadow:0 0 16px red;
+}
+
+.logo p{
+  margin-top:6px;
+  font-size:11px;
+  color:#aaa;
+  letter-spacing:2px;
+}
+
+.nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.nav a{
+  padding:13px 16px;
+  border:1px solid #ff1a1a;
+  border-radius:8px;
+  background:linear-gradient(90deg,#111,#333,#111);
+  color:white;
+  text-decoration:none;
+  font-size:10px;
+  letter-spacing:2px;
+  box-shadow:0 0 14px rgba(255,0,0,.35);
+  transition:.22s;
+}
+
+.nav a:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 25px rgba(255,0,0,.65);
+}
+
+.main{
+  max-width:1150px;
+  margin:0 auto;
+}
+
+.hero{
+  margin-bottom:22px;
+  padding:26px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),
+    rgba(0,0,0,.82);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.25),
+    inset 0 0 24px rgba(255,0,0,.06);
+}
+
+.hero h2{
+  font-size:30px;
+  text-shadow:0 0 14px red;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.form-box{
+  padding:26px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),
+    rgba(0,0,0,.84);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.25),
+    inset 0 0 24px rgba(255,0,0,.06);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:11px;
+  color:#bbb;
+  letter-spacing:1px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:15px;
+  border:1px solid rgba(255,0,0,.55);
+  border-radius:10px;
+  background:rgba(0,0,0,.72);
+  color:white;
+  outline:none;
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+textarea{
+  min-height:140px;
+  resize:vertical;
+  line-height:1.7;
+}
+
+input:focus,select:focus,textarea:focus{
+  box-shadow:0 0 14px rgba(255,0,0,.45);
+}
+
+.submit-btn{
+  margin-top:18px;
+  width:100%;
+  min-height:52px;
+  border:1px solid #ff1a1a;
+  border-radius:10px;
+  background:linear-gradient(90deg,#300,#900,#300);
+  color:white;
+  font-size:13px;
+  letter-spacing:2px;
+  cursor:pointer;
+  box-shadow:0 0 18px rgba(255,0,0,.38);
+  transition:.22s;
+}
+
+.submit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 32px rgba(255,0,0,.75);
+}
+
+.submit-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.message{
+  margin-top:18px;
+  padding:16px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:12px;
+  background:rgba(0,0,0,.65);
+  color:#ffb3b3;
+  font-size:12px;
+  line-height:1.7;
+  text-align:center;
+  min-height:50px;
+}
+
+.warning{
+  margin-top:18px;
+  padding:16px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:12px;
+  background:rgba(255,0,0,.08);
+  color:#ffb3b3;
+  font-size:11px;
+  line-height:1.8;
+  text-align:center;
+}
+
+@media(max-width:900px){
+  .page{padding:18px}
+  .topbar{flex-direction:column;text-align:center}
+  .nav{justify-content:center}
+  .form-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+  .logo h1{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="logo">
+      <h1>MAJKAR</h1>
+      <p>ADD RENTAL OFFER</p>
+    </div>
+
+    <nav class="nav">
+      <a href="rent.html">WRÓĆ</a>
+      <a href="rentals.html">OGŁOSZENIA</a>
+      <a href="dashboard.html">PANEL</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <h2>Dodaj ogłoszenie wynajmu</h2>
+      <p>Wypełnij dane auta. Ogłoszenie zostanie zapisane w Firebase i będzie widoczne dla innych zalogowanych użytkowników MAJKAR.</p>
+    </section>
+
+    <section class="form-box">
+      <form id="rentalForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="brand">MARKA AUTA</label>
+            <input id="brand" type="text" placeholder="NP. AUDI" required>
+          </div>
+
+          <div class="field">
+            <label for="model">MODEL</label>
+            <input id="model" type="text" placeholder="NP. A6 C8" required>
+          </div>
+
+          <div class="field">
+            <label for="year">ROK PRODUKCJI</label>
+            <input id="year" type="number" placeholder="NP. 2020">
+          </div>
+
+          <div class="field">
+            <label for="city">MIASTO</label>
+            <input id="city" type="text" placeholder="NP. WARSZAWA" required>
+          </div>
+
+          <div class="field">
+            <label for="price">CENA ZA DOBĘ</label>
+            <input id="price" type="number" placeholder="NP. 399" required>
+          </div>
+
+          <div class="field">
+            <label for="deposit">KAUCJA</label>
+            <input id="deposit" type="number" placeholder="NP. 2000">
+          </div>
+
+          <div class="field">
+            <label for="fuel">PALIWO</label>
+            <select id="fuel" required>
+              <option value="">WYBIERZ</option>
+              <option value="Benzyna">BENZYNA</option>
+              <option value="Diesel">DIESEL</option>
+              <option value="Hybryda">HYBRYDA</option>
+              <option value="Elektryk">ELEKTRYK</option>
+              <option value="LPG">LPG</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="gearbox">SKRZYNIA</label>
+            <select id="gearbox" required>
+              <option value="">WYBIERZ</option>
+              <option value="Manual">MANUAL</option>
+              <option value="Automat">AUTOMAT</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="phone">TELEFON KONTAKTOWY</label>
+            <input id="phone" type="text" placeholder="NP. 500 600 700" required>
+          </div>
+
+          <div class="field">
+            <label for="ownerName">NAZWA / IMIĘ W OGŁOSZENIU</label>
+            <input id="ownerName" type="text" placeholder="NP. MACIEK / WYPOŻYCZALNIA">
+          </div>
+
+          <div class="field full">
+            <label for="image">LINK DO ZDJĘCIA AUTA</label>
+            <input id="image" type="text" placeholder="WKLEJ LINK DO ZDJĘCIA">
+          </div>
+
+          <div class="field full">
+            <label for="description">OPIS OGŁOSZENIA</label>
+            <textarea id="description" placeholder="OPISZ AUTO, WARUNKI WYNAJMU, LIMIT KM, ODBIÓR, ZWROT, KAUCJĘ..."></textarea>
+          </div>
+        </div>
+
+        <button id="submitBtn" class="submit-btn" type="submit">DODAJ OGŁOSZENIE</button>
+
+        <div id="message" class="message">Gotowy do dodania ogłoszenia.</div>
+      </form>
+    </section>
+
+    <div class="warning">
+      Nie wrzucaj fałszywych ogłoszeń ani cudzych danych. Później dodamy weryfikację użytkowników i firm.
+    </div>
+  </main>
+
+</div>
+
+<script type="module">
+import {
+  auth,
+  db,
+  collection,
+  addDoc,
+  serverTimestamp,
+  onAuthStateChanged
+} from "./firebase-config.js";
+
+const form = document.getElementById("rentalForm");
+const submitBtn = document.getElementById("submitBtn");
+const message = document.getElementById("message");
+
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  currentUser = user;
+});
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!currentUser) {
+    message.textContent = "Musisz być zalogowany, żeby dodać ogłoszenie.";
+    return;
+  }
+
+  const rental = {
+    brand: document.getElementById("brand").value.trim(),
+    model: document.getElementById("model").value.trim(),
+    year: document.getElementById("year").value.trim(),
+    city: document.getElementById("city").value.trim(),
+    price: document.getElementById("price").value.trim(),
+    deposit: document.getElementById("deposit").value.trim(),
+    fuel: document.getElementById("fuel").value,
+    gearbox: document.getElementById("gearbox").value,
+    phone: document.getElementById("phone").value.trim(),
+    ownerName: document.getElementById("ownerName").value.trim(),
+    image: document.getElementById("image").value.trim(),
+    description: document.getElementById("description").value.trim(),
+    ownerUid: currentUser.uid,
+    ownerEmail: currentUser.email,
+    createdAt: serverTimestamp()
+  };
+
+  if (!rental.brand || !rental.model || !rental.city || !rental.price || !rental.fuel || !rental.gearbox || !rental.phone) {
+    message.textContent = "Uzupełnij wymagane pola.";
+    return;
+  }
+
+  try {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "DODAWANIE...";
+    message.textContent = "Dodaję ogłoszenie do bazy...";
+
+    await addDoc(collection(db, "rentals"), rental);
+
+    message.textContent = "Ogłoszenie dodane!";
+    window.location.href = "rentals.html";
+  } catch (error) {
+    console.error(error);
+    message.textContent = "Błąd dodawania ogłoszenia. Sprawdź Firestore albo reguły bazy danych.";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "DODAJ OGŁOSZENIE";
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -231,7 +230,7 @@
           <p>Moduł w budowie.</p>
         </div>
 
-        <div class="tile" data-page="rent-car">
+        <div class="tile" id="rentCarTile">
           <span class="badge">MODULE 05</span>
           <div class="icon">🔑</div>
           <h3>WYPOŻYCZ AUTO</h3>
@@ -261,6 +260,7 @@
     const userEmail = document.getElementById("userEmail");
     const logoutTile = document.getElementById("logoutTile");
     const myCarTile = document.getElementById("myCarTile");
+    const rentCarTile = document.getElementById("rentCarTile");
     const message = document.getElementById("message");
     const tiles = document.querySelectorAll(".tile[data-page]");
 
@@ -276,16 +276,13 @@
       window.location.href = "my-car.html";
     });
 
+    rentCarTile.addEventListener("click", () => {
+      window.location.href = "rent.html";
+    });
+
     tiles.forEach((tile) => {
       tile.addEventListener("click", () => {
-        const page = tile.dataset.page;
         const name = tile.querySelector("h3").textContent;
-
-        if (page === "rent-car") {
-          message.textContent = name + " — moduł w budowie.";
-          return;
-        }
-
         message.textContent = name + " — moduł wkrótce dostępny.";
       });
     });
@@ -298,4 +295,3 @@
 
 </body>
 </html>
-```

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ogłoszenia wynajmu - MAJKAR</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.28),rgba(0,0,0,.92)),
+    url("background.jpg") center/cover no-repeat;
+  color:white;
+}
+
+.page{
+  min-height:100vh;
+  padding:35px;
+}
+
+.topbar{
+  max-width:1150px;
+  margin:0 auto 28px;
+  padding:22px 26px;
+  border:1px solid #ff1a1a;
+  border-radius:14px;
+  background:rgba(0,0,0,.78);
+  box-shadow:0 0 25px rgba(255,0,0,.35);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+}
+
+.logo h1{
+  font-size:36px;
+  letter-spacing:6px;
+  text-shadow:0 0 16px red;
+}
+
+.logo p{
+  margin-top:6px;
+  font-size:11px;
+  color:#aaa;
+  letter-spacing:2px;
+}
+
+.nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.nav a{
+  padding:13px 16px;
+  border:1px solid #ff1a1a;
+  border-radius:8px;
+  background:linear-gradient(90deg,#111,#333,#111);
+  color:white;
+  text-decoration:none;
+  font-size:10px;
+  letter-spacing:2px;
+  box-shadow:0 0 14px rgba(255,0,0,.35);
+  transition:.22s;
+}
+
+.nav a:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 25px rgba(255,0,0,.65);
+}
+
+.main{
+  max-width:1150px;
+  margin:0 auto;
+}
+
+.hero{
+  margin-bottom:22px;
+  padding:26px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),
+    rgba(0,0,0,.82);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.25),
+    inset 0 0 24px rgba(255,0,0,.06);
+}
+
+.hero h2{
+  font-size:30px;
+  text-shadow:0 0 14px red;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:22px;
+  padding:18px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:16px;
+  background:rgba(0,0,0,.76);
+  box-shadow:0 0 18px rgba(255,0,0,.18);
+}
+
+input,select{
+  width:100%;
+  padding:14px;
+  border:1px solid rgba(255,0,0,.55);
+  border-radius:10px;
+  background:rgba(0,0,0,.72);
+  color:white;
+  outline:none;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+input:focus,select:focus{
+  box-shadow:0 0 14px rgba(255,0,0,.45);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
+}
+
+.card{
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg,rgba(255,0,0,.12),transparent 40%),
+    rgba(0,0,0,.84);
+  box-shadow:
+    0 0 20px rgba(255,0,0,.25),
+    inset 0 0 24px rgba(255,0,0,.06);
+  overflow:hidden;
+}
+
+.car-img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+  background:rgba(0,0,0,.65);
+  border-bottom:1px solid rgba(255,0,0,.45);
+}
+
+.content{
+  padding:22px;
+}
+
+.content h3{
+  font-size:20px;
+  margin-bottom:12px;
+  letter-spacing:2px;
+  text-shadow:0 0 10px red;
+}
+
+.meta{
+  color:#aaa;
+  font-size:11px;
+  line-height:1.8;
+  margin-bottom:12px;
+}
+
+.price{
+  font-size:22px;
+  margin:14px 0;
+  color:white;
+  text-shadow:0 0 12px red;
+}
+
+.desc{
+  color:#bbb;
+  font-size:12px;
+  line-height:1.7;
+  margin-bottom:14px;
+}
+
+.contact{
+  padding:14px;
+  border:1px solid rgba(255,0,0,.35);
+  border-radius:12px;
+  background:rgba(0,0,0,.55);
+  color:#ddd;
+  font-size:11px;
+  line-height:1.8;
+  margin-bottom:14px;
+}
+
+.delete-btn{
+  width:100%;
+  min-height:44px;
+  border:1px solid rgba(255,0,0,.75);
+  border-radius:9px;
+  background:rgba(255,0,0,.12);
+  color:#ffb3b3;
+  font-size:11px;
+  letter-spacing:2px;
+  cursor:pointer;
+  transition:.22s;
+}
+
+.delete-btn:hover{
+  background:rgba(255,0,0,.22);
+  box-shadow:0 0 18px rgba(255,0,0,.35);
+}
+
+.empty,.message{
+  padding:24px;
+  border:1px solid rgba(255,0,0,.45);
+  border-radius:16px;
+  background:rgba(0,0,0,.76);
+  color:#aaa;
+  font-size:13px;
+  line-height:1.8;
+  text-align:center;
+}
+
+.message{
+  margin-bottom:18px;
+  color:#ffb3b3;
+}
+
+@media(max-width:900px){
+  .page{padding:18px}
+  .topbar{flex-direction:column;text-align:center}
+  .nav{justify-content:center}
+  .filters{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .logo h1{font-size:30px}
+}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div class="logo">
+      <h1>MAJKAR</h1>
+      <p>PUBLIC RENTAL MARKET</p>
+    </div>
+
+    <nav class="nav">
+      <a href="rent.html">WRÓĆ</a>
+      <a href="add-rental.html">DODAJ OGŁOSZENIE</a>
+      <a href="dashboard.html">PANEL</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <h2>Ogłoszenia wynajmu aut</h2>
+      <p>Lista aut dodanych przez użytkowników MAJKAR. Każdy zalogowany użytkownik może dodać ogłoszenie, a inni mogą je zobaczyć.</p>
+    </section>
+
+    <div id="message" class="message">Ładowanie ogłoszeń...</div>
+
+    <section class="filters">
+      <input id="searchInput" type="text" placeholder="SZUKAJ: MARKA, MODEL, MIASTO">
+      <select id="fuelFilter">
+        <option value="">KAŻDE PALIWO</option>
+        <option value="Benzyna">BENZYNA</option>
+        <option value="Diesel">DIESEL</option>
+        <option value="Hybryda">HYBRYDA</option>
+        <option value="Elektryk">ELEKTRYK</option>
+        <option value="LPG">LPG</option>
+      </select>
+      <select id="gearboxFilter">
+        <option value="">KAŻDA SKRZYNIA</option>
+        <option value="Manual">MANUAL</option>
+        <option value="Automat">AUTOMAT</option>
+      </select>
+      <input id="maxPriceInput" type="number" placeholder="CENA MAX">
+    </section>
+
+    <section id="rentalsGrid" class="grid"></section>
+  </main>
+
+</div>
+
+<script type="module">
+import {
+  auth,
+  db,
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  orderBy,
+  onAuthStateChanged
+} from "./firebase-config.js";
+
+const rentalsGrid = document.getElementById("rentalsGrid");
+const message = document.getElementById("message");
+const searchInput = document.getElementById("searchInput");
+const fuelFilter = document.getElementById("fuelFilter");
+const gearboxFilter = document.getElementById("gearboxFilter");
+const maxPriceInput = document.getElementById("maxPriceInput");
+
+let currentUser = null;
+let rentals = [];
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  currentUser = user;
+  await loadRentals();
+});
+
+async function loadRentals() {
+  try {
+    message.textContent = "Ładowanie ogłoszeń...";
+    const rentalsQuery = query(collection(db, "rentals"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(rentalsQuery);
+
+    rentals = snapshot.docs.map((document) => {
+      return {
+        id: document.id,
+        ...document.data()
+      };
+    });
+
+    message.textContent = "";
+    renderRentals();
+  } catch (error) {
+    console.error(error);
+    message.textContent = "Błąd ładowania ogłoszeń. Sprawdź Firestore albo reguły bazy danych.";
+  }
+}
+
+function renderRentals() {
+  const search = searchInput.value.toLowerCase().trim();
+  const fuel = fuelFilter.value;
+  const gearbox = gearboxFilter.value;
+  const maxPrice = Number(maxPriceInput.value);
+
+  const filtered = rentals.filter((rental) => {
+    const text = `${rental.brand || ""} ${rental.model || ""} ${rental.city || ""} ${rental.year || ""}`.toLowerCase();
+
+    const matchSearch = text.includes(search);
+    const matchFuel = fuel === "" || rental.fuel === fuel;
+    const matchGearbox = gearbox === "" || rental.gearbox === gearbox;
+    const matchPrice = !maxPrice || Number(rental.price) <= maxPrice;
+
+    return matchSearch && matchFuel && matchGearbox && matchPrice;
+  });
+
+  rentalsGrid.innerHTML = "";
+
+  if (filtered.length === 0) {
+    rentalsGrid.innerHTML = `
+      <div class="empty">
+        Brak ogłoszeń. Dodaj pierwsze auto i niech MAJKAR zacznie żyć.
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach((rental) => {
+    const canDelete = currentUser && rental.ownerUid === currentUser.uid;
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img class="car-img" src="${escapeHtml(rental.image || "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop")}" alt="Zdjęcie auta">
+
+      <div class="content">
+        <h3>${escapeHtml(rental.brand)} ${escapeHtml(rental.model)}</h3>
+
+        <div class="meta">
+          ROCZNIK: ${escapeHtml(rental.year || "BRAK DANYCH")}<br>
+          MIASTO: ${escapeHtml(rental.city)}<br>
+          PALIWO: ${escapeHtml(rental.fuel)}<br>
+          SKRZYNIA: ${escapeHtml(rental.gearbox)}<br>
+          KAUCJA: ${escapeHtml(rental.deposit || "BRAK DANYCH")} ZŁ
+        </div>
+
+        <div class="price">${escapeHtml(rental.price)} ZŁ / DOBA</div>
+
+        <div class="desc">${escapeHtml(rental.description || "Brak opisu.")}</div>
+
+        <div class="contact">
+          TELEFON: ${escapeHtml(rental.phone)}<br>
+          DODANE PRZEZ: ${escapeHtml(rental.ownerName || rental.ownerEmail || "Użytkownik MAJKAR")}
+        </div>
+
+        ${canDelete ? `<button class="delete-btn" data-id="${rental.id}">USUŃ OGŁOSZENIE</button>` : ""}
+      </div>
+    `;
+
+    rentalsGrid.appendChild(card);
+  });
+
+  document.querySelectorAll(".delete-btn").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const id = button.dataset.id;
+      await deleteRental(id);
+    });
+  });
+}
+
+async function deleteRental(id) {
+  const rental = rentals.find((item) => item.id === id);
+
+  if (!rental) {
+    alert("Nie znaleziono ogłoszenia.");
+    return;
+  }
+
+  if (!currentUser || rental.ownerUid !== currentUser.uid) {
+    alert("Możesz usuwać tylko swoje ogłoszenia.");
+    return;
+  }
+
+  const confirmDelete = confirm("Na pewno usunąć to ogłoszenie?");
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDoc(doc(db, "rentals", id));
+    rentals = rentals.filter((item) => item.id !== id);
+    renderRentals();
+  } catch (error) {
+    console.error(error);
+    alert("Nie udało się usunąć ogłoszenia.");
+  }
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+searchInput.addEventListener("input", renderRentals);
+fuelFilter.addEventListener("change", renderRentals);
+gearboxFilter.addEventListener("change", renderRentals);
+maxPriceInput.addEventListener("input", renderRentals);
+</script>
+
+</body>
+</html>

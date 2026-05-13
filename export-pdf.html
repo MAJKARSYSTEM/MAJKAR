@@ -82,185 +82,189 @@ body{
   letter-spacing:1px;
 }
 
+/* NOWY SPÓJNY PDF */
 #pdfTemplate{
   width:794px;
-  background:#f2f2f2;
+  background:#f4f4f4;
   color:#111;
-  padding:0;
   font-family:Arial, sans-serif;
   display:none;
   margin:30px auto;
+  padding:0;
 }
 
-.pdf-cover{
+.pdf-document{
   width:794px;
-  min-height:650px;
-  background:linear-gradient(135deg,#090909,#1d1d1d 55%,#5c0000);
+  background:#f4f4f4;
+  padding:26px;
+}
+
+.pdf-header{
+  background:linear-gradient(135deg,#080808,#1c1c1c 65%,#760000);
   color:white;
-  padding:55px 48px;
+  border-radius:18px;
+  padding:28px;
+  margin-bottom:18px;
   position:relative;
   overflow:hidden;
-  margin-bottom:25px;
 }
 
-.pdf-cover:before{
+.pdf-header:after{
   content:"";
   position:absolute;
-  width:500px;
-  height:500px;
-  border:2px solid rgba(255,0,0,.25);
+  width:260px;
+  height:260px;
+  border:2px solid rgba(255,255,255,.08);
   border-radius:50%;
-  right:-160px;
-  top:-120px;
+  right:-80px;
+  top:-90px;
 }
 
 .pdf-logo{
   font-family:'Orbitron',sans-serif;
-  font-size:42px;
-  letter-spacing:7px;
+  font-size:34px;
+  letter-spacing:6px;
   font-weight:900;
-  color:white;
-}
-
-.pdf-subtitle{
-  margin-top:12px;
-  color:#ff3b3b;
-  font-size:14px;
-  letter-spacing:3px;
-  font-weight:bold;
-}
-
-.pdf-car-main{margin-top:80px}
-
-.pdf-car-main h2{
-  font-size:38px;
-  line-height:1.2;
-  margin-bottom:18px;
-}
-
-.pdf-vin{
-  color:#ccc;
-  font-size:13px;
-  letter-spacing:1px;
-}
-
-.pdf-cover-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-top:55px;
-}
-
-.pdf-cover-box{
-  border:1px solid rgba(255,255,255,.22);
-  background:rgba(255,255,255,.08);
-  padding:18px;
-  border-radius:12px;
-}
-
-.pdf-cover-box small{
-  display:block;
-  color:#aaa;
-  font-size:10px;
   margin-bottom:8px;
 }
 
-.pdf-cover-box strong{
-  display:block;
-  font-size:17px;
-}
-
-.pdf-footer-cover{
-  position:absolute;
-  bottom:35px;
-  left:48px;
-  right:48px;
-  color:#bbb;
+.pdf-subtitle{
+  color:#ff4b4b;
   font-size:11px;
-  border-top:1px solid rgba(255,255,255,.2);
-  padding-top:18px;
+  letter-spacing:3px;
+  font-weight:bold;
+  margin-bottom:30px;
 }
 
-.pdf-page{
-  width:794px;
-  min-height:auto;
-  padding:34px 38px;
-  background:#f2f2f2;
+.pdf-car-title{
+  font-size:30px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.pdf-vin{
+  font-size:11px;
+  color:#ccc;
+}
+
+.pdf-meta-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:22px;
+}
+
+.pdf-meta-box{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:12px;
+  padding:12px;
+}
+
+.pdf-meta-box small{
+  display:block;
+  font-size:9px;
+  color:#aaa;
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+
+.pdf-meta-box strong{
+  display:block;
+  font-size:14px;
+  color:white;
+}
+
+.pdf-section{
+  background:white;
+  border:1px solid #ddd;
+  border-radius:16px;
+  padding:18px;
+  margin-bottom:16px;
   page-break-inside:avoid;
 }
 
 .pdf-section-title{
-  font-size:22px;
+  font-size:17px;
   font-weight:900;
-  margin-bottom:14px;
-  border-left:6px solid #b40000;
-  padding-left:12px;
   color:#111;
+  border-left:5px solid #b40000;
+  padding-left:10px;
+  margin-bottom:14px;
 }
 
 .pdf-summary{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-bottom:18px;
+  gap:10px;
 }
 
 .pdf-card{
-  background:white;
-  border-radius:10px;
-  padding:14px;
+  background:#f7f7f7;
   border:1px solid #ddd;
+  border-radius:12px;
+  padding:13px;
 }
 
 .pdf-card small{
   display:block;
   color:#777;
-  font-size:9px;
-  margin-bottom:7px;
+  font-size:8px;
   text-transform:uppercase;
+  margin-bottom:6px;
 }
 
 .pdf-card strong{
-  font-size:16px;
+  display:block;
+  font-size:15px;
   color:#111;
 }
 
-.pdf-block{
-  background:white;
-  border-radius:12px;
-  padding:16px;
-  border:1px solid #ddd;
-  margin-bottom:18px;
-  page-break-inside:avoid;
+.pdf-car-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
 }
 
-.pdf-block h3{
-  font-size:17px;
-  margin-bottom:12px;
-  color:#b40000;
+.pdf-info{
+  background:#f8f8f8;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:11px;
+}
+
+.pdf-info small{
+  display:block;
+  font-size:8px;
+  color:#777;
+  text-transform:uppercase;
+  margin-bottom:5px;
+}
+
+.pdf-info strong{
+  font-size:12px;
+  color:#111;
 }
 
 .pdf-table{
   width:100%;
   border-collapse:collapse;
-  font-size:9px;
-  margin-bottom:18px;
+  font-size:8.5px;
   background:white;
-  page-break-inside:auto;
 }
 
 .pdf-table th{
-  background:#111;
+  background:#171717;
   color:white;
-  padding:8px;
+  padding:7px;
   text-align:left;
+  font-weight:bold;
 }
 
 .pdf-table td{
-  padding:8px;
-  border-bottom:1px solid #ddd;
+  padding:7px;
+  border-bottom:1px solid #e1e1e1;
   vertical-align:top;
-  background:white;
   color:#111;
 }
 
@@ -269,20 +273,21 @@ body{
 }
 
 .pdf-empty{
-  color:#777;
-  font-size:11px;
-  padding:12px;
   background:#f7f7f7;
-  border-radius:8px;
-  margin-bottom:18px;
+  color:#777;
+  border:1px dashed #bbb;
+  border-radius:10px;
+  padding:12px;
+  font-size:11px;
 }
 
-.pdf-note{
-  font-size:10px;
-  color:#666;
+.pdf-footer{
   margin-top:14px;
-  border-top:1px solid #ddd;
   padding-top:12px;
+  border-top:1px solid #ccc;
+  font-size:9px;
+  color:#666;
+  text-align:center;
 }
 
 @media(max-width:900px){
@@ -319,103 +324,121 @@ body{
 </div>
 
 <div id="pdfTemplate">
+  <div class="pdf-document">
 
-  <section class="pdf-cover">
-    <div class="pdf-logo">MAJKAR</div>
-    <div class="pdf-subtitle">RAPORT POJAZDU</div>
+    <section class="pdf-header">
+      <div class="pdf-logo">MAJKAR</div>
+      <div class="pdf-subtitle">RAPORT POJAZDU</div>
 
-    <div class="pdf-car-main">
-      <h2 id="pdfCarTitle">---</h2>
+      <div class="pdf-car-title" id="pdfCarTitle">---</div>
       <div class="pdf-vin">VIN: <span id="pdfVin">---</span></div>
+
+      <div class="pdf-meta-grid">
+        <div class="pdf-meta-box">
+          <small>Generacja</small>
+          <strong id="pdfGeneration">---</strong>
+        </div>
+
+        <div class="pdf-meta-box">
+          <small>Rok</small>
+          <strong id="pdfYear">---</strong>
+        </div>
+
+        <div class="pdf-meta-box">
+          <small>Data raportu</small>
+          <strong id="pdfDate">---</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="pdf-section">
+      <h2 class="pdf-section-title">Podsumowanie kosztów</h2>
+
+      <div class="pdf-summary">
+        <div class="pdf-card">
+          <small>Serwisy</small>
+          <strong id="sumService">0 zł</strong>
+        </div>
+
+        <div class="pdf-card">
+          <small>Ubezpieczenia</small>
+          <strong id="sumInsurance">0 zł</strong>
+        </div>
+
+        <div class="pdf-card">
+          <small>Przeglądy</small>
+          <strong id="sumInspection">0 zł</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="pdf-section">
+      <h2 class="pdf-section-title">Liczba wpisów</h2>
+
+      <div class="pdf-summary">
+        <div class="pdf-card">
+          <small>Serwis</small>
+          <strong id="countServices">0</strong>
+        </div>
+
+        <div class="pdf-card">
+          <small>Polisy</small>
+          <strong id="countInsurances">0</strong>
+        </div>
+
+        <div class="pdf-card">
+          <small>Przeglądy</small>
+          <strong id="countInspections">0</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="pdf-section">
+      <h2 class="pdf-section-title">Dane pojazdu</h2>
+
+      <div class="pdf-car-grid">
+        <div class="pdf-info">
+          <small>Marka i model</small>
+          <strong id="carNameCell">---</strong>
+        </div>
+
+        <div class="pdf-info">
+          <small>Generacja</small>
+          <strong id="carGenerationCell">---</strong>
+        </div>
+
+        <div class="pdf-info">
+          <small>Rok</small>
+          <strong id="carYearCell">---</strong>
+        </div>
+
+        <div class="pdf-info">
+          <small>VIN</small>
+          <strong id="carVinCell">---</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="pdf-section">
+      <h2 class="pdf-section-title">Historia serwisowa</h2>
+      <div id="pdfServices"></div>
+    </section>
+
+    <section class="pdf-section">
+      <h2 class="pdf-section-title">Ubezpieczenia</h2>
+      <div id="pdfInsurances"></div>
+    </section>
+
+    <section class="pdf-section">
+      <h2 class="pdf-section-title">Przeglądy techniczne</h2>
+      <div id="pdfInspections"></div>
+    </section>
+
+    <div class="pdf-footer">
+      Raport wygenerowany automatycznie przez MAJKAR BOOK. Dokument ma charakter informacyjny.
     </div>
 
-    <div class="pdf-cover-grid">
-      <div class="pdf-cover-box">
-        <small>GENERACJA</small>
-        <strong id="pdfGeneration">---</strong>
-      </div>
-
-      <div class="pdf-cover-box">
-        <small>ROK</small>
-        <strong id="pdfYear">---</strong>
-      </div>
-
-      <div class="pdf-cover-box">
-        <small>DATA RAPORTU</small>
-        <strong id="pdfDate">---</strong>
-      </div>
-    </div>
-
-    <div class="pdf-footer-cover">
-      Raport wygenerowany automatycznie przez MAJKAR BOOK. Dane pochodzą z zapisów użytkownika.
-    </div>
-  </section>
-
-  <section class="pdf-page">
-    <h2 class="pdf-section-title">Podsumowanie</h2>
-
-    <div class="pdf-summary">
-      <div class="pdf-card">
-        <small>Łączny koszt serwisów</small>
-        <strong id="sumService">0 zł</strong>
-      </div>
-
-      <div class="pdf-card">
-        <small>Łączny koszt ubezpieczeń</small>
-        <strong id="sumInsurance">0 zł</strong>
-      </div>
-
-      <div class="pdf-card">
-        <small>Łączny koszt przeglądów</small>
-        <strong id="sumInspection">0 zł</strong>
-      </div>
-    </div>
-
-    <div class="pdf-summary">
-      <div class="pdf-card">
-        <small>Serwisy</small>
-        <strong id="countServices">0</strong>
-      </div>
-
-      <div class="pdf-card">
-        <small>Ubezpieczenia</small>
-        <strong id="countInsurances">0</strong>
-      </div>
-
-      <div class="pdf-card">
-        <small>Przeglądy</small>
-        <strong id="countInspections">0</strong>
-      </div>
-    </div>
-
-    <div class="pdf-block">
-      <h3>Dane pojazdu</h3>
-      <table class="pdf-table">
-        <tbody>
-          <tr><th>Marka i model</th><td id="carNameCell">---</td></tr>
-          <tr><th>Generacja</th><td id="carGenerationCell">---</td></tr>
-          <tr><th>Rok</th><td id="carYearCell">---</td></tr>
-          <tr><th>VIN</th><td id="carVinCell">---</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="pdf-note">
-      Ten dokument jest raportem informacyjnym. Nie zastępuje dokumentów urzędowych, faktur ani zaświadczeń ze stacji kontroli pojazdów.
-    </div>
-  </section>
-
-  <section class="pdf-page">
-    <h2 class="pdf-section-title">Historia serwisowa</h2>
-    <div id="pdfServices"></div>
-
-    <h2 class="pdf-section-title">Ubezpieczenia</h2>
-    <div id="pdfInsurances"></div>
-
-    <h2 class="pdf-section-title">Przeglądy techniczne</h2>
-    <div id="pdfInspections"></div>
-  </section>
-
+  </div>
 </div>
 
 <script type="module">
@@ -552,20 +575,18 @@ async function loadReport(user){
   document.getElementById("countInspections").textContent = inspections.length;
 
   document.getElementById("pdfServices").innerHTML = table(
-    ["Data", "Przebieg", "Co było robione", "Miejsce", "NIP", "Telefon", "Cena"],
+    ["Data", "Przebieg", "Opis", "Miejsce", "Cena"],
     services.map(item => [
       item.date,
       item.mileage ? item.mileage + " km" : "",
       item.work,
       item.place,
-      item.nip,
-      item.phone,
       item.price ? money(item.price) : ""
     ])
   );
 
   document.getElementById("pdfInsurances").innerHTML = table(
-    ["Od", "Do", "Ubezpieczyciel", "Numer polisy", "Cena"],
+    ["Od", "Do", "Ubezpieczyciel", "Nr polisy", "Cena"],
     insurances.map(item => [
       item.startDate,
       item.endDate,
@@ -576,16 +597,14 @@ async function loadReport(user){
   );
 
   document.getElementById("pdfInspections").innerHTML = table(
-    ["Data", "Ważny do", "Przebieg", "Wynik", "Cena", "Stacja", "Nr badania", "Uwagi"],
+    ["Data", "Ważny do", "Przebieg", "Wynik", "Cena", "Stacja"],
     inspections.map(item => [
       item.inspectionDate,
       item.validDate,
       item.mileage ? item.mileage + " km" : "",
       item.result,
       item.price ? money(item.price) : "",
-      item.station,
-      item.inspectionNumber,
-      item.notes
+      item.station
     ])
   );
 
@@ -611,7 +630,7 @@ downloadBtn.addEventListener("click", async () => {
   await new Promise(resolve => setTimeout(resolve, 300));
 
   const options = {
-    margin: 0,
+    margin: 10,
     filename: `majkar-raport-${currentCarName}.pdf`,
     image: {
       type: "jpeg",
@@ -620,7 +639,7 @@ downloadBtn.addEventListener("click", async () => {
     html2canvas: {
       scale: 2,
       useCORS: true,
-      backgroundColor: "#f2f2f2",
+      backgroundColor: "#f4f4f4",
       scrollX: 0,
       scrollY: 0
     },

@@ -236,11 +236,11 @@ body{
     <p>Daty badań technicznych i historia przeglądów.</p>
   </div>
 
-  <div class="tile" data-module="obd">
+  <div class="tile" data-module="ai-mechanic">
     <span class="badge">MODULE 05</span>
-    <div class="icon">🔌</div>
-    <h3>OBD</h3>
-    <p>Diagnostyka, błędy i przyszłe połączenie z AI.</p>
+    <div class="icon">🤖</div>
+    <h3>AI MECHANIK</h3>
+    <p>Zadaj pytanie o auto, wyjaśnij kody błędów i analizuj historię pojazdu.</p>
   </div>
 
   <div class="tile" data-module="export-pdf">
@@ -342,6 +342,11 @@ tiles.forEach(tile => {
 
     if (moduleType === "inspection") {
       window.location.href = "inspection.html?id=" + carId;
+      return;
+    }
+
+    if (moduleType === "ai-mechanic") {
+      window.location.href = "ai-mechanic.html?id=" + carId;
       return;
     }
 

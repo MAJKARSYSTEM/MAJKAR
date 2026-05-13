@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAJKAR - Przegląd</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.9)),url("background.jpg") center/cover no-repeat;
+  color:#fff;
+  padding:35px;
+}
+
+.page{max-width:1250px;margin:0 auto}
+
+.topbar,.panel,.summary-box{
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:rgba(0,0,0,.82);
+  box-shadow:0 0 25px rgba(255,0,0,.35);
+}
+
+.topbar{
+  padding:24px 28px;
+  margin-bottom:25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+h1{
+  font-size:34px;
+  letter-spacing:5px;
+  text-shadow:0 0 16px red;
+}
+
+.topbar p{
+  margin-top:8px;
+  color:#aaa;
+  font-size:12px;
+  letter-spacing:2px;
+}
+
+button{
+  min-height:44px;
+  padding:0 14px;
+  border:1px solid #ff1a1a;
+  border-radius:8px;
+  color:#fff;
+  background:linear-gradient(90deg,#1a0000,#b00000,#1a0000);
+  font-weight:900;
+  letter-spacing:1px;
+  cursor:pointer;
+  font-size:11px;
+}
+
+.back-btn,.cancel-btn{
+  background:linear-gradient(90deg,#111,#333,#111);
+}
+
+.edit-btn{
+  background:linear-gradient(90deg,#00111a,#005577,#00111a);
+}
+
+.delete-btn{
+  background:linear-gradient(90deg,#240000,#8b0000,#240000);
+}
+
+.summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:25px;
+}
+
+.summary-box{
+  padding:20px;
+  text-align:center;
+}
+
+.summary-box p{
+  color:#aaa;
+  font-size:11px;
+  margin-bottom:10px;
+}
+
+.summary-box span{
+  color:#ff3030;
+  font-size:18px;
+  font-weight:900;
+}
+
+.panel{
+  padding:26px;
+  margin-bottom:24px;
+}
+
+.panel h2{
+  font-size:22px;
+  margin-bottom:20px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:18px;
+}
+
+.wide{grid-column:1/-1}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  font-size:11px;
+  color:#bbb;
+  letter-spacing:2px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:0 14px;
+  background:#111;
+  border:1px solid #ff1a1a;
+  color:#fff;
+  font-size:14px;
+  outline:none;
+}
+
+input,select{height:52px}
+
+textarea{
+  min-height:90px;
+  padding-top:14px;
+  resize:vertical;
+}
+
+.form-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:14px;
+  border-bottom:1px solid rgba(255,0,0,.25);
+  text-align:left;
+  font-size:12px;
+  vertical-align:top;
+}
+
+th{color:#ff3030}
+
+.table-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.message{
+  margin-top:15px;
+  min-height:20px;
+  text-align:center;
+  font-size:12px;
+  color:#66ff66;
+}
+
+@media(max-width:1000px){
+  .summary{grid-template-columns:repeat(2,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  .wide{grid-column:auto}
+}
+
+@media(max-width:900px){
+  body{padding:18px}
+  .topbar{flex-direction:column;text-align:center}
+  .summary{grid-template-columns:1fr}
+  .form-actions{grid-template-columns:1fr}
+  table{display:block;overflow-x:auto;white-space:nowrap}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<header class="topbar">
+  <div>
+    <h1>PRZEGLĄD</h1>
+    <p id="carName">Ładowanie auta...</p>
+  </div>
+
+  <button class="back-btn" id="backBtn">POWRÓT</button>
+</header>
+
+<section class="summary">
+  <div class="summary-box">
+    <p>OSTATNI PRZEGLĄD</p>
+    <span id="lastInspection">Brak</span>
+  </div>
+
+  <div class="summary-box">
+    <p>WAŻNY DO</p>
+    <span id="validUntil">Brak</span>
+  </div>
+
+  <div class="summary-box">
+    <p>STATUS</p>
+    <span id="statusBox">Brak</span>
+  </div>
+
+  <div class="summary-box">
+    <p>LICZBA WPISÓW</p>
+    <span id="totalEntries">0</span>
+  </div>
+</section>
+
+<section class="panel">
+  <h2 id="formTitle">Dodaj przegląd</h2>
+
+  <form id="inspectionForm">
+    <div class="form-grid">
+
+      <div>
+        <label>DATA PRZEGLĄDU</label>
+        <input id="inspectionDate" type="date" required>
+      </div>
+
+      <div>
+        <label>DATA WAŻNOŚCI</label>
+        <input id="validDate" type="date" required>
+      </div>
+
+      <div>
+        <label>PRZEBIEG</label>
+        <input id="mileage" type="number" min="0" placeholder="np. 245000" required>
+      </div>
+
+      <div>
+        <label>CENA PRZEGLĄDU</label>
+        <input id="price" type="number" step="0.01" min="0" placeholder="np. 99" required>
+      </div>
+
+      <div>
+        <label>WYNIK</label>
+        <select id="result" required>
+          <option value="Pozytywny">Pozytywny</option>
+          <option value="Negatywny">Negatywny</option>
+        </select>
+      </div>
+
+      <div>
+        <label>NUMER BADANIA</label>
+        <input id="inspectionNumber" type="text" placeholder="np. SKP/2026/001">
+      </div>
+
+      <div class="wide">
+        <label>STACJA KONTROLI POJAZDÓW</label>
+        <input id="station" type="text" placeholder="np. Okręgowa Stacja Kontroli Pojazdów">
+      </div>
+
+      <div class="wide">
+        <label>UWAGI DIAGNOSTY</label>
+        <textarea id="notes" placeholder="np. do obserwacji tuleje wahaczy..."></textarea>
+      </div>
+
+      <div>
+        <label>AKCJA</label>
+        <div class="form-actions">
+          <button type="submit" id="saveBtn">ZAPISZ</button>
+          <button type="button" class="cancel-btn" id="cancelBtn">ANULUJ</button>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+  <div id="message" class="message"></div>
+</section>
+
+<section class="panel">
+  <h2>Historia przeglądów</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>DATA</th>
+        <th>WAŻNY DO</th>
+        <th>PRZEBIEG</th>
+        <th>WYNIK</th>
+        <th>CENA</th>
+        <th>STACJA</th>
+        <th>NR BADANIA</th>
+        <th>UWAGI</th>
+        <th>AKCJE</th>
+      </tr>
+    </thead>
+
+    <tbody id="inspectionTable">
+      <tr>
+        <td colspan="9">Ładowanie danych...</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<script type="module">
+import {
+  auth,
+  db,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  onAuthStateChanged
+} from "./firebase-config.js";
+
+const params = new URLSearchParams(window.location.search);
+const carId = params.get("id");
+
+const carName = document.getElementById("carName");
+const backBtn = document.getElementById("backBtn");
+const form = document.getElementById("inspectionForm");
+const table = document.getElementById("inspectionTable");
+const message = document.getElementById("message");
+const formTitle = document.getElementById("formTitle");
+const saveBtn = document.getElementById("saveBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+
+const lastInspection = document.getElementById("lastInspection");
+const validUntil = document.getElementById("validUntil");
+const statusBox = document.getElementById("statusBox");
+const totalEntries = document.getElementById("totalEntries");
+
+const inspectionDate = document.getElementById("inspectionDate");
+const validDate = document.getElementById("validDate");
+const mileage = document.getElementById("mileage");
+const price = document.getElementById("price");
+const result = document.getElementById("result");
+const inspectionNumber = document.getElementById("inspectionNumber");
+const station = document.getElementById("station");
+const notes = document.getElementById("notes");
+
+let currentUser = null;
+let inspections = [];
+let editingId = null;
+
+function showMessage(text, success = true) {
+  message.textContent = text;
+  message.style.color = success ? "#66ff66" : "#ff6666";
+}
+
+function formatMoney(value) {
+  return (Number(value) || 0).toFixed(2).replace(".", ",") + " zł";
+}
+
+function resetForm() {
+  editingId = null;
+  form.reset();
+  result.value = "Pozytywny";
+  formTitle.textContent = "Dodaj przegląd";
+  saveBtn.textContent = "ZAPISZ";
+}
+
+async function loadCar(user) {
+  if (!carId) {
+    carName.textContent = "Brak ID auta";
+    showMessage("Brak ID auta w adresie.", false);
+    return;
+  }
+
+  const carRef = doc(db, "users", user.uid, "cars", carId);
+  const carSnap = await getDoc(carRef);
+
+  if (!carSnap.exists()) {
+    carName.textContent = "Auto nie istnieje";
+    showMessage("Nie znaleziono auta.", false);
+    return;
+  }
+
+  const car = carSnap.data();
+  carName.textContent = `${car.brand || ""} ${car.model || ""} ${car.generation || ""}`;
+}
+
+async function loadInspections(user) {
+  const inspectionsRef = collection(db, "users", user.uid, "cars", carId, "inspections");
+  const snap = await getDocs(inspectionsRef);
+
+  inspections = [];
+
+  snap.forEach(docSnap => {
+    inspections.push({
+      id: docSnap.id,
+      ...docSnap.data()
+    });
+  });
+
+  inspections.sort((a, b) => (b.inspectionDate || "").localeCompare(a.inspectionDate || ""));
+  renderInspections();
+}
+
+function renderInspections() {
+  table.innerHTML = "";
+
+  if (inspections.length === 0) {
+    table.innerHTML = `
+      <tr>
+        <td colspan="9">Brak zapisanych przeglądów. Dodaj pierwszy wpis.</td>
+      </tr>
+    `;
+  }
+
+  inspections.forEach(item => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${item.inspectionDate || "-"}</td>
+      <td>${item.validDate || "-"}</td>
+      <td>${item.mileage || "-"} km</td>
+      <td>${item.result || "-"}</td>
+      <td>${formatMoney(item.price)}</td>
+      <td>${item.station || "-"}</td>
+      <td>${item.inspectionNumber || "-"}</td>
+      <td>${item.notes || "-"}</td>
+      <td>
+        <div class="table-actions">
+          <button type="button" class="edit-btn">EDYTUJ</button>
+          <button type="button" class="delete-btn">USUŃ</button>
+        </div>
+      </td>
+    `;
+
+    row.querySelector(".edit-btn").addEventListener("click", () => {
+      editingId = item.id;
+      inspectionDate.value = item.inspectionDate || "";
+      validDate.value = item.validDate || "";
+      mileage.value = item.mileage || "";
+      price.value = item.price || "";
+      result.value = item.result || "Pozytywny";
+      inspectionNumber.value = item.inspectionNumber || "";
+      station.value = item.station || "";
+      notes.value = item.notes || "";
+      formTitle.textContent = "Edytuj przegląd";
+      saveBtn.textContent = "ZAPISZ ZMIANY";
+      showMessage("Tryb edycji przeglądu.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    row.querySelector(".delete-btn").addEventListener("click", async () => {
+      if (!confirm("Czy na pewno chcesz usunąć ten przegląd?")) return;
+
+      try {
+        const itemRef = doc(db, "users", currentUser.uid, "cars", carId, "inspections", item.id);
+        await deleteDoc(itemRef);
+        await loadInspections(currentUser);
+        showMessage("Przegląd usunięty.");
+      } catch (error) {
+        console.error(error);
+        showMessage("Błąd usuwania przeglądu: " + error.code, false);
+      }
+    });
+
+    table.appendChild(row);
+  });
+
+  totalEntries.textContent = inspections.length;
+
+  if (inspections.length > 0) {
+    const latest = inspections[0];
+    lastInspection.textContent = latest.inspectionDate || "Brak";
+    validUntil.textContent = latest.validDate || "Brak";
+
+    const today = new Date().toISOString().split("T")[0];
+
+    if (latest.validDate && latest.validDate >= today && latest.result === "Pozytywny") {
+      statusBox.textContent = "WAŻNY";
+    } else {
+      statusBox.textContent = "NIEWAŻNY";
+    }
+  } else {
+    lastInspection.textContent = "Brak";
+    validUntil.textContent = "Brak";
+    statusBox.textContent = "Brak";
+  }
+}
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  currentUser = user;
+
+  try {
+    await loadCar(user);
+    await loadInspections(user);
+    showMessage("Przeglądy załadowane.");
+  } catch (error) {
+    console.error(error);
+    showMessage("Błąd ładowania danych: " + error.code, false);
+  }
+});
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (!currentUser || !carId) {
+    showMessage("Brak użytkownika albo ID auta.", false);
+    return;
+  }
+
+  const inspection = {
+    inspectionDate: inspectionDate.value,
+    validDate: validDate.value,
+    mileage: Number(mileage.value),
+    price: Number(price.value),
+    result: result.value,
+    inspectionNumber: inspectionNumber.value.trim(),
+    station: station.value.trim(),
+    notes: notes.value.trim(),
+    updatedAt: new Date().toISOString()
+  };
+
+  try {
+    if (editingId) {
+      const itemRef = doc(db, "users", currentUser.uid, "cars", carId, "inspections", editingId);
+      await setDoc(itemRef, inspection, { merge: true });
+      showMessage("Przegląd zaktualizowany.");
+    } else {
+      const inspectionsRef = collection(db, "users", currentUser.uid, "cars", carId, "inspections");
+      await addDoc(inspectionsRef, {
+        ...inspection,
+        createdAt: new Date().toISOString()
+      });
+      showMessage("Przegląd zapisany.");
+    }
+
+    resetForm();
+    await loadInspections(currentUser);
+  } catch (error) {
+    console.error(error);
+    showMessage("Błąd zapisu przeglądu: " + error.code, false);
+  }
+});
+
+cancelBtn.addEventListener("click", () => {
+  resetForm();
+  showMessage("Edycja anulowana.");
+});
+
+backBtn.addEventListener("click", () => {
+  window.location.href = "car-dashboard.html?id=" + carId;
+});
+</script>
+
+</body>
+</html>

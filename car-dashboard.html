@@ -1,389 +1,352 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAJKAR BOOK</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAJKAR BOOK</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Orbitron', sans-serif;
-    }
+body{
+  min-height:100vh;
+  background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.9)),url("background.jpg") center/cover no-repeat;
+  color:white;
+  padding:35px;
+}
 
-    body {
-      min-height: 100vh;
-      background:
-        linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.9)),
-        url("background.jpg") center/cover no-repeat;
-      color: white;
-      padding: 35px;
-    }
+.page{max-width:1150px;margin:0 auto}
 
-    .page {
-      max-width: 1150px;
-      margin: 0 auto;
-    }
+.topbar{
+  padding:24px 28px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:rgba(0,0,0,.8);
+  box-shadow:0 0 28px rgba(255,0,0,.4);
+  margin-bottom:28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
 
-    .topbar {
-      padding: 24px 28px;
-      border: 1px solid #ff1a1a;
-      border-radius: 16px;
-      background: rgba(0,0,0,.8);
-      box-shadow: 0 0 28px rgba(255,0,0,.4);
-      margin-bottom: 28px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-    }
+.brand h1{
+  font-size:38px;
+  letter-spacing:6px;
+  text-shadow:0 0 18px red;
+}
 
-    .brand h1 {
-      font-size: 38px;
-      letter-spacing: 6px;
-      text-shadow: 0 0 18px red;
-    }
+.back-btn{
+  min-height:48px;
+  padding:0 20px;
+  border:1px solid #ff1a1a;
+  border-radius:8px;
+  color:white;
+  background:linear-gradient(90deg,#111,#333,#111);
+  font-weight:900;
+  letter-spacing:2px;
+  cursor:pointer;
+  box-shadow:0 0 14px rgba(255,0,0,.35);
+}
 
-    .back-btn {
-      min-height: 48px;
-      padding: 0 20px;
-      border: 1px solid #ff1a1a;
-      border-radius: 8px;
-      color: white;
-      background: linear-gradient(90deg, #111, #333, #111);
-      font-weight: 900;
-      letter-spacing: 2px;
-      cursor: pointer;
-      box-shadow: 0 0 14px rgba(255,0,0,.35);
-    }
+.car-header{
+  padding:26px;
+  border:1px solid rgba(255,0,0,.65);
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,0,0,.14),transparent 45%),rgba(0,0,0,.78);
+  box-shadow:0 0 24px rgba(255,0,0,.28),inset 0 0 24px rgba(255,0,0,.08);
+  margin-bottom:28px;
+}
 
-    .car-header {
-      padding: 26px;
-      border: 1px solid rgba(255,0,0,.65);
-      border-radius: 16px;
-      background:
-        linear-gradient(135deg, rgba(255,0,0,.14), transparent 45%),
-        rgba(0,0,0,.78);
-      box-shadow:
-        0 0 24px rgba(255,0,0,.28),
-        inset 0 0 24px rgba(255,0,0,.08);
-      margin-bottom: 28px;
-    }
+.car-header h2{
+  font-size:30px;
+  margin-bottom:12px;
+  text-shadow:0 0 14px red;
+}
 
-    .car-header h2 {
-      font-size: 30px;
-      margin-bottom: 12px;
-      text-shadow: 0 0 14px red;
-    }
+.car-info{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:18px;
+}
 
-    .car-info {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 18px;
-    }
+.info-box{
+  padding:14px;
+  border:1px solid rgba(255,0,0,.38);
+  background:rgba(0,0,0,.55);
+  border-radius:10px;
+  font-size:11px;
+  color:#aaa;
+}
 
-    .info-box {
-      padding: 14px;
-      border: 1px solid rgba(255,0,0,.38);
-      background: rgba(0,0,0,.55);
-      border-radius: 10px;
-      font-size: 11px;
-      color: #aaa;
-    }
+.info-box span{
+  display:block;
+  margin-top:7px;
+  color:white;
+  font-size:13px;
+  font-weight:900;
+  word-break:break-word;
+}
 
-    .info-box span {
-      display: block;
-      margin-top: 7px;
-      color: white;
-      font-size: 13px;
-      font-weight: 900;
-      word-break: break-word;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
+.tile{
+  min-height:180px;
+  padding:26px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(255,0,0,.13),transparent 40%),rgba(0,0,0,.82);
+  box-shadow:0 0 20px rgba(255,0,0,.28),inset 0 0 24px rgba(255,0,0,.07);
+  cursor:pointer;
+  transition:.22s ease;
+  position:relative;
+  overflow:hidden;
+}
 
-    .tile {
-      min-height: 180px;
-      padding: 26px;
-      border: 1px solid #ff1a1a;
-      border-radius: 16px;
-      background:
-        linear-gradient(135deg, rgba(255,0,0,.13), transparent 40%),
-        rgba(0,0,0,.82);
-      box-shadow:
-        0 0 20px rgba(255,0,0,.28),
-        inset 0 0 24px rgba(255,0,0,.07);
-      cursor: pointer;
-      transition: .22s ease;
-      position: relative;
-      overflow: hidden;
-    }
+.tile:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 35px rgba(255,0,0,.58),inset 0 0 28px rgba(255,0,0,.13);
+}
 
-    .tile:hover {
-      transform: translateY(-5px);
-      box-shadow:
-        0 0 35px rgba(255,0,0,.58),
-        inset 0 0 28px rgba(255,0,0,.13);
-    }
+.icon{
+  font-size:42px;
+  margin-bottom:18px;
+}
 
-    .icon {
-      font-size: 42px;
-      margin-bottom: 18px;
-    }
+.tile h3{
+  font-size:19px;
+  margin-bottom:10px;
+  letter-spacing:2px;
+}
 
-    .tile h3 {
-      font-size: 19px;
-      margin-bottom: 10px;
-      letter-spacing: 2px;
-    }
+.tile p{
+  font-size:12px;
+  color:#aaa;
+  line-height:1.5;
+}
 
-    .tile p {
-      font-size: 12px;
-      color: #aaa;
-      line-height: 1.5;
-    }
+.badge{
+  position:absolute;
+  top:18px;
+  right:18px;
+  padding:6px 9px;
+  border:1px solid rgba(255,0,0,.55);
+  color:#ff3030;
+  font-size:9px;
+  letter-spacing:1px;
+  background:rgba(0,0,0,.55);
+}
 
-    .badge {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      padding: 6px 9px;
-      border: 1px solid rgba(255,0,0,.55);
-      color: #ff3030;
-      font-size: 9px;
-      letter-spacing: 1px;
-      background: rgba(0,0,0,.55);
-    }
+.message{
+  margin-top:20px;
+  min-height:22px;
+  text-align:center;
+  color:#66ff66;
+  font-size:12px;
+  letter-spacing:1px;
+}
 
-    .message {
-      margin-top: 20px;
-      min-height: 22px;
-      text-align: center;
-      color: #66ff66;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
+@media(max-width:900px){
+  body{padding:18px}
+  .topbar{flex-direction:column;text-align:center}
+  .car-info{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
 
-    @media (max-width: 900px) {
-      body {
-        padding: 18px;
-      }
-
-      .topbar {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .car-info {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 560px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .car-info {
-        grid-template-columns: 1fr;
-      }
-
-      .brand h1 {
-        font-size: 30px;
-      }
-
-      .car-header h2 {
-        font-size: 24px;
-      }
-    }
-  </style>
+@media(max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .car-info{grid-template-columns:1fr}
+  .brand h1{font-size:30px}
+  .car-header h2{font-size:24px}
+}
+</style>
 </head>
 
 <body>
 
-  <div class="page">
+<div class="page">
 
-    <header class="topbar">
-      <div class="brand">
-        <h1>MAJKAR BOOK</h1>
-      </div>
-
-      <button class="back-btn" id="backBtn">POWRÓT</button>
-    </header>
-
-    <section class="car-header">
-      <h2 id="carTitle">Ładowanie auta...</h2>
-
-      <div class="car-info">
-        <div class="info-box">
-          GENERACJA
-          <span id="carGeneration">---</span>
-        </div>
-
-        <div class="info-box">
-          ROK
-          <span id="carYear">---</span>
-        </div>
-
-        <div class="info-box">
-          VIN
-          <span id="carVin">---</span>
-        </div>
-
-        <div class="info-box">
-          STATUS
-          <span>ONLINE</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="grid">
-      <div class="tile" data-module="service">
-        <span class="badge">MODULE 01</span>
-        <div class="icon">🛠️</div>
-        <h3>SERWIS</h3>
-        <p>Historia napraw, kosztów i danych warsztatu.</p>
-      </div>
-
-      <div class="tile" data-module="fuel">
-        <span class="badge">MODULE 02</span>
-        <div class="icon">⛽</div>
-        <h3>DZIENNIK PALIWOWY</h3>
-        <p>Tankowania, litry i koszty paliwa.</p>
-      </div>
-
-      <div class="tile" data-module="insurance">
-        <span class="badge">MODULE 03</span>
-        <div class="icon">📄</div>
-        <h3>UBEZPIECZENIE</h3>
-        <p>Polisy, terminy, ubezpieczyciel, numer polisy i koszt.</p>
-      </div>
-
-      <div class="tile" data-module="inspection">
-        <span class="badge">MODULE 04</span>
-        <div class="icon">✅</div>
-        <h3>PRZEGLĄD</h3>
-        <p>Daty badań technicznych i historia przeglądów.</p>
-      </div>
-
-      <div class="tile" data-module="obd">
-        <span class="badge">MODULE 05</span>
-        <div class="icon">🔌</div>
-        <h3>OBD</h3>
-        <p>Diagnostyka, błędy i przyszłe połączenie z AI.</p>
-      </div>
-    </section>
-
-    <div id="message" class="message"></div>
-
+<header class="topbar">
+  <div class="brand">
+    <h1>MAJKAR BOOK</h1>
   </div>
 
-  <script type="module">
-    import {
-      auth,
-      db,
-      doc,
-      getDoc,
-      onAuthStateChanged
-    } from "./firebase-config.js";
+  <button class="back-btn" id="backBtn">POWRÓT</button>
+</header>
 
-    const params = new URLSearchParams(window.location.search);
-    const carId = params.get("id");
+<section class="car-header">
+  <h2 id="carTitle">Ładowanie auta...</h2>
 
-    const carTitle = document.getElementById("carTitle");
-    const carGeneration = document.getElementById("carGeneration");
-    const carYear = document.getElementById("carYear");
-    const carVin = document.getElementById("carVin");
-    const backBtn = document.getElementById("backBtn");
-    const message = document.getElementById("message");
-    const tiles = document.querySelectorAll(".tile");
+  <div class="car-info">
+    <div class="info-box">
+      GENERACJA
+      <span id="carGeneration">---</span>
+    </div>
 
-    function showMessage(text, success = true) {
-      message.textContent = text;
-      message.style.color = success ? "#66ff66" : "#ff6666";
+    <div class="info-box">
+      ROK
+      <span id="carYear">---</span>
+    </div>
+
+    <div class="info-box">
+      VIN
+      <span id="carVin">---</span>
+    </div>
+
+    <div class="info-box">
+      STATUS
+      <span>ONLINE</span>
+    </div>
+  </div>
+</section>
+
+<section class="grid">
+
+  <div class="tile" data-module="service">
+    <span class="badge">MODULE 01</span>
+    <div class="icon">🛠️</div>
+    <h3>SERWIS</h3>
+    <p>Historia napraw, kosztów i danych warsztatu.</p>
+  </div>
+
+  <div class="tile" data-module="fuel">
+    <span class="badge">MODULE 02</span>
+    <div class="icon">⛽</div>
+    <h3>DZIENNIK PALIWOWY</h3>
+    <p>Tankowania, litry i koszty paliwa.</p>
+  </div>
+
+  <div class="tile" data-module="insurance">
+    <span class="badge">MODULE 03</span>
+    <div class="icon">📄</div>
+    <h3>UBEZPIECZENIE</h3>
+    <p>Polisy, terminy, ubezpieczyciel, numer polisy i koszt.</p>
+  </div>
+
+  <div class="tile" data-module="inspection">
+    <span class="badge">MODULE 04</span>
+    <div class="icon">✅</div>
+    <h3>PRZEGLĄD</h3>
+    <p>Daty badań technicznych i historia przeglądów.</p>
+  </div>
+
+  <div class="tile" data-module="obd">
+    <span class="badge">MODULE 05</span>
+    <div class="icon">🔌</div>
+    <h3>OBD</h3>
+    <p>Diagnostyka, błędy i przyszłe połączenie z AI.</p>
+  </div>
+
+</section>
+
+<div id="message" class="message"></div>
+
+</div>
+
+<script type="module">
+import {
+  auth,
+  db,
+  doc,
+  getDoc,
+  onAuthStateChanged
+} from "./firebase-config.js";
+
+const params = new URLSearchParams(window.location.search);
+const carId = params.get("id");
+
+const carTitle = document.getElementById("carTitle");
+const carGeneration = document.getElementById("carGeneration");
+const carYear = document.getElementById("carYear");
+const carVin = document.getElementById("carVin");
+const backBtn = document.getElementById("backBtn");
+const message = document.getElementById("message");
+const tiles = document.querySelectorAll(".tile");
+
+function showMessage(text, success = true) {
+  message.textContent = text;
+  message.style.color = success ? "#66ff66" : "#ff6666";
+}
+
+async function loadCar(user) {
+  if (!carId) {
+    carTitle.textContent = "Brak ID auta";
+    showMessage("Brak ID auta w adresie.", false);
+    return;
+  }
+
+  const carRef = doc(db, "users", user.uid, "cars", carId);
+  const carSnap = await getDoc(carRef);
+
+  if (!carSnap.exists()) {
+    carTitle.textContent = "Auto nie istnieje";
+    showMessage("Nie znaleziono auta.", false);
+    return;
+  }
+
+  const car = carSnap.data();
+
+  carTitle.textContent = `${car.brand || ""} ${car.model || ""}`;
+  carGeneration.textContent = car.generation || "Brak danych";
+  carYear.textContent = car.year || "Brak danych";
+  carVin.textContent = car.vin || "Brak danych";
+
+  showMessage("MAJKAR BOOK załadowany.");
+}
+
+onAuthStateChanged(auth, async user => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  try {
+    await loadCar(user);
+  } catch (error) {
+    console.error(error);
+    showMessage("Błąd ładowania auta: " + error.code, false);
+  }
+});
+
+tiles.forEach(tile => {
+  tile.addEventListener("click", () => {
+    const moduleType = tile.dataset.module;
+
+    if (moduleType === "service") {
+      window.location.href = "service-log.html?id=" + carId;
+      return;
     }
 
-    async function loadCar(user) {
-      if (!carId) {
-        carTitle.textContent = "Brak ID auta";
-        showMessage("Brak ID auta w adresie.", false);
-        return;
-      }
-
-      const carRef = doc(db, "users", user.uid, "cars", carId);
-      const carSnap = await getDoc(carRef);
-
-      if (!carSnap.exists()) {
-        carTitle.textContent = "Auto nie istnieje";
-        showMessage("Nie znaleziono auta.", false);
-        return;
-      }
-
-      const car = carSnap.data();
-
-      carTitle.textContent = `${car.brand || ""} ${car.model || ""}`;
-      carGeneration.textContent = car.generation || "Brak danych";
-      carYear.textContent = car.year || "Brak danych";
-      carVin.textContent = car.vin || "Brak danych";
-
-      showMessage("MAJKAR BOOK załadowany.");
+    if (moduleType === "fuel") {
+      window.location.href = "fuel-log.html?id=" + carId;
+      return;
     }
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        window.location.href = "index.html";
-        return;
-      }
+    if (moduleType === "insurance") {
+      window.location.href = "insurance.html?id=" + carId;
+      return;
+    }
 
-      try {
-        await loadCar(user);
-      } catch (error) {
-        console.error(error);
-        showMessage("Błąd ładowania auta: " + error.code, false);
-      }
-    });
+    if (moduleType === "inspection") {
+      window.location.href = "inspection.html?id=" + carId;
+      return;
+    }
 
-    tiles.forEach(tile => {
-      tile.addEventListener("click", () => {
-        const moduleType = tile.dataset.module;
+    const moduleName = tile.querySelector("h3").textContent;
+    showMessage(moduleName + " — moduł wkrótce dostępny.");
+  });
+});
 
-        if (moduleType === "service") {
-          window.location.href = "service-log.html?id=" + carId;
-          return;
-        }
-
-        if (moduleType === "fuel") {
-          window.location.href = "fuel-log.html?id=" + carId;
-          return;
-        }
-
-        if (moduleType === "insurance") {
-          window.location.href = "insurance.html?id=" + carId;
-          return;
-        }
-
-        const moduleName = tile.querySelector("h3").textContent;
-        showMessage(moduleName + " — moduł wkrótce dostępny.");
-      });
-    });
-
-    backBtn.addEventListener("click", () => {
-      window.location.href = "my-car.html";
-    });
-  </script>
+backBtn.addEventListener("click", () => {
+  window.location.href = "my-car.html";
+});
+</script>
 
 </body>
 </html>

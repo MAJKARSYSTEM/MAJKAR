@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAJKAR EXPORT PDF</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.9)),url("background.jpg") center/cover no-repeat;
+  color:white;
+  padding:35px;
+}
+
+.page{max-width:1150px;margin:0 auto}
+
+.topbar{
+  padding:24px 28px;
+  border:1px solid #ff1a1a;
+  border-radius:16px;
+  background:rgba(0,0,0,.8);
+  box-shadow:0 0 28px rgba(255,0,0,.4);
+  margin-bottom:28px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.brand h1{
+  font-size:34px;
+  letter-spacing:5px;
+  text-shadow:0 0 18px red;
+}
+
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+
+.btn{
+  min-height:48px;
+  padding:0 20px;
+  border:1px solid #ff1a1a;
+  border-radius:8px;
+  color:white;
+  background:linear-gradient(90deg,#111,#333,#111);
+  font-weight:900;
+  letter-spacing:2px;
+  cursor:pointer;
+  box-shadow:0 0 14px rgba(255,0,0,.35);
+}
+
+.report-preview{
+  padding:28px;
+  border:1px solid rgba(255,0,0,.65);
+  border-radius:16px;
+  background:rgba(0,0,0,.82);
+  box-shadow:0 0 24px rgba(255,0,0,.28),inset 0 0 24px rgba(255,0,0,.08);
+}
+
+.preview-title{
+  font-size:28px;
+  margin-bottom:10px;
+  text-shadow:0 0 14px red;
+}
+
+.preview-text{
+  color:#aaa;
+  font-size:12px;
+  line-height:1.6;
+}
+
+.message{
+  margin-top:20px;
+  min-height:22px;
+  text-align:center;
+  color:#66ff66;
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+/* PDF TEMPLATE */
+#pdfTemplate{
+  width:794px;
+  background:#f2f2f2;
+  color:#111;
+  padding:0;
+  font-family:Arial, sans-serif;
+  display:none;
+  margin:30px auto;
+}
+
+.pdf-page{
+  width:794px;
+  min-height:1123px;
+  padding:38px;
+  background:#f2f2f2;
+  page-break-after:always;
+}
+
+.pdf-cover{
+  width:794px;
+  min-height:1123px;
+  background:linear-gradient(135deg,#090909,#1d1d1d 55%,#5c0000);
+  color:white;
+  padding:55px 48px;
+  position:relative;
+  overflow:hidden;
+  page-break-after:always;
+}
+
+.pdf-cover:before{
+  content:"";
+  position:absolute;
+  width:500px;
+  height:500px;
+  border:2px solid rgba(255,0,0,.25);
+  border-radius:50%;
+  right:-160px;
+  top:-120px;
+}
+
+.pdf-logo{
+  font-family:'Orbitron',sans-serif;
+  font-size:42px;
+  letter-spacing:7px;
+  font-weight:900;
+  color:white;
+}
+
+.pdf-subtitle{
+  margin-top:12px;
+  color:#ff3b3b;
+  font-size:14px;
+  letter-spacing:3px;
+  font-weight:bold;
+}
+
+.pdf-car-main{
+  margin-top:130px;
+}
+
+.pdf-car-main h2{
+  font-size:42px;
+  line-height:1.2;
+  margin-bottom:18px;
+}
+
+.pdf-vin{
+  color:#ccc;
+  font-size:13px;
+  letter-spacing:1px;
+}
+
+.pdf-cover-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:70px;
+}
+
+.pdf-cover-box{
+  border:1px solid rgba(255,255,255,.22);
+  background:rgba(255,255,255,.08);
+  padding:18px;
+  border-radius:12px;
+}
+
+.pdf-cover-box small{
+  display:block;
+  color:#aaa;
+  font-size:10px;
+  margin-bottom:8px;
+}
+
+.pdf-cover-box strong{
+  display:block;
+  font-size:17px;
+}
+
+.pdf-footer-cover{
+  position:absolute;
+  bottom:45px;
+  left:48px;
+  right:48px;
+  color:#bbb;
+  font-size:11px;
+  border-top:1px solid rgba(255,255,255,.2);
+  padding-top:18px;
+}
+
+.pdf-section-title{
+  font-size:24px;
+  font-weight:900;
+  margin-bottom:18px;
+  border-left:6px solid #b40000;
+  padding-left:12px;
+  color:#111;
+}
+
+.pdf-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:26px;
+}
+
+.pdf-card{
+  background:white;
+  border-radius:12px;
+  padding:16px;
+  border:1px solid #ddd;
+}
+
+.pdf-card small{
+  display:block;
+  color:#777;
+  font-size:10px;
+  margin-bottom:7px;
+  text-transform:uppercase;
+}
+
+.pdf-card strong{
+  font-size:18px;
+  color:#111;
+}
+
+.pdf-block{
+  background:white;
+  border-radius:12px;
+  padding:18px;
+  border:1px solid #ddd;
+  margin-bottom:22px;
+}
+
+.pdf-block h3{
+  font-size:18px;
+  margin-bottom:12px;
+  color:#b40000;
+}
+
+.pdf-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:10px;
+  margin-bottom:24px;
+  background:white;
+}
+
+.pdf-table th{
+  background:#111;
+  color:white;
+  padding:9px;
+  text-align:left;
+}
+
+.pdf-table td{
+  padding:9px;
+  border-bottom:1px solid #ddd;
+  vertical-align:top;
+  background:white;
+  color:#111;
+}
+
+.pdf-empty{
+  color:#777;
+  font-size:12px;
+  padding:12px;
+  background:#f7f7f7;
+  border-radius:8px;
+  margin-bottom:24px;
+}
+
+.pdf-note{
+  font-size:10px;
+  color:#666;
+  margin-top:18px;
+  border-top:1px solid #ddd;
+  padding-top:12px;
+}
+
+@media(max-width:900px){
+  body{padding:18px}
+  .topbar{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<header class="topbar">
+  <div class="brand">
+    <h1>MAJKAR EXPORT PDF</h1>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="downloadBtn">POBIERZ PDF</button>
+    <button class="btn" id="backBtn">POWRÓT</button>
+  </div>
+</header>
+
+<main class="report-preview">
+  <h2 class="preview-title" id="previewTitle">Ładowanie raportu...</h2>
+  <p class="preview-text">
+    Ta strona generuje elegancki raport PDF z danych auta, historii serwisowej, ubezpieczeń i przeglądów.
+  </p>
+</main>
+
+<div id="message" class="message"></div>
+
+</div>
+
+<div id="pdfTemplate">
+  <section class="pdf-cover">
+    <div class="pdf-logo">MAJKAR</div>
+    <div class="pdf-subtitle">RAPORT POJAZDU</div>
+
+    <div class="pdf-car-main">
+      <h2 id="pdfCarTitle">---</h2>
+      <div class="pdf-vin">VIN: <span id="pdfVin">---</span></div>
+    </div>
+
+    <div class="pdf-cover-grid">
+      <div class="pdf-cover-box">
+        <small>GENERACJA</small>
+        <strong id="pdfGeneration">---</strong>
+      </div>
+
+      <div class="pdf-cover-box">
+        <small>ROK</small>
+        <strong id="pdfYear">---</strong>
+      </div>
+
+      <div class="pdf-cover-box">
+        <small>DATA RAPORTU</small>
+        <strong id="pdfDate">---</strong>
+      </div>
+    </div>
+
+    <div class="pdf-footer-cover">
+      Raport wygenerowany automatycznie przez MAJKAR BOOK. Dane pochodzą z zapisów użytkownika.
+    </div>
+  </section>
+
+  <section class="pdf-page">
+    <h2 class="pdf-section-title">Podsumowanie</h2>
+
+    <div class="pdf-summary">
+      <div class="pdf-card">
+        <small>Łączny koszt serwisów</small>
+        <strong id="sumService">0 zł</strong>
+      </div>
+
+      <div class="pdf-card">
+        <small>Łączny koszt ubezpieczeń</small>
+        <strong id="sumInsurance">0 zł</strong>
+      </div>
+
+      <div class="pdf-card">
+        <small>Łączna liczba wpisów</small>
+        <strong id="sumEntries">0</strong>
+      </div>
+    </div>
+
+    <div class="pdf-summary">
+      <div class="pdf-card">
+        <small>Serwisy</small>
+        <strong id="countServices">0</strong>
+      </div>
+
+      <div class="pdf-card">
+        <small>Ubezpieczenia</small>
+        <strong id="countInsurances">0</strong>
+      </div>
+
+      <div class="pdf-card">
+        <small>Przeglądy</small>
+        <strong id="countInspections">0</strong>
+      </div>
+    </div>
+
+    <div class="pdf-block">
+      <h3>Dane pojazdu</h3>
+      <table class="pdf-table">
+        <tbody>
+          <tr><th>Marka i model</th><td id="carNameCell">---</td></tr>
+          <tr><th>Generacja</th><td id="carGenerationCell">---</td></tr>
+          <tr><th>Rok</th><td id="carYearCell">---</td></tr>
+          <tr><th>VIN</th><td id="carVinCell">---</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pdf-note">
+      Ten dokument jest raportem informacyjnym. Nie zastępuje dokumentów urzędowych, faktur ani zaświadczeń ze stacji kontroli pojazdów.
+    </div>
+  </section>
+
+  <section class="pdf-page">
+    <h2 class="pdf-section-title">Historia serwisowa</h2>
+    <div id="pdfServices"></div>
+
+    <h2 class="pdf-section-title">Ubezpieczenia</h2>
+    <div id="pdfInsurances"></div>
+
+    <h2 class="pdf-section-title">Przeglądy techniczne</h2>
+    <div id="pdfInspections"></div>
+  </section>
+</div>
+
+<script type="module">
+import {
+  auth,
+  db,
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  onAuthStateChanged
+} from "./firebase-config.js";
+
+const params = new URLSearchParams(window.location.search);
+const carId = params.get("id");
+
+const previewTitle = document.getElementById("previewTitle");
+const message = document.getElementById("message");
+const downloadBtn = document.getElementById("downloadBtn");
+const backBtn = document.getElementById("backBtn");
+const pdfTemplate = document.getElementById("pdfTemplate");
+
+let currentCarName = "majkar-raport";
+let reportReady = false;
+
+function showMessage(text, success = true){
+  message.textContent = text;
+  message.style.color = success ? "#66ff66" : "#ff6666";
+}
+
+function safe(value){
+  return value || "Brak danych";
+}
+
+function money(value){
+  const number = Number(value);
+  if (!number) return "0 zł";
+  return number.toLocaleString("pl-PL") + " zł";
+}
+
+function sumCost(items, field){
+  return items.reduce((sum,item) => sum + (Number(item[field]) || 0), 0);
+}
+
+function setText(id, value){
+  const element = document.getElementById(id);
+  if(element){
+    element.textContent = safe(value);
+  }
+}
+
+function table(headers, rows){
+  if (!rows.length) {
+    return `<div class="pdf-empty">Brak zapisanych danych.</div>`;
+  }
+
+  return `
+    <table class="pdf-table">
+      <thead>
+        <tr>${headers.map(h => `<th>${h}</th>`).join("")}</tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => `
+          <tr>${row.map(cell => `<td>${safe(cell)}</td>`).join("")}</tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+async function getCollectionData(user, collectionName){
+  const ref = collection(db, "users", user.uid, "cars", carId, collectionName);
+
+  try{
+    const q = query(ref, orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+    return snap.docs.map(doc => doc.data());
+  }catch(error){
+    const snap = await getDocs(ref);
+    return snap.docs.map(doc => doc.data());
+  }
+}
+
+async function loadReport(user){
+  if(!carId){
+    previewTitle.textContent = "Brak ID auta";
+    showMessage("Brak ID auta w adresie.", false);
+    return;
+  }
+
+  const carRef = doc(db, "users", user.uid, "cars", carId);
+  const carSnap = await getDoc(carRef);
+
+  if(!carSnap.exists()){
+    previewTitle.textContent = "Auto nie istnieje";
+    showMessage("Nie znaleziono auta.", false);
+    return;
+  }
+
+  const car = carSnap.data();
+  const fullName = `${car.brand || ""} ${car.model || ""}`.trim() || "Auto";
+  currentCarName = fullName.replaceAll(" ", "-").toLowerCase();
+
+  const services = await getCollectionData(user, "services");
+  const insurances = await getCollectionData(user, "insurances");
+  const inspections = await getCollectionData(user, "inspections");
+
+  previewTitle.textContent = `Raport gotowy: ${fullName}`;
+
+  setText("pdfCarTitle", fullName);
+  setText("pdfVin", car.vin);
+  setText("pdfGeneration", car.generation);
+  setText("pdfYear", car.year);
+  setText("pdfDate", new Date().toLocaleDateString("pl-PL"));
+
+  setText("carNameCell", fullName);
+  setText("carGenerationCell", car.generation);
+  setText("carYearCell", car.year);
+  setText("carVinCell", car.vin);
+
+  document.getElementById("sumService").textContent = money(sumCost(services, "cost"));
+  document.getElementById("sumInsurance").textContent = money(sumCost(insurances, "price"));
+  document.getElementById("sumEntries").textContent = services.length + insurances.length + inspections.length;
+
+  document.getElementById("countServices").textContent = services.length;
+  document.getElementById("countInsurances").textContent = insurances.length;
+  document.getElementById("countInspections").textContent = inspections.length;
+
+  document.getElementById("pdfServices").innerHTML = table(
+    ["Data", "Przebieg", "Warsztat", "Opis", "Koszt"],
+    services.map(item => [
+      item.date,
+      item.mileage ? item.mileage + " km" : "",
+      item.workshop,
+      item.description,
+      item.cost ? money(item.cost) : ""
+    ])
+  );
+
+  document.getElementById("pdfInsurances").innerHTML = table(
+    ["Data wykupienia", "Data zakończenia", "Ubezpieczyciel", "Numer polisy", "Cena"],
+    insurances.map(item => [
+      item.startDate,
+      item.endDate,
+      item.company,
+      item.policyNumber,
+      item.price ? money(item.price) : ""
+    ])
+  );
+
+  document.getElementById("pdfInspections").innerHTML = table(
+    ["Data przeglądu", "Data następnego", "Stacja", "Wynik", "Koszt", "Uwagi"],
+    inspections.map(item => [
+      item.date,
+      item.nextDate,
+      item.station,
+      item.result,
+      item.price ? money(item.price) : "",
+      item.notes
+    ])
+  );
+
+  reportReady = true;
+  showMessage("Raport premium gotowy do pobrania.");
+}
+
+downloadBtn.addEventListener("click", async () => {
+  if (!reportReady) {
+    showMessage("Raport jeszcze się ładuje.", false);
+    return;
+  }
+
+  if (typeof html2pdf === "undefined") {
+    showMessage("Biblioteka PDF się nie załadowała. Sprawdź internet albo CDN.", false);
+    return;
+  }
+
+  showMessage("Generuję PDF...");
+
+  pdfTemplate.style.display = "block";
+
+  await new Promise(resolve => setTimeout(resolve, 300));
+
+  const options = {
+    margin: 0,
+    filename: `majkar-raport-${currentCarName}.pdf`,
+    image: {
+      type: "jpeg",
+      quality: 0.98
+    },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#f2f2f2",
+      scrollX: 0,
+      scrollY: 0
+    },
+    jsPDF: {
+      unit: "px",
+      format: [794, 1123],
+      orientation: "portrait"
+    },
+    pagebreak: {
+      mode: ["css", "legacy"]
+    }
+  };
+
+  try {
+    await html2pdf().set(options).from(pdfTemplate).save();
+    showMessage("PDF pobrany.");
+  } catch (error) {
+    console.error(error);
+    showMessage("Błąd generowania PDF. Otwórz F12 → Console i podeślij błąd.", false);
+  }
+
+  pdfTemplate.style.display = "none";
+});
+
+backBtn.addEventListener("click", () => {
+  window.location.href = "car-dashboard.html?id=" + carId;
+});
+
+onAuthStateChanged(auth, async user => {
+  if(!user){
+    window.location.href = "index.html";
+    return;
+  }
+
+  try{
+    await loadReport(user);
+  }catch(error){
+    console.error(error);
+    showMessage("Błąd ładowania raportu: " + error.code, false);
+  }
+});
+</script>
+
+</body>
+</html>

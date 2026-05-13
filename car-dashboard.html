@@ -243,6 +243,13 @@ body{
     <p>Diagnostyka, błędy i przyszłe połączenie z AI.</p>
   </div>
 
+  <div class="tile" data-module="export-pdf">
+    <span class="badge">MODULE 06</span>
+    <div class="icon">📑</div>
+    <h3>EXPORT PDF</h3>
+    <p>Wygeneruj raport PDF z serwisów, ubezpieczenia i przeglądów.</p>
+  </div>
+
 </section>
 
 <div id="message" class="message"></div>
@@ -335,6 +342,11 @@ tiles.forEach(tile => {
 
     if (moduleType === "inspection") {
       window.location.href = "inspection.html?id=" + carId;
+      return;
+    }
+
+    if (moduleType === "export-pdf") {
+      window.location.href = "export-pdf.html?id=" + carId;
       return;
     }
 
